@@ -1,0 +1,62 @@
+.camera-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    background-color: #1a1a1a; /* 어두운 배경 */
+    border-radius: 12px;
+    color: #ffffff;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    margin: 20px;
+}
+
+.camera-header {
+    margin-bottom: 1.5rem;
+}
+
+.camera-header h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #00d1ff; /* 포인트 컬러 */
+}
+
+.video-wrapper {
+    position: relative;
+    border: 4px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #000;
+    line-height: 0; /* 이미지 하단 공백 제거 */
+}
+
+.video-feed {
+    width: 100%;
+    max-width: 720px;
+    height: auto;
+    display: block;
+}
+
+.status-bar {
+    margin-top: 1rem;
+    padding: 8px 16px;
+    background: #333;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    background-color: #28a745; /* 가동 중 초록색 */
+    border-radius: 50%;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+}
