@@ -5,7 +5,7 @@ import UseNavi from '../../../hooks/UseNavi';
 
 const Admin = () => {
   const [pin, setPin] = useState("");
-  const navigate = UseNavi();
+  const {goTo} = UseNavi();
 
   const SpringUrl = import.meta.env.VITE_SPRING_API_URL;
 
@@ -15,12 +15,13 @@ const Admin = () => {
       const res = await axios.post(`${SpringUrl}/api/check-admin`, {number: pin});
       if (res.data.success) {
         alert(res.data.message);
-        navigate('/camera') // 인증 성공 시 이동할 페이지
+        goTo('/camera') // 인증 성공 시 이동할 페이지
       } else {
         alert(res.data.message);
         setPin(""); // 틀리면 입력창 초기화
       }
     } catch (err) {
+      console.error(err)
       alert("서버 연결 실패")
     }
   };
