@@ -1,0 +1,9 @@
+.navi{
+  width: 100%;
+  background-color: #fff;
+  height: 27px;
+}
+
+.navi-cursor {
+  cursor: pointer;
+}

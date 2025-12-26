@@ -1,7 +1,7 @@
-import "./Monitor_main.css";
+import "../styles/MonitoringMain.css";
 import { useState, useEffect } from "react";
-import factoryImg from "../../img/factory_bg.png";
-import { NavLink } from "react-router-dom";
+import factoryImg from "../../../img/factory_bg.png";
+import UseNavi from "../../../hooks/UseNavi";
 
 const MESSAGE_ROW_HEIGHT = 35;
 const alertMessages = [
@@ -11,7 +11,8 @@ const alertMessages = [
   { machine: "4호기", text: "진동 수치가 기준을 초과했습니다." },
 ];
 
-function Monitor_main() {
+const MonitoringMain = () => {
+  const { goTo } = UseNavi();
   const [currentTime, setCurrentTime] = useState(new Date());
   const [messageIndex, setMessageIndex] = useState(0);
   const [transitionOn, setTransitionOn] = useState(true);
@@ -81,7 +82,7 @@ function Monitor_main() {
               <div className="temp">온도 : {sec}℃</div>
               <div className="hum">습도 : {Number(sec) + 2}%</div>
             </div>
-            <div className="machine_1"> <NavLink to="/dashboard_machine1">1호기</NavLink></div>
+            <div className="machine_1" onClick={() => goTo('/dashboard')}>1호기</div>
             <div className="machine_2">2호기</div>
             <div className="machine_3">3호기</div>
             <div className="machine_4">4호기</div>
@@ -116,4 +117,4 @@ function Monitor_main() {
   );
 }
 
-export default Monitor_main;
+export default MonitoringMain;
