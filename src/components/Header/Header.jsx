@@ -2,7 +2,7 @@ import "./Header.css";
 import logo from "../../img/logov3.png";
 import porfile from "../../img/profileWH.png";
 import { NavLink } from "react-router-dom";
-import UseNavi from "../../utils/UseNavi.jsx";
+import UseNavi from "../../hooks/UseNavi.jsx";
 
 function Header() {
 
