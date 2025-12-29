@@ -1,11 +1,16 @@
 import './App.css'
+import EmergencyAlertModal from './features/emergency/components/EmergencyAlertModal'
+import { EmergencyAlertProvider } from './features/emergency/context/EmergencyAlertContext'
 import Routers from './Route'
 
 function App() {
 
   return (
     <>
-      <Routers />
+      <EmergencyAlertProvider>
+        <Routers />
+        <EmergencyAlertModal />
+      </EmergencyAlertProvider>
     </>
   )
 }
