@@ -15,6 +15,7 @@ const Routers = () => {
         <Route path="/" element={<Admin/>} />
         <Route path="/monitor" element={<MonitoringMain />} />
         <Route path="/dashboard" element={<DashboardMachine />} />
+        <Route path="/camera" element={<Camera />} />
         <Route path="/chart" element={<ProductChart />} />
         <Route path="/sensor" element={<SensorDetailPage />} />
         <Route path="/items/defect" element={<DefectItemPage />} />
