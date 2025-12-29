@@ -16,7 +16,7 @@ function App() {
   // 가장 최신 데이터가 realTimeData 배열 마지막 방에 있음 (최대 20개까지 저장)
   useEffect(() => {
     const handleData = (newData) => {
-      console.log("실시간 들어오는 데이터 : ", newData)  // 개발 끝나면 삭제
+      // console.log("실시간 들어오는 데이터 : ", newData)  // 개발 끝나면 삭제
       setRealTimeData(prev => {
         const newItem = {
           // timestamp : newData.timestamp,
