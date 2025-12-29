@@ -21,6 +21,7 @@ const Admin = () => {
         setPin(""); // 틀리면 입력창 초기화
       }
     } catch (err) {
+      console.error(err)
       alert("서버 연결 실패")
     }
   };

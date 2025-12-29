@@ -1,0 +1,103 @@
+/* 센서 박스 그룹 */
+.current_sensor_wrap {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 10px;
+}
+
+/* 개별 센서 박스 */
+.current_sensor_box {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+/* 상단 이름 영역 */
+.sensor_name_area {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.sensor_name {
+  color: #b7d4ff; /* 연한 파란색 톤 -> 추후 프로젝트 컬러로 변경 가능성 */
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* 데이터 영역 */
+.sensor_data_area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 120px;
+  padding: 15px;
+}
+
+/* 상태 텍스트 (정상/비정상) */
+.status_text {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+/* 네온 효과 */
+.status_text.normal {
+  color: #4ade80;
+  text-shadow: 0 0 10px rgba(74, 222, 128, 0.6);
+}
+
+.status_text.abnormal {
+  color: #ff4d4d;
+  text-shadow: 0 0 10px rgba(255, 77, 77, 0.6);
+}
+
+/* 숫자 값 */
+.sensor_value_container {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.sensor_value {
+  font-size: 38px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.sensor_unit {
+  font-size: 16px;
+  color: #8899aa;
+  font-weight: 500;
+}
+
+.sensor_value_leak {
+  font-size: 32px;
+  font-weight: 800;
+  margin-top: 5px;
+}
+
+.sensor_value_leak.normal {
+  color: #4ade80;
+  text-shadow: 0 0 10px rgba(74, 222, 128, 0.4);
+}
+
+.sensor_value_leak.abnormal {
+  color: #ff4d4d;
+  text-shadow: 0 0 15px rgba(255, 77, 77, 0.6);
+  animation: blink 1s infinite;
+}
+
+/* 비정상 시 깜빡임 */
+@keyframes blink {
+  50% { opacity: 0.5; }
+}
