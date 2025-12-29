@@ -15,34 +15,7 @@
   font-weight: 700;
 }
 
-.page-header {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 5px; /* 제목과 탭 사이 간격 */
-}
 
-.machine-selector {
-  padding: 5px 10px;
-  font-size: 18px;
-  font-weight: 700;
-  border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.2);
-  background-color: #2a3a4a;
-  color: white;
-  cursor: pointer;
-}
-
-.machine-selector:focus {
-  outline: none;
-  border-color: #4A90E2;
-}
-
-.page-title {
-  margin: 0; /* 헤더 안에서 정렬을 위해 마진 제거 */
-  font-size: 24px;
-  color: white;
-}
 /* [중요] 상단 센서 탭 - 다시 살려냈습니다! */
 /* 1. 탭 전체를 중앙으로 보내서 사이드바와 격리 */
 /* 상단 센서 영역: 왼쪽 사이드바 너비를 계산해서 본문 위쪽부터 시작하게 배치 */
