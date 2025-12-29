@@ -11,6 +11,14 @@ const CurrentSensors = ({ realTimeData }) => {
     { id: "leak", name: "누수" }
   ];
 
+  // (임시) 더미데이터
+  const testData = {
+    temperature : 21.62,
+    humidity : 9,
+    noise : 59.06,
+    leak : 1
+  }
+
   const sensorBox = (sensor, data) => {
     const isNormal = sensor.id === "leak"
       ? data[sensor.id] === 1  // 누수 1이면 true = 정상
@@ -53,10 +61,14 @@ const CurrentSensors = ({ realTimeData }) => {
     <>
       <div className="current_sensor_container">
         <div className="current_sensor_wrap">
-        { realTimeData.length !== 0 &&
+        { realTimeData.length !== 0 ? // &&
           sensorList.map((sensor) => {
             return sensorBox(sensor, realTimeData[realTimeData.length - 1])
           })
+          // (임시) 실시간 데이터를 받지 못할 경우 임시 데이터로 보여주기
+          : sensorList.map((sensor) => {
+              return sensorBox(sensor, testData)
+            })
         }
         </div>
       </div>

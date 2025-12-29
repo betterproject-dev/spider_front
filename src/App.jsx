@@ -4,7 +4,10 @@ import Routers from './Route'
 import Header from "./components/Header/Header.jsx";
 import { io } from 'socket.io-client';
 
-const socket = io("http://localhost:5000");
+const socket = io("http://localhost:5000", {
+  reconnectionAttempts: 3,  // 재연결 시도 3회
+  timeout: 5000
+});
 
 function App() {
   const [realTimeData, setRealTimeData] = useState([]);
@@ -28,11 +31,17 @@ function App() {
       });
     }
 
+    const handleConnectError = (err) => {
+      console.warn("현재 서버에 연결할 수 없습니다.");
+    };
+
     socket.on("sensor_data", handleData);
+    socket.on("connect_error", handleConnectError);
 
     // 컴포넌트가 사라질 때 리스너 해제
     return () => {
       socket.off("sensor_data", handleData);
+      socket.off("connect_error", handleConnectError);
     }
   }, []);
 

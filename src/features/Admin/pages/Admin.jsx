@@ -5,7 +5,7 @@ import UseNavi from '../../../hooks/UseNavi';
 
 const Admin = () => {
   const [pin, setPin] = useState("");
-  const {goTo} = UseNavi();
+  const { goTo } = UseNavi();
 
   const SpringUrl = import.meta.env.VITE_SPRING_API_URL;
 
