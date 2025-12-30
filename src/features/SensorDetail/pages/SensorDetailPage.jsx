@@ -1,12 +1,13 @@
 import Navbar from "../../../components/Navbar/Navbar";
+import MachineDetail from "../../MachineDetail/pages/MachineDetail";
 
-const SensorDetailPage = () => {
+const SensorDetailPage = ({ realTimeData }) => {
   return (
     <>
-      {/* 아래 스타일 임시용 = 나중에 제거 */}
-      <div className="wrap" style={{display:'flex', flexDirection:'column'}}>
+      <div className="wrap">
         <Navbar detail={true} sort="센서 상세" />
         <h1>센서 페이지</h1>
+        <MachineDetail realTimeData={realTimeData} />
       </div>
     </>
   )

@@ -54,7 +54,7 @@ const DangerScoreGraph = (machine_number) => {
     <div className="dashboard-layout">
       {/* 왼쪽: 그래프 영역 */}
       <div className="graph-container">
-        <ResponsiveContainer width="100%" height={400}>
+        <ResponsiveContainer width="100%" height="100%">
           <LineChart data={scores} margin={{ top: 5, right: 30, left: 20, bottom: 25 }}>
             <CartesianGrid strokeDasharray="5 5" stroke="#e2e8f0" vertical={false} />
             <XAxis tickFormatter={(value, index) => index + 1} interval={0} padding={{ left: 30, right: 30 }}>
