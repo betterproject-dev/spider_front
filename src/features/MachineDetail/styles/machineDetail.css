@@ -1,0 +1,203 @@
+/* 전체 컨테이너 */
+.wrap {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #2a3a4a; /* 진한 다크 블루 배경 */
+}
+
+/* 상단 타이틀 */
+.page-title {
+  padding: 20px 40px 10px 40px;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+
+/* [중요] 상단 센서 탭 - 다시 살려냈습니다! */
+/* 1. 탭 전체를 중앙으로 보내서 사이드바와 격리 */
+/* 상단 센서 영역: 왼쪽 사이드바 너비를 계산해서 본문 위쪽부터 시작하게 배치 */
+.sensor-tabs {
+  display: flex;
+  /* 사이드바 너비(160px) + 간격(20px)만큼 띄워서 본문 박스 시작점에 맞춤 */
+  padding-left: 220px; 
+  gap: 40px;           /* 탭 사이 간격을 아주 넓게 */
+  margin-top: 30px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.sensor-tab {
+  background: none;    /* 배경 제거 (버튼 느낌 탈피) */
+  border: none;
+  padding: 10px 5px;
+  font-size: 22px;     /* 글자 크기를 아주 크게 */
+  font-weight: 500;
+  color: #868e96;      /* 비활성은 흐리게 */
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s;
+}
+
+/* 활성화된 탭 디자인: 하단에 포인트 컬러 바 */
+.sensor-tab.active {
+  color: #fff;         /* 글자색 강조 */
+  font-weight: 800;
+}
+
+.sensor-tab.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;         /* 두꺼운 강조선 */
+  background-color: #4A90E2; /* 포인트 컬러(주황색) */
+  border-radius: 2px;
+}
+
+/* 마우스 올렸을 때 효과 */
+.sensor-tab:hover {
+  color: #4A90E2;
+}
+
+/* 대시보드 레이아웃 위치 조정 (탭이 커진 만큼 맞춤) */
+.dashboard-layout {
+  display: flex;
+  flex: 1;
+  padding: 0 40px 40px 40px;
+  gap: 20px;
+  /* 탭 바로 아래에 밀착되도록 설정 */
+  align-items: stretch;
+}
+/* 대시보드 메인 레이아웃 */
+.dashboard-layout {
+  display: flex;
+  flex: 1;
+  padding: 0 40px 40px 40px;
+  gap: 20px;
+}
+
+/* 사이드바 기간 버튼 박스 */
+.sidebar {
+  width: 160px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.period-btn {
+  padding: 15px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: none;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.period-btn.active {
+  background-color: #4a9af7; /* 주황색 포인트 */
+  border-color: #89bffc;
+  font-weight: 700;
+}
+
+/* 메인 컨텐츠 (화이트 박스) */
+.machine_contents {
+  flex: none;
+  width: 80%;
+  background-color: #fff;
+  border-radius: 0 15px 15px 15px; /* 탭과 연결되는 부드러운 모서리 */
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* 요약 바 - 가로로 정보를 펼쳐서 휑함을 해결 */
+/* 요약 바 전체 - 양 끝 정렬 */
+/* 요약 바 전체 */
+.info-summary-bar {
+  display: flex;
+  /* 핵심: 내부의 모든 아이템(왼쪽그룹 + 오른쪽수치)을 등간격으로 배치 */
+  justify-content: space-between; 
+  align-items: center;
+  background-color: #f8f9fa;
+  padding: 25px 40px; /* 위아래 여백을 조금 더 주어 시원하게 */
+  border-radius: 12px;
+  border-left: 6px solid #4A90E2;
+  margin-bottom: 25px;
+}
+
+/* 왼쪽 3개 항목 그룹 (여기도 flex로 펼쳐줌) */
+.info-group-left {
+  display: flex;
+  flex: 1; /* 이 그룹이 가능한 넓은 영역을 차지하게 함 */
+  justify-content: space-around; /* 내부 항목들을 박스 안에서 균등 배분 */
+  margin-right: 50px; /* 오른쪽 강조값과의 최소 간격 확보 */
+}
+
+/* 각 정보 항목 (호기, 센서, 상태) */
+.info-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* 텍스트는 왼쪽 정렬 */
+}
+
+/* 오른쪽 강조 수치 전용 (선택 사항: 선 제거) */
+.current-value-box {
+  text-align: right;
+  min-width: 150px; /* 수치 영역 너비 확보 */
+  /* 필요하다면 border-left: 1px solid #dee2e6; 를 유지하거나 제거하세요 */
+}
+
+/* 폰트 및 시인성 조절 */
+.info-label {
+  font-size: 13px;
+  color: #868e96;
+  margin-bottom: 8px;
+}
+
+.info-value {
+  font-size: 19px;
+  font-weight: 700;
+  color: #2a3a4a;
+}
+
+/* 우측 현재 수치 박스 스타일 */
+.current-value-box {
+  text-align: right;
+  padding-left: 40px;
+  border-left: 1px solid #dee2e6; /* 왼쪽 그룹과 시각적 분리 */
+}
+
+.highlight-value {
+  font-size: 32px;
+  color: #4A90E2;
+  font-weight: 800;
+  display: block; /* 수치만 따로 한 줄 차지 */
+}
+
+/* 그래프 카드 */
+.chart-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-placeholder {
+  flex: 1;
+  background-color: #fafafa;
+  border: 1px dashed #dee2e6;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #adb5bd;
+}

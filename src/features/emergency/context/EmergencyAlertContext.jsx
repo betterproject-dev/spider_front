@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import { ALERT_LEVEL, ALERT_MODE } from "../constants/emergencyConstants";
 
 /**
  * 긴급 알림 전역 상태 Context
@@ -15,10 +16,18 @@ const EmergencyAlertContext = createContext(null)
 // closeAlert()에서 항상 이 상태로 되돌림
 const INITIAL_ALERT = {
   isOpen: false,
-  machineNo: null,
-  sensorValue: null,
-  message: ""
+  id: null,              // alert_events.id
+  machineNo: null,       // machineId or machineNo
+  title: null,
+  message: "",
+  dangerScore: null,
+  startedAt: null,
+  endedAt: null,
+  // 모달 상태
+  mode: ALERT_MODE.ALERT,         // "ALERT" | "RECHECK"
+  level: ALERT_LEVEL.EMERGENCY    // 필요하면 저장 (선택)
 }
+
 
 /**
  * 긴급 알림 Context Provider
@@ -33,11 +42,21 @@ export const EmergencyAlertProvider = ({children}) => {
   /**
    * 긴급 알림 열기
    *
-   * @param {{machineNo:number, sensorValue:number, message:string}} data
+    * @param {{
+    *  id?: number,
+    *  machineNo?: number,
+    *  title?: string,
+    *  message?: string,
+    *  dangerScore?: number,
+    *  startedAt?: any,
+    *  endedAt?: any,
+    *  mode?: typeof ALERT_MODE[keyof typeof ALERT_MODE],
+    *  level?: string
+    * }} data
    */
   // useCallback사용: 매 렌더마다 함수가 새로 생성되지 않게 고정, useEffect 의존성에서 불필요한 재실행 방지
   const openAlert = useCallback((data) => {
-    setAlert({isOpen: true, ...data})
+    setAlert({...INITIAL_ALERT, ...data, isOpen: true})
   }, [])
 
   /**
@@ -65,15 +84,22 @@ export const EmergencyAlertProvider = ({children}) => {
  *
  * @returns {{
  *  alert: {
- *    isOpen:boolean,
- *    machineNo:number|null,
- *    sensorValue:number|null,
- *    message:string
+ *    isOpen: boolean,
+ *    id: number|null,
+ *    machineNo: number|null,
+ *    title: string|null,
+ *    message: string,
+ *    dangerScore: number|null,
+ *    startedAt: any,
+ *    endedAt: any,
+ *    mode?: typeof ALERT_MODE[keyof typeof ALERT_MODE],
+ *    level: string
  *  },
- *  openAlert: Function,
- *  closeAlert: Function
+ *  openAlert: (data: Partial<typeof INITIAL_ALERT>) => void,
+ *  closeAlert: () => void
  * }}
  */
+
 export const useEmergencyAlertContext = () => {
   const ctx = useContext(EmergencyAlertContext)
   if (!ctx) {

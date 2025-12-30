@@ -1,4 +1,3 @@
-/* 배경 어둡게 */
 .emergency-backdrop {
   position: fixed;
   inset: 0;
@@ -111,21 +110,35 @@
   color: #333;
 }
 
-/* 센서값 */
-.emergency-sensor {
+/* dangerScore 표시 */
+.emergency-score {
   font-size: 15px;
-  color: #222;
-}
-
-.emergency-sensor strong {
+  font-weight: 700;
   color: #b71c1c;
-  font-size: 18px;
+  background: rgba(183, 28, 28, 0.08);
+  border: 1px solid rgba(183, 28, 28, 0.25);
+  padding: 10px 14px;
+  border-radius: 12px;
+  margin-top: 6px;
 }
 
-/* 하단 버튼 영역 */
-.emergency-footer {
-  margin-top: 28px;
+/* RECHECK 질문 문구 */
+.emergency-recheck {
+  margin-top: 12px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #111;
+  letter-spacing: 0.2px;
 }
+
+/* 버튼이 2개일 때 보기 좋게 */
+.emergency-footer {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 
 /* 확인 버튼 */
 .emergency-btn {
@@ -147,6 +160,68 @@
 .emergency-backdrop::after,
 .emergency-icon {
   animation-delay: 0s;
+}
+
+/* 버튼 공통: 눌림/포커스 상태 강화 */
+.emergency-btn:active {
+  transform: translateY(1px);
+}
+
+.emergency-btn:focus-visible {
+  outline: 3px solid rgba(255, 0, 0, 0.35);
+  outline-offset: 3px;
+}
+
+/* RECHECK 모드 버튼 2개 스타일 분리 (선택) */
+/* "정상 작동" 버튼: 긍정(그린) */
+.emergency-btn--ok {
+  background: #1b5e20;
+}
+.emergency-btn--ok:hover {
+  background: #0b3d10;
+}
+
+/* "아니오" 버튼: 주의(레드 유지) */
+.emergency-btn--no {
+  background: #b71c1c;
+}
+.emergency-btn--no:hover {
+  background: #7f0000;
+}
+
+.emergency-backdrop::before,
+.emergency-backdrop::after {
+  pointer-events: none;
+}
+
+/* 반응형(모바일) 대응 */
+@media (max-width: 560px) {
+  .emergency-modal {
+    width: calc(100vw - 32px);
+    padding: 28px 18px;
+  }
+
+  .emergency-header h2 {
+    font-size: 18px;
+    margin-bottom: 18px;
+  }
+
+  .emergency-status {
+    font-size: 18px;
+  }
+
+  .emergency-message {
+    font-size: 15px;
+  }
+
+  .emergency-btn {
+    width: 100%;
+    padding: 12px 14px;
+  }
+
+  .emergency-footer {
+    width: 100%;
+  }
 }
 
 @keyframes dangerPulse {
