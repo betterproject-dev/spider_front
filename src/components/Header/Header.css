@@ -1,0 +1,79 @@
+img {
+  height: 40px;
+}
+
+header {
+  background-color: #020730;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0 30px;
+  display: flex;
+  height: 50px;
+  align-items: center;
+  position: relative;
+  justify-content: space-between;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  line-height: 50px;
+}
+
+header ul {
+  width: 100%;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+}
+
+header li {
+  color: #000000;
+  font-weight: 600;
+  font-size: 18px;
+  height: 50px;
+  padding: 5px 0;
+  cursor: pointer;
+}
+
+/* 알림 아이콘 */
+.alarm{
+  position: absolute;
+  right: 80px;
+  top: 45%;
+  transform: translateY(-50%);
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.alarm svg {
+  font-size: 28px;   /* 기존보다 확실히 큼 */
+}
+
+/* 마우스 올렸을 때 */
+.alarm:hover {
+  color: #ff4d4d;          /* 경고 느낌 빨간색 */
+}
+
+/* 긴급 알림 상태 (class 추가용) */
+.alarm.emergency{
+  color: #ff2e2e;
+  animation: alarm-shake 0.8s infinite;
+}
+
+/* 긴급 상태일 때 더 강조 */
+.alarm.emergency svg {
+  font-size: 32px;
+}
+
+/* 흔들림 애니메이션 */
+@keyframes alarm-shake{
+  0%   { transform: translateY(-50%) rotate(0deg); }
+  20%  { transform: translateY(-50%) rotate(-15deg); }
+  40%  { transform: translateY(-50%) rotate(15deg); }
+  60%  { transform: translateY(-50%) rotate(-10deg); }
+  80%  { transform: translateY(-50%) rotate(10deg); }
+  100% { transform: translateY(-50%) rotate(0deg); }
+}
+
