@@ -1,9 +1,9 @@
+import Loading from "../../../components/Loading/Loading";
 import Navbar from "../../../components/Navbar/Navbar";
-import UseNavi from "../../../hooks/UseNavi";
+import CurrentSensors from "../components/CurrentSensors";
 import "../styles/DashboardMachine.css";
 
-const DashboardMachine = () => {
-  const { goTo } = UseNavi();
+const DashboardMachine = ({ realTimeData }) => {
 
   return (
     <>
@@ -13,10 +13,13 @@ const DashboardMachine = () => {
           <div className="machine_title_area">
             <h1>1호기</h1>
           </div>
-            {/* 임시 버튼 */}
-            <button onClick={() => goTo('/camera')}>카메라</button>
-            <button onClick={() => goTo('/sensor')}>센서 페이지</button>
-            <button onClick={() => goTo('/items/defect')}>제품 불량 페이지</button>
+          {/* (임시) 주석 처리 -> 실시간 데이터가 들어오지 않으면 대시보드 대신 로딩 스페너를 보여주는 코드임. */}
+          {/* { realTimeData.length === 0 && (
+            <div className="current_sensor_container">
+              <Loading message="센서 데이터 수신 대기 중..." />
+            </div>
+          )} */}
+          <CurrentSensors realTimeData={realTimeData} />
         </div>
       </div>
     </>
