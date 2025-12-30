@@ -53,13 +53,13 @@
 
 /* 네온 효과 */
 .status_text.normal {
-  color: #4ade80;
-  text-shadow: 0 0 10px rgba(74, 222, 128, 0.6);
+  color: var(--color-normal);
+  text-shadow: 0 0 10px rgba(var(--rgb-normal), 0.6);
 }
 
 .status_text.abnormal {
-  color: #ff4d4d;
-  text-shadow: 0 0 10px rgba(255, 77, 77, 0.6);
+  color: var(--color-danger);
+  text-shadow: 0 0 10px rgba(var(--rgb-danger), 0.6);
 }
 
 /* 숫자 값 */
@@ -88,13 +88,13 @@
 }
 
 .sensor_value_leak.normal {
-  color: #4ade80;
-  text-shadow: 0 0 10px rgba(74, 222, 128, 0.4);
+  color: var(--color-normal);
+  text-shadow: 0 0 10px rgba(var(--rgb-normal), 0.4);
 }
 
 .sensor_value_leak.abnormal {
-  color: #ff4d4d;
-  text-shadow: 0 0 15px rgba(255, 77, 77, 0.6);
+  color: var(--color-danger);
+  text-shadow: 0 0 15px rgba(var(--rgb-danger), 0.6);
   animation: blink 1s infinite;
 }
 
