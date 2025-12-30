@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/machineDetail.css';
 import MachineLayout from './MachineLayout';
+import { useParams } from 'react-router-dom';
 
 const MachineDetail = () => {
+  const { sensorKey } = useParams();
+
   const [selectedMachine, setSelectedMachine] = useState(7);
-  const [selectedSensor, setSelectedSensor] = useState('temperature');
+  const [selectedSensor, setSelectedSensor] = useState( sensorKey || 'temperature' );
   const [selectedPeriod, setSelectedPeriod] = useState('live');
 
   const machines = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -12,7 +15,7 @@ const MachineDetail = () => {
     { id: 1, name: '온도', key: 'temperature' },
     { id: 2, name: '습도', key: 'humidity' },
     { id: 3, name: '소음', key: 'noise' },
-    { id: 4, name: '누수', key: 'dust' }
+    { id: 4, name: '누수', key: 'leak' }
   ];
 
   const sideButtons = [
@@ -20,6 +23,10 @@ const MachineDetail = () => {
     { id: 2, name: '일간 추이', key: 'today' },
     { id: 3, name: '주간 추이', key: 'week' }
   ];
+
+  useEffect(() => {
+    setSelectedSensor(sensorKey);
+  }, [sensorKey]);
 
   return (
     <MachineLayout

@@ -17,7 +17,7 @@ const Routers = ({ realTimeData }) => {
         <Route path="/dashboard" element={<DashboardMachine realTimeData={realTimeData} />} />
         <Route path="/camera" element={<Camera />} />
         <Route path="/machineDetail" element={<MachineDetail />} />
-        <Route path="/sensor" element={<SensorDetailPage realTimeData={realTimeData} />} />
+        <Route path="/sensor/:sensorKey" element={<SensorDetailPage realTimeData={realTimeData} />} />
         <Route path="/items/defect" element={<DefectItemPage />} />
       </Routes>
     </>
