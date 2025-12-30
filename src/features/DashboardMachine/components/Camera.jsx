@@ -1,9 +1,9 @@
 import '../styles/camera.css';
+import { axiosFlask } from '../../../utils/axiosFactory.js';
 
 const Camera = () => {
 
-  const FlaskUrl = import.meta.env.VITE_FLASK_API_URL
-  const videoStreamUrl = `${FlaskUrl}/camera/video_feed`;
+  const videoStreamUrl = `${axiosFlask.defaults.baseURL}/camera/video_feed`;
 
   return (
     <>
