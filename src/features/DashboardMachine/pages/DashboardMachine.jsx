@@ -1,10 +1,11 @@
 import Navbar from "../../../components/Navbar/Navbar";
 import UseNavi from "../../../hooks/UseNavi";
 import "../styles/DashboardMachine.css";
+import DangerScoreGraph from "../components/DangerScoreGraph.jsx";
 
 const DashboardMachine = () => {
   const { goTo } = UseNavi();
-
+  
   return (
     <>
       <div className="wrap">
@@ -17,6 +18,7 @@ const DashboardMachine = () => {
             <button onClick={() => goTo('/camera')}>카메라</button>
             <button onClick={() => goTo('/sensor')}>센서 페이지</button>
             <button onClick={() => goTo('/items/defect')}>제품 불량 페이지</button>
+            <DangerScoreGraph machine_number={1}/>
         </div>
       </div>
     </>
