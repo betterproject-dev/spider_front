@@ -9,7 +9,6 @@ const MachineLayout = ({
   onMachineChange,      // 호기 변경 함수
   tabs = [],          // 상단 센서 탭 배열
   selectedTab = "",   // 현재 선택된 센서 key
-  onTabChange = () => {}, 
   sideButtons = [],   // 왼쪽 사이드바 버튼 배열 (일간, 주간, 실시간 등)
   selectedSide = "",  // 현재 선택된 사이드 버튼 key
   onSideChange = () => {},
@@ -20,7 +19,7 @@ const MachineLayout = ({
   const { goTo } = UseNavi();
 
   return (
-    <div className="wrap">
+    <>
       {/* 1. 최상단 타이틀 */}
       <select 
           className="machine-selector"
@@ -94,7 +93,7 @@ const MachineLayout = ({
           </div>
         </main>
       </div>
-    </div>
+    </>
   );
 };
 
