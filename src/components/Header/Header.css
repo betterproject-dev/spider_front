@@ -52,20 +52,17 @@ header li {
 }
 
 /* 마우스 올렸을 때 */
-.alarm:hover {
-  color: #ff4d4d;          /* 경고 느낌 빨간색 */
+.alarm .nbell-trigger:hover svg {
+  color: #ff4d4d;
 }
 
-/* 긴급 알림 상태 (class 추가용) */
-.alarm.emergency{
+/* emergency도 아이콘(svg)만 */
+.alarm.emergency svg {
   color: #ff2e2e;
   animation: alarm-shake 0.8s infinite;
-}
-
-/* 긴급 상태일 때 더 강조 */
-.alarm.emergency svg {
   font-size: 32px;
 }
+
 
 /* 흔들림 애니메이션 */
 @keyframes alarm-shake{

@@ -31,7 +31,7 @@ export const useEmergencyAlertFromServer = ({intervalMs = 5000, enabled = true} 
 
       openAlert({
         id: dto.id,
-        machineNo: dto.machineId,
+        machineNo: dto.machineNumber,
         title: dto.title,
         message: dto.message,
         dangerScore: dto.dangerScore,

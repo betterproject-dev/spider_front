@@ -1,0 +1,178 @@
+.nbell-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* 버튼 기본 스타일 제거 + Header(alarm) 색/폰트 상속 */
+.nbell-trigger {
+  all: unset;              /* 버튼 기본 스타일 싹 제거 */
+  cursor: pointer;
+  color: inherit;          /* ✅ .alarm의 color(#fff) 상속 */
+  display: inline-flex;
+  align-items: center;
+}
+
+/* 드롭다운 패널 */
+.npanel {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  width: 360px;
+  max-height: 70vh;
+  background: #0f172a;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  z-index: 9999;
+  color: rgba(255, 255, 255, 0.9); /* 패널 글자색 고정 */
+}
+
+.npanel-header { padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.npanel-title { color: #fff; font-weight: 700; }
+
+.ntabs { display: flex; gap: 6px; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.ntab {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: transparent;
+  color: rgba(255,255,255,0.8);
+  cursor: pointer;
+}
+.ntab.active { background: rgba(255,255,255,0.10); color: #fff; }
+
+.npanel-body { overflow: auto; max-height: calc(70vh - 100px); padding: 10px; }
+
+.nitem {
+  padding: 10px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 8px;
+  cursor: pointer;
+  color: rgba(255,255,255,0.9);
+}
+.nitem:hover {
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.95); /* 빨강 안 됨 */
+}
+
+.nitem-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.nitem-title { font-weight: 700; }
+.nitem-badge { font-size: 12px; padding: 2px 8px; border-radius: 999px; }
+.b-active { background: rgba(255,60,60,0.25); color: #ffb4b4; }
+.b-resolved { background: rgba(60,255,160,0.18); color: #bfffe0; }
+
+.nitem-msg { font-size: 13px; opacity: 0.9; margin-bottom: 6px; }
+.nitem-meta { display: flex; justify-content: space-between; font-size: 12px; opacity: 0.7; }
+.nempty { padding: 18px 10px; color: rgba(255,255,255,0.7); text-align: center; }
+
+/* 상세 모달 */
+.amodal-backdrop{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.amodal{
+  width: 520px;
+  max-width: calc(100vw - 24px);
+  max-height: calc(100vh - 24px);
+  overflow: auto;
+  background: #0f172a;
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 16px;
+  padding: 16px;
+  color: rgba(255,255,255,0.92);
+}
+
+.amodal-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.amodal-title{
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.amodal-close{
+  all: unset;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 10px;
+  color: rgba(255,255,255,0.75);
+}
+.amodal-close:hover{
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+}
+
+.amodal-sub{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0.9;
+  margin-bottom: 10px;
+}
+
+.amodal-status{
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+.amodal-status.s-active{ background: rgba(255,60,60,0.20); color: #ffb4b4; }
+.amodal-status.s-resolved{ background: rgba(60,255,160,0.16); color: #bfffe0; }
+
+.amodal-msg{
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 12px;
+}
+
+.amodal-meta{
+  font-size: 12px;
+  opacity: 0.8;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+
+.amodal-section-title{
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.amodal-grid{
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.amodal-row{
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 10px;
+  padding: 10px 12px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.amodal-row:first-child{ border-top: none; }
+
+.amodal-k{ opacity: 0.8; }
+.amodal-v{ font-weight: 700; }
+
+.amodal-empty{
+  opacity: 0.7;
+  padding: 10px 0;
+}
