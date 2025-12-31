@@ -5,7 +5,7 @@ const LeakStateChart = ({ data, dataKey }) => {
 // 1. 데이터 보완: 값이 null이거나 undefined일 경우를 방지하고 
   // false -> 1(정상), true -> 0(누수)으로 명확히 고정
 
-    console.log("=== LeakStateChart 받은 데이터 ===");
+  console.log("=== LeakStateChart 받은 데이터 ===");
   console.log("전체 데이터:", data);
   console.log("dataKey:", dataKey);
   data?.slice(0, 5).forEach((item, idx) => {

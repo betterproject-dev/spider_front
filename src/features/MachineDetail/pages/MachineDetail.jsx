@@ -27,7 +27,9 @@ const MachineDetail = ({ realTimeData }) => {
     : testData;
 
   const [selectedMachine, setSelectedMachine] = useState(1);
-  const [selectedSensor, setSelectedSensor] = useState( sensorKey || 'temperature' );
+  const [selectedSensor, setSelectedSensor] = useState(() => {
+  return sensorKey || SENSOR_LIST[0]?.key || 'temperature';
+});
   const [selectedPeriod, setSelectedPeriod] = useState('live');
   
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
@@ -75,14 +77,13 @@ const MachineDetail = ({ realTimeData }) => {
     // 4. 가공 데이터 (UI에 뿌려줄 값들)
     const currentSensorConfig = SENSOR_LIST.find(s => s.key === selectedSensor) || SENSOR_LIST[0];;
     // // 안전하게 (빈배열일 때 )
-    // const latestData = sensorData.length > 0 ? sensorData[sensorData.length - 1] : {}; 
-    // const currentVal = latestData[currentSensorConfig?.key];
- 
-  useEffect(() => {
-    setSelectedSensor(sensorKey);
-  }, [sensorKey]);
 
-  // 현재 선택된 센서의 설정 정보
+  // ✅ 수정: sensorKey가 변경될 때만 업데이트
+  useEffect(() => {
+    if (sensorKey) {
+      setSelectedSensor(sensorKey);
+    }
+  }, [sensorKey]);
   
   // 현재 선택된 센서의 값 (단위 포함)
   const selectedSensorData = () => {
@@ -147,7 +148,6 @@ const MachineDetail = ({ realTimeData }) => {
 
       {/* 6. 그래프 영역 (자식 컴포넌트 호출) */}
 <div className="chart-area" style={{ minHeight: '400px', marginTop: '10px' }}>
-  <p style={{color: 'red'}}>전달되는 키: {currentSensorConfig?.key}</p>
   {selectedSensor === 'leak' ? (
     // 1순위: 누수 센서일 때 (전용 차트만 노출)
     <LeakStateChart 
