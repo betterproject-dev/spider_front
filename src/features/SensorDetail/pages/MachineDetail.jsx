@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../../DetailLayout/styles/sensorDetail.css';
 import MachineLayout from '../../DetailLayout/pages/MachineLayout';  // ✅ 수정
 import { useParams } from 'react-router-dom';
@@ -111,7 +111,6 @@ const MachineDetail = ({ realTimeData }) => {
       onMachineChange={setSelectedMachine} // 변경 함수 전달
       tabs={SENSOR_LIST}
       selectedTab={selectedSensor}
-      onTabChange={setSelectedSensor}
       sideButtons={sideButtons}
       selectedSide={selectedPeriod}
       onSideChange={setSelectedPeriod}
@@ -131,15 +130,17 @@ const MachineDetail = ({ realTimeData }) => {
       }}
     >
       {/* 5. 날짜 선택 영역 (차트 상단에 배치) */}
-      <div className="date-selection-bar" style={{ marginBottom: '20px' }}>
-        <span style={{ fontSize: '14px', fontWeight: '600', marginRight: '10px' }}>데이터 조회 날짜:</span>
-        <input 
-          type="date" 
-          value={selectedDate} 
-          onChange={(e) => setSelectedDate(e.target.value)}
-          style={{ padding: '4px 8px', borderRadius: '4px', border: '1px solid #ddd' }}
-        />
-      </div>
+      {selectedPeriod !== 'live' &&
+        <div className="date-selection-bar" style={{ marginBottom: '20px' }}>
+          <span style={{ fontSize: '14px', fontWeight: '600', marginRight: '10px' }}>데이터 조회 날짜:</span>
+          <input 
+            type="date" 
+            value={selectedDate} 
+            onChange={(e) => setSelectedDate(e.target.value)}
+            style={{ padding: '4px 8px', borderRadius: '4px', border: '1px solid #ddd' }}
+          />
+        </div>
+      }
 
       {/* 이 부분이 MachineLayout의 {children} 자리로 들어갑니다 */}
       <h3 className="chart-title">
@@ -159,7 +160,9 @@ const MachineDetail = ({ realTimeData }) => {
           realTimeData={realTimeData} 
           sensor={selectedSensor} 
           data={sensorData} 
-          dataKey={currentSensorConfig?.key} 
+          dataKey={currentSensorConfig?.key}
+          unit={currentSensorConfig?.unit}
+          sensorName={currentSensorConfig?.name}
         />
   ) : selectedPeriod === 'today' ? (
     // // ✅ 일간 추이 - 누수 체크 추가
@@ -171,7 +174,8 @@ const MachineDetail = ({ realTimeData }) => {
       : <SensorDayChart 
           data={sensorData} 
           dataKey={currentSensorConfig?.key} 
-          unit={currentSensorConfig?.unit} 
+          unit={currentSensorConfig?.unit}
+          sensorName={currentSensorConfig?.name}
         />
   ) : selectedPeriod === 'week' ? (
     // ✅ 주간 추이 - 누수 체크 추가
@@ -183,7 +187,8 @@ const MachineDetail = ({ realTimeData }) => {
       : <SensorWeekChart
           data={sensorData} 
           dataKey={currentSensorConfig?.key} 
-          unit={currentSensorConfig?.unit} 
+          unit={currentSensorConfig?.unit}
+          sensorName={currentSensorConfig?.name}
         />
   ) : null}
 </div>
