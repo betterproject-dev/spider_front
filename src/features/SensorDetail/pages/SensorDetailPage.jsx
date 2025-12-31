@@ -1,4 +1,4 @@
-import MachineDetail from "../../MachineDetail/pages/MachineDetail";
+import MachineDetail from "./MachineDetail";
 
 const SensorDetailPage = ({ realTimeData }) => {
   return (

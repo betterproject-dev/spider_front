@@ -1,5 +1,4 @@
-import React from 'react';
-import '../styles/machineDetail.css';
+import '../styles/sensorDetail.css';
 import UseNavi from '../../../hooks/UseNavi';
 import PageHeader from '../../../components/PageHeader/PageHeader';
 
@@ -20,14 +19,14 @@ const MachineLayout = ({
   const { goTo } = UseNavi();
 
   return (
-    <div className="wrap">
+    <>
+      {/* 1. 최상단 타이틀 */}
       <PageHeader
         detail={true}
         sort={sort}
         selectedMachine={selectedMachine}
         onMachineChange={onMachineChange}
       />
-      {/* 1. 최상단 타이틀 */}
       <h1 className="page-title">{title}</h1>
 
       {/* 2. 상단 센서 탭 (데이터가 있을 때만 렌더링) */}
@@ -90,7 +89,7 @@ const MachineLayout = ({
           </div>
         </main>
       </div>
-    </div>
+    </>
   );
 };
 
