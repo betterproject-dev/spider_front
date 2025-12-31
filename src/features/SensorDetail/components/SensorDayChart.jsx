@@ -2,13 +2,13 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 
 const SensorDayChart =  ({data, dataKey, unit}) => {
 
-    console.log('=== SensorDayChart 디버깅 ===');
-  console.log('받은 data:', data);
-  console.log('받은 dataKey:', dataKey);
-  console.log('받은 unit:', unit);
-  console.log('data 길이:', data?.length);
-  console.log('첫 번째 데이터:', data?.[0]);
-  console.log('데이터에 해당 키 있나?:', data?.[0]?.[dataKey]);
+  //   console.log('=== SensorDayChart 디버깅 ===');
+  // console.log('받은 data:', data);
+  // console.log('받은 dataKey:', dataKey);
+  // console.log('받은 unit:', unit);
+  // console.log('data 길이:', data?.length);
+  // console.log('첫 번째 데이터:', data?.[0]);
+  // console.log('데이터에 해당 키 있나?:', data?.[0]?.[dataKey]);
 
   return (
 

@@ -2,10 +2,6 @@ import { Bar, BarChart, Cell, ReferenceLine, ResponsiveContainer, Tooltip, XAxis
 
 const LeakStateChart = ({ data, dataKey }) => {
 
-  console.log("=== LeakStateChart 받은 데이터 ===");
-  console.log("전체 데이터:", data);
-  console.log("dataKey:", dataKey);
-  
   if (!data || !Array.isArray(data) || data.length === 0) {
     return <div style={{padding: '50px', textAlign: 'center'}}>데이터가 없습니다</div>;
   }
@@ -19,8 +15,6 @@ const LeakStateChart = ({ data, dataKey }) => {
       leakStatusValue: isLeak ? 1 : -1  // 누수(true) -> 1, 정상(false) -> -1
     };
   });
-
-  console.log("✅ 변환된 데이터 샘플:", processedData.slice(0, 3));
 
   return (
     <ResponsiveContainer width="100%" height={400}>
