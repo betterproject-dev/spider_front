@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Navbar from "../../../components/Navbar/Navbar";
-import MachineLayout from "../../MachineDetail/pages/MachineLayout";
+import MachineLayout from "../../DetailLayout/pages/MachineLayout";
 import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import requestHandler from "../../../utils/requestHandler";
 import '../styles/defectItem.css';

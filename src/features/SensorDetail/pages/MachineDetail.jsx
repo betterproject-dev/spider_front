@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/sensorDetail.css';
-import MachineLayout from '../../MachineDetail/pages/MachineLayout';
+import '../../DetailLayout/styles/sensorDetail.css';
+import MachineLayout from '../../DetailLayout/pages/MachineLayout';  // ✅ 수정
 import { useParams } from 'react-router-dom';
 import sensorConfig from '../../../utils/sensorConfig';
 import STATUS_COLOR from '../../../utils/statusColor';
-import SensorDayChart from '../components/SensorDayChart';
-import SensorWeekChart from '../components/SensorWeekChart';
+import SensorDayChart from '../components/SensorDayChart';  // ✅ 수정
+import SensorWeekChart from '../components/SensorWeekChart';  // ✅ 수정
 import requestHandler from '../../../utils/requestHandler';
-import SensorLiveChart from '../components/SensorLiveChart';
-import LeakLiveChart from '../components/LeakLiveChart';
-
+import SensorLiveChart from '../components/SensorLiveChart';  // ✅ 수정
+import LeakLiveChart from '../components/LeakLiveChart'; 
+import LeakStateChart from '../components/LeakStateChart';
 
 const MachineDetail = ({ realTimeData }) => {
    // (임시) 더미데이터
   const testData = {
-    temperature : 21.62,
+    temperature_DS18B20 : 21.62,
     humidity : 9,
     noise : 59.06,
     leak : 1
@@ -151,26 +151,40 @@ const MachineDetail = ({ realTimeData }) => {
 
       {/* 6. 그래프 영역 (자식 컴포넌트 호출) */}
 <div className="chart-area" style={{ minHeight: '400px', marginTop: '10px' }}>
-{selectedSensor === "leak"
-          ? <LeakLiveChart realTimeData={realTimeData} sensor={selectedSensor} />
-          : <SensorLiveChart realTimeData={realTimeData} sensor={selectedSensor} 
-                data={sensorData} 
-                dataKey={currentSensorConfig?.key}  />
-        } 
-    {selectedPeriod === 'today' ? (
-    // 2순위: 누수가 아니고 일간 추이일 때
-    <SensorDayChart 
-      data={sensorData} 
-      dataKey={currentSensorConfig?.key} 
-      unit={currentSensorConfig?.unit} 
-    />
+  {selectedPeriod === 'live' ? (
+    // 실시간 모니터링
+    selectedSensor === "leak"
+      ? <LeakLiveChart realTimeData={realTimeData} sensor={selectedSensor} />
+      : <SensorLiveChart 
+          realTimeData={realTimeData} 
+          sensor={selectedSensor} 
+          data={sensorData} 
+          dataKey={currentSensorConfig?.key} 
+        />
+  ) : selectedPeriod === 'today' ? (
+    // // ✅ 일간 추이 - 누수 체크 추가
+    selectedSensor === "leak"
+      ? <LeakStateChart 
+          data={sensorData} 
+          dataKey={currentSensorConfig?.key} 
+        />
+      : <SensorDayChart 
+          data={sensorData} 
+          dataKey={currentSensorConfig?.key} 
+          unit={currentSensorConfig?.unit} 
+        />
   ) : selectedPeriod === 'week' ? (
-    // 3순위: 누수가 아니고 주간 추이일 때
-    <SensorWeekChart
-      data={sensorData} 
-      dataKey={currentSensorConfig?.key} 
-      unit={currentSensorConfig?.unit} 
-    />
+    // ✅ 주간 추이 - 누수 체크 추가
+    selectedSensor === "leak"
+      ? <LeakStateChart 
+          data={sensorData} 
+          dataKey={currentSensorConfig?.key} 
+        />
+      : <SensorWeekChart
+          data={sensorData} 
+          dataKey={currentSensorConfig?.key} 
+          unit={currentSensorConfig?.unit} 
+        />
   ) : null}
 </div>
 
