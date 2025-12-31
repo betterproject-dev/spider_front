@@ -1,15 +1,15 @@
 import React from 'react';
 import '../styles/machineDetail.css';
 import UseNavi from '../../../hooks/UseNavi';
+import PageHeader from '../../../components/PageHeader/PageHeader';
 
 const MachineLayout = ({ 
-  title = "정보 없음", 
-  machines = [],        // 호기 리스트 [1, 2, 3...]
+  title = "정보 없음",
+  sort,  // 페이지 네비바에 들어갈 상세 페이지 정보
   selectedMachine,      // 현재 선택된 호기
   onMachineChange,      // 호기 변경 함수
   tabs = [],          // 상단 센서 탭 배열
   selectedTab = "",   // 현재 선택된 센서 key
-  onTabChange = () => {}, 
   sideButtons = [],   // 왼쪽 사이드바 버튼 배열 (일간, 주간, 실시간 등)
   selectedSide = "",  // 현재 선택된 사이드 버튼 key
   onSideChange = () => {},
@@ -21,17 +21,13 @@ const MachineLayout = ({
 
   return (
     <div className="wrap">
+      <PageHeader
+        detail={true}
+        sort={sort}
+        selectedMachine={selectedMachine}
+        onMachineChange={onMachineChange}
+      />
       {/* 1. 최상단 타이틀 */}
-      <select 
-          className="machine-selector"
-          value={selectedMachine}
-          onChange={(e) => onMachineChange(Number(e.target.value))}
-        >
-          {machines.map((num) => (
-            <option key={num} value={num}>{num}호기</option>
-          ))}
-        </select>
-      
       <h1 className="page-title">{title}</h1>
 
       {/* 2. 상단 센서 탭 (데이터가 있을 때만 렌더링) */}

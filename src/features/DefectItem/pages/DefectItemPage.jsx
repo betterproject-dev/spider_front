@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Navbar from "../../../components/Navbar/Navbar";
+import Navbar from "../../../components/PageHeader/components/Navbar";
 import MachineLayout from "../../MachineDetail/pages/MachineLayout";
 import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import requestHandler from "../../../utils/requestHandler";
@@ -46,7 +46,7 @@ const DefectItemPage = () => {
     <>
       <MachineLayout
         title="제품 불량률 통계 페이지"
-        machines={[1, 2, 3, 4]}
+        sort="제품 불량"
         selectedMachine={selectedMachine}
         onMachineChange={setSelectedMachine}
         sideButtons={[
