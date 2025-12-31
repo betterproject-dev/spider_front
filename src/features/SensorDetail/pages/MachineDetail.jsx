@@ -106,6 +106,7 @@ const MachineDetail = ({ realTimeData }) => {
   return (
     <MachineLayout
       title={`[ ${selectedMachine}호기 ] 센서 정보`}
+      sort="센서 정보"
       machines={machines}              // 호기 리스트 전달
       selectedMachine={selectedMachine} // 현재 값 전달
       onMachineChange={setSelectedMachine} // 변경 함수 전달

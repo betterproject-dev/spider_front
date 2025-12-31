@@ -12,9 +12,9 @@
 .sensor-tabs {
   display: flex;
   /* 사이드바 너비(160px) + 간격(20px)만큼 띄워서 본문 박스 시작점에 맞춤 */
-  padding-left: 220px; 
+  padding-left: 220px;
   gap: 40px;           /* 탭 사이 간격을 아주 넓게 */
-  margin-top: 30px;
+  margin-top: 10px;
   margin-bottom: 10px;
   width: 100%;
 }
@@ -103,7 +103,7 @@
   width: 80%;
   background-color: #fff;
   border-radius: 0 15px 15px 15px; /* 탭과 연결되는 부드러운 모서리 */
-  padding: 30px;
+  padding: 0 30px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -122,7 +122,7 @@
   padding: 25px 40px; /* 위아래 여백을 조금 더 주어 시원하게 */
   border-radius: 12px;
   border-left: 6px solid #4A90E2;
-  margin-bottom: 25px;
+  margin: 15px 0;
 }
 
 /* 왼쪽 3개 항목 그룹 (여기도 flex로 펼쳐줌) */
