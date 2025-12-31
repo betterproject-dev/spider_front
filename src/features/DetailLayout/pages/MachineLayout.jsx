@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/machineDetail.css';
+import '../styles/sensorDetail.css';
 import UseNavi from '../../../hooks/UseNavi';
 
 const MachineLayout = ({ 
