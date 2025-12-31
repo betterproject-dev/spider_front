@@ -1,5 +1,6 @@
 import React from 'react';
 import '../styles/machineDetail.css';
+import UseNavi from '../../../hooks/UseNavi';
 
 const MachineLayout = ({ 
   title = "정보 없음", 
@@ -16,6 +17,8 @@ const MachineLayout = ({
   currentValue = { label: "현재 수치", value: "-" }, // 요약 바 오른쪽 강조 수치
   children            // 하단 그래프 영역에 들어갈 내용 (h3 및 차트)
 }) => {
+  const { goTo } = UseNavi();
+
   return (
     <div className="wrap">
       {/* 1. 최상단 타이틀 */}
@@ -38,7 +41,7 @@ const MachineLayout = ({
             <button
               key={tab.id}
               className={`sensor-tab ${selectedTab === tab.key ? 'active' : ''}`}
-              onClick={() => onTabChange(tab.key)}
+              onClick={() => goTo(`/sensor/${tab.key}`)}
             >
               {tab.name}
             </button>
