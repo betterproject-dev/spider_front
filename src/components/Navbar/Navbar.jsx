@@ -14,7 +14,7 @@ const Navbar = ({ detail=false, sort='' }) => {
       <div className="navi">
         <p>
           {/* (공통) 메인 모니터링 페이지로 이동 */}
-          <span className='navi-cursor' onClick={() => goTo("/monitor")}>Monitoring</span>
+          <span className='navi-cursor' onClick={() => goTo("/monitor")}>메인 모니터링</span>
         {
           detail
           ? (

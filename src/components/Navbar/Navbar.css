@@ -1,7 +1,11 @@
 .navi{
   width: 100%;
-  background-color: #fff;
+  color: #fff;
   height: 27px;
+  margin: 10px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
 }
 
 .navi-cursor {
