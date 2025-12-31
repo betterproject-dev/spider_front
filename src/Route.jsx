@@ -1,20 +1,27 @@
 import { Route, Routes } from "react-router-dom"
-import Monitor_main from "./features/Monitoring_main/Monitor_main.jsx";
-import Mainpage from "./features/Home/Mainpage.jsx";
-import Dashboard_machine1 from "./features/Dashboard_machine1/Dashboard_machine1.jsx";
+import MonitoringMain from "./features/MonitoringMain/pages/MonitoringMain.jsx";
+import DashboardMachine from "./features/DashboardMachine/pages/DashboardMachine.jsx";
 import Admin from "./features/Admin/pages/Admin"
-import Camera from "./features/Camera/pages/Camera"
+import ProductChart from "./features/Chart/pages/ProductChart"
+import MachineDetail from "./features/MachineDetail/pages/MachineDetail"
+import Camera from "./features/DashboardMachine/components/Camera.jsx"
+import SensorDetailPage from "./features/SensorDetail/pages/SensorDetailPage.jsx";
+import DefectItemPage from "./features/DefectItem/pages/DefectItemPage.jsx";
 
 
-const Routers = () => {
+const Routers = ({ realTimeData }) => {
   return (
     <>
       <Routes>
-        <Route path="/main" element={<Mainpage />} />
-        <Route path="/monitor" element={<Monitor_main />} />
-        <Route path="/dashboard_machine1" element={<Dashboard_machine1 />} />
         <Route path="/" element={<Admin/>} />
+        <Route path="/monitor" element={<MonitoringMain />} />
+        <Route path="/dashboard" element={<DashboardMachine realTimeData={realTimeData} />} />
         <Route path="/camera" element={<Camera />} />
+        <Route path="/chart" element={<ProductChart />} />
+        <Route path="/machineDetail" element={<MachineDetail />} />
+        <Route path="/sensor" element={<SensorDetailPage />} />
+        <Route path="/sensor/:sensorKey" element={<SensorDetailPage realTimeData={realTimeData} />} />
+        <Route path="/items/defect" element={<DefectItemPage />} />
       </Routes>
     </>
   );
