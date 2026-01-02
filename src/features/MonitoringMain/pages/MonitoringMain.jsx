@@ -63,7 +63,9 @@ const MonitoringMain = () => {
               <p className="time">{time}</p>
             </div>
             <div className="main_button_list">
-              <div className="main_btn">생산현황</div>
+              <div className="main_btn" onClick={() => goTo('/items/defect')}>
+                제품 불량 통계
+              </div>
               <div className="main_btn">생산현황</div>
               <div className="main_btn">생산현황</div>
             </div>

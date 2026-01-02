@@ -22,9 +22,6 @@ const DashboardMachine = ({ realTimeData }) => {
             </div>
           )} */}
           <CurrentSensors realTimeData={realTimeData} />
-          <div>
-            <p onClick={() => goTo('/items/defect')}>제품 불량 그래프</p>
-          </div>
         </div>
       </div>
     </>
