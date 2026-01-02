@@ -5,20 +5,28 @@ import NotificationTabs from "./NotificationTabs"
 import Loading from "../../../components/Loading/Loading"
 import NotificationItem from "./NotificationItem"
 import AlertDetailModal from "./AlertDetailModal"
+import { useEmergencyAlertContext } from "../../emergency/context/EmergencyAlertContext";
+import PinModal from "./PinModal"
 
 const NotificationPanel = ({onClose}) => {
   const ref = useRef(null)
+  const {closeAlert} = useEmergencyAlertContext?.() ?? {} // 없어도 에러 안나게
   
   const [tab, setTab] = useState("ALL")
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(false)
   const [selected, setSelected] = useState(null)
   const [detailOpen, setDetailOpen] = useState(false)
+
+  const [pinOpen, setPinOpen] = useState(false)
+  const [resolving, setResolving] = useState(false)
+  const [targetAlert, setTargetAlert] = useState(null)
   
   useOutsideClick(ref, () => {
-    if (detailOpen) return
+    if (detailOpen || pinOpen) return
     onClose()
   })
+
   const load = async (t) => {
     setLoading(true)
     try {
@@ -49,6 +57,35 @@ const NotificationPanel = ({onClose}) => {
     setDetailOpen(true)
   }
 
+  // 해결 버튼 클릭 -> PIN 모달 오픈
+  const openResolvePin = (a) => {
+    setTargetAlert(a)
+    setPinOpen(true)
+  }
+
+  const submitPin = async (pin) => {
+    if (!targetAlert) return
+    setResolving(true)
+    try {
+      const res = await alertApi.resolveById(targetAlert.id, pin)
+
+      if (!res.ok) {
+        alert(res.message ?? "해결 처리 실패 ")
+        return
+      }
+
+      // 성공: 리스트 갱신
+      setPinOpen(false);
+      setTargetAlert(null)
+      await load(tab)
+
+      // 전역  긴급모달 열려 있으면 닫기
+      closeAlert?.()
+    } finally {
+      setResolving(false)
+    }
+  }
+
   return (
     <div className="npanel" ref={ref}>
       <div className="npanel-header">
@@ -68,7 +105,7 @@ const NotificationPanel = ({onClose}) => {
               key={a.id} 
               data={a} 
               onClick={() => openDetail(a)}
-              onResolved={() => load(tab)}
+              onResolveClick={() => openResolvePin(a)}
             />
           ))
         )}
@@ -78,6 +115,13 @@ const NotificationPanel = ({onClose}) => {
         open={detailOpen}
         alert={selected}
         onClose={() => setDetailOpen(false) }
+      />
+
+      <PinModal
+        open={pinOpen}
+        loading={resolving}
+        onClose={() => setPinOpen(false)}
+        onSubmit={submitPin}
       />
     </div>
   )

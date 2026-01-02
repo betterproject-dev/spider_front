@@ -235,3 +235,89 @@
   opacity: 0.7;
   padding: 10px 0;
 }
+
+/* PIN 모달 */
+.pmodal-backdrop{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+}
+
+.pmodal{
+  width: 360px;
+  max-width: calc(100vw - 24px);
+  background: #0f172a;
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 16px;
+  padding: 14px;
+  color: rgba(255,255,255,0.92);
+}
+
+.pmodal-head{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.pmodal-title{
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.pmodal-x{
+  all: unset;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 10px;
+  color: rgba(255,255,255,0.75);
+}
+.pmodal-x:hover{
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+}
+
+.pmodal-input{
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  outline: none;
+  margin-bottom: 12px;
+}
+
+.pmodal-actions{
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.pmodal-cancel, .pmodal-ok{
+  border-radius: 12px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: transparent;
+  color: rgba(255,255,255,0.9);
+}
+
+.pmodal-ok{
+  border: 1px solid rgba(60, 255, 160, 0.45);
+  background: rgba(60, 255, 160, 0.15);
+  color: #bfffe0;
+}
+.pmodal-ok:disabled{
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.pmodal-ok:hover:enabled{
+  background: rgba(60, 255, 160, 0.28);
+  border-color: rgba(60, 255, 160, 0.8);
+}
