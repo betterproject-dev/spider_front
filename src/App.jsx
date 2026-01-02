@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import './App.css'
+import EmergencyAlertModal from './features/emergency/components/EmergencyAlertModal'
 import Routers from './Route'
 import Header from "./components/Header/Header.jsx";
 import UseSocket from './hooks/UseSocket.jsx';
@@ -28,13 +29,17 @@ function App() {
   UseSocket("sensor_data", handleSensorData);
 
   return (
+    
     <div className="app-layout">
       <Header  />
       <main className="app-main">
         <Routers realTimeData={realTimeData} />
       </main>
+        
+      <EmergencyAlertModal />
     </div>
-  );
+    
+  )
 }
 
 export default App
