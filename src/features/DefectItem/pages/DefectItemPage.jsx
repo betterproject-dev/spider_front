@@ -13,11 +13,12 @@ const DefectItemPage = () => {
   const [defectData, setDefectData] = useState([]);
   const [trendData, setTrendData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [summary, setSummary] = useState({totalInspected: 0, totalRejected: 0, avgRate: 0});
 
-  const fetchDefectSummary = (onSuccess, setLoading) => {
+  const fetchDefectSummary = (onSuccess, type, setLoading) => {
     return requestHandler({
       method:"get",
-      url:"/api/stats/defect-summary",
+      url:`/api/stats/defect-summary?type=${type}`,
       server:"spring",
       onSuccess,
       setLoading
@@ -35,12 +36,30 @@ const DefectItemPage = () => {
   }
 
   useEffect(() => {
+    setLoading(true);
     // 파이 차트 데이터 호출
-    fetchDefectSummary((data) => setDefectData(data), setLoading);
+    fetchDefectSummary((data) => setDefectData(data), selectedSide, setLoading);
 
     // 바 차트 데이터 호출
-    fetchRejectionTrend(selectedMachine, selectedSide, (data) => setTrendData(data), setLoading);
-  }, [selectedMachine, selectedSide])
+    fetchRejectionTrend(selectedMachine, selectedSide, (data) => {
+      setTrendData(data);
+
+      // 데이터가 있을 때만 합산 계산
+      if (data && data.length > 0){
+        const totalIns = data.reduce((acc, cur) => acc + (cur.totalInspected || 0), 0);
+        const totalRej = data.reduce((acc, cur) => acc + (cur.totalRejected || 0), 0);
+        const avg = totalIns > 0 ? ((totalRej / totalIns) * 100).toFixed(1) : 0;
+
+        setSummary({
+          totalInspected: totalIns,
+          totalRejected: totalRej,
+          avgRate: avg
+        });
+      } else {
+        setSummary({totalInspected: 0, totalRejected: 0, avgRate: 0});
+      }
+    }, setLoading);
+  }, [selectedMachine, selectedSide]);
 
   return (
     <>
@@ -56,10 +75,10 @@ const DefectItemPage = () => {
         selectedSide={selectedSide}
         onSideChange={setSelectedSide}
         summaryItems={[
-          { label: "총 검사수", value: "1,200", color: "#333"},
+          { label: "총 검사수", value: summary.totalInspected.toLocaleString(), color: "#333"},
           { label: "불량수", value: defectData.reduce((acc, cur) => acc + cur.count, 0), color: "red"}
         ]}
-        currentValue={{label: "평균 불량률", value: "3.5%"}}
+        currentValue={{label: "평균 불량률", value: `${summary.avgRate}%`}}
         >
           {loading && <div className="loading-overlay">데이터 로딩 중...</div>}
           <div className="stats-chart-container">

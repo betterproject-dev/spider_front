@@ -1,9 +1,11 @@
 import Loading from "../../../components/Loading/Loading";
 import Navbar from "../../../components/Navbar/Navbar";
+import UseNavi from "../../../hooks/UseNavi";
 import CurrentSensors from "../components/CurrentSensors";
 import "../styles/DashboardMachine.css";
 
 const DashboardMachine = ({ realTimeData }) => {
+  const { goTo } = UseNavi();
 
   return (
     <>
@@ -20,6 +22,9 @@ const DashboardMachine = ({ realTimeData }) => {
             </div>
           )} */}
           <CurrentSensors realTimeData={realTimeData} />
+          <div>
+            <p onClick={() => goTo('/items/defect')}>제품 불량 그래프</p>
+          </div>
         </div>
       </div>
     </>
