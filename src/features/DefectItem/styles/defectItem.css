@@ -1,0 +1,32 @@
+.stats-chart-container {
+    display: flex;
+    flex-direction: row; /* 가로 배치 */
+    width: 100%;
+    min-height: 450px;   /* 높이를 강제로 지정 */
+    padding: 20px;
+    background-color: white;
+}
+
+.chart-section {
+    flex: 1;
+    height: 400px;       /* 각 섹션에도 높이 지정 */
+    min-width: 300px;
+}
+
+.chart-title {
+    color: #8fb184; /* 이미지의 연두색 텍스트 반영 */
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.chart-subtitle {
+    color: #999;
+    font-size: 0.8rem;
+    margin-bottom: 20px;
+}
+
+/* Recharts 범례(Legend) 스타일 조정 */
+.recharts-default-legend {
+    font-size: 12px;
+    margin-top: 10px !important;
+}
