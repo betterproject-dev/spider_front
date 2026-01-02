@@ -11,6 +11,7 @@ header {
   display: flex;
   height: 50px;
   align-items: center;
+  position: relative;
   justify-content: space-between;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   line-height: 50px;
@@ -34,5 +35,42 @@ header li {
   cursor: pointer;
 }
 
+/* 알림 아이콘 */
+.alarm{
+  position: absolute;
+  right: 80px;
+  top: 45%;
+  transform: translateY(-50%);
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 10;
+}
 
+.alarm svg {
+  font-size: 28px;   /* 기존보다 확실히 큼 */
+}
+
+/* 마우스 올렸을 때 */
+.alarm .nbell-trigger:hover svg {
+  color: #ff4d4d;
+}
+
+/* emergency도 아이콘(svg)만 */
+.alarm.emergency svg {
+  color: #ff2e2e;
+  animation: alarm-shake 0.8s infinite;
+  font-size: 32px;
+}
+
+
+/* 흔들림 애니메이션 */
+@keyframes alarm-shake{
+  0%   { transform: translateY(-50%) rotate(0deg); }
+  20%  { transform: translateY(-50%) rotate(-15deg); }
+  40%  { transform: translateY(-50%) rotate(15deg); }
+  60%  { transform: translateY(-50%) rotate(-10deg); }
+  80%  { transform: translateY(-50%) rotate(10deg); }
+  100% { transform: translateY(-50%) rotate(0deg); }
+}
 
