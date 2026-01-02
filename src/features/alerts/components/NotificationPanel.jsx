@@ -64,7 +64,12 @@ const NotificationPanel = ({onClose}) => {
           <div className="nempty">알림이 없습니다.</div>
         ) : (
           items.map((a) => (
-            <NotificationItem key={a.id} data={a} onClick={() => openDetail(a)}/>
+            <NotificationItem 
+              key={a.id} 
+              data={a} 
+              onClick={() => openDetail(a)}
+              onResolved={() => load(tab)}
+            />
           ))
         )}
       </div>

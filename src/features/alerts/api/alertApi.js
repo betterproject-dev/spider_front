@@ -25,5 +25,11 @@ export const alertApi = {
       server: "spring"
     }),
 
+  resolveById: (id) =>
+    requestHandler({
+      method: "post",
+      url: `/api/alerts/${id}/resolve`,
+      server: "spring",
+    })
   
 }
