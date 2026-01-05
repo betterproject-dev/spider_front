@@ -63,13 +63,14 @@
 .dash-sensor-box.abnormal .dash-sensor-value { color: #c00; }
 .dash-main-row {
   display: flex;
+  height: 70%;
   gap: 24px;
   padding: 32px 40px 0 40px;
 }
 .dash-graph-box {
   background: #bdbdbd;
   border-radius: 6px;
-  flex: 2;
+  flex: 1.5;
   min-height: 260px;
   display: flex;
   align-items: center;
@@ -101,7 +102,7 @@
 .dash-cctv-box {
   background: #bdbdbd;
   border-radius: 6px;
-  flex: 2;
+  flex: 1;
   min-height: 260px;
   padding: 0 0 0 0;
   display: flex;
