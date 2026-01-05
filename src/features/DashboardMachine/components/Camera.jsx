@@ -1,10 +1,13 @@
 import "../styles/camera.css";
 import {useState} from "react";
 import UseSocket from "../../../hooks/UseSocket"; // 경로 재확인 필수
+import UseNavi from "../../../hooks/UseNavi.jsx";
 
 const Camera = () => {
   const FlaskUrl = import.meta.env.VITE_FLASK_API_URL || "http://localhost:5000";
   const videoStreamUrl = `${FlaskUrl}/camera/video_feed`;
+
+  const { goTo } = UseNavi();
 
   // YOLO 감지 결과를 저장할 상태
   const [yoloResult, setYoloResult] = useState([]);
@@ -98,7 +101,7 @@ const Camera = () => {
         />
 
         <div className="video_status">
-          <ul className="video_status_list">{renderStatusContent()}</ul>
+          <ul className="video_status_list" onClick={() => {goTo('/items/defect')}}>{renderStatusContent()}</ul>
         </div>
       </div>
 

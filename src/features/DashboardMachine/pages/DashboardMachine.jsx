@@ -6,7 +6,6 @@ import MessageSlider from "../../../components/MessageSlider/MessageSlider";
 import Camera from "../components/Camera";
 import Loading from "../../../components/Loading/Loading";
 import CurrentSensors from "../components/CurrentSensors";
-import UseNavi from "../../../hooks/UseNavi.jsx";
 
 // 메시지 슬라이더용 데이터 (MonitoringMain에서 복사)
 const MESSAGE_ROW_HEIGHT = 35;
@@ -17,8 +16,6 @@ const alertMessages = [
 ];
 
 const DashboardMachine = ({ realTimeData }) => {
-  const { goTo } = UseNavi();
-
   // 시간 표시
   const [currentTime, setCurrentTime] = useState(new Date());
   // 현재 선택한 기계 번호
@@ -85,7 +82,7 @@ const DashboardMachine = ({ realTimeData }) => {
           <div className="dash-graph-box">
             <DangerScoreGraph machine_number={selectedMachine} />
           </div>
-          <div className="dash-cctv-box" onClick={() => {goTo('/items/defect')}}>
+          <div className="dash-cctv-box">
             <Camera />
           </div>
         </div>

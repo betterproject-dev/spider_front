@@ -43,7 +43,13 @@
     background-color: #131313cc;
     padding: 10px;
     text-align: center;
+    cursor: pointer;
 }
+
+.video_status:hover {
+    background-color: #131313e5;
+}
+
 
 .status-dot {
     width: 10px;
