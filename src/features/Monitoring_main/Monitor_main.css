@@ -1,23 +1,7 @@
-/* 메시지 슬라이더 하단 고정 및 가시성 개선 */
-.message-area {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 100;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  pointer-events: none; /* 내부 클릭 방지 시 해제 */
-}
-.message-area .monitor_message {
-  pointer-events: auto;
-}
 .wrap {
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: column;
   background-color: #2a3a4a;
 }
 
@@ -320,3 +304,81 @@
   box-shadow: 0 0 8px rgba(255, 50, 50, 0.5);
 }
 
+/* 메시지 영역 - 하단 */
+.monitor_message {
+  margin: 0 auto;
+  width: 800px;
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  right: 0;
+  background: linear-gradient(90deg, rgba(40, 50, 65, 0.95), rgba(50, 60, 75, 0.95));
+  padding: 5px 15px;
+  display: flex;
+  align-items: center;
+  border-top: 2px solid #2a3a4a;
+  border-radius: 50px;
+  z-index: 10;
+}
+
+.message_left {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  border-radius: 50px;
+}
+
+.message_left p {
+  margin: 0;
+  color: #e0e0e0;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.message_right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  background-color: rgb(34, 36, 49);
+  padding: 5px 15px;
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+.message_slider {
+  position: relative;
+  width: 100%;
+  height: 35px;
+  overflow: hidden;
+}
+
+.message_track {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.45s ease-in-out;
+}
+
+.message_item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 35px;
+}
+
+.machine_num {
+  background: linear-gradient(135deg, #ff3333, #dd1111);
+  color: white;
+  padding: 5px 15px;
+  border: 1px solid #bb0000;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.message_text {
+  color: #ffffff;
+  font-size: 13px;
+  padding: 8px 15px;
+  flex: 1;
+}

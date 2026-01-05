@@ -1,57 +1,85 @@
-import { useEffect, useState } from "react";
-import Loading from "../../../components/Loading/Loading";
-import CurrentSensors from "../components/CurrentSensors";
+import { useState, useEffect } from "react";
 import "../styles/DashboardMachine.css";
-import PageHeader from "../../../components/PageHeader/PageHeader";
+import MessageSlider from "../../../components/MessageSlider/MessageSlider";
+import Camera from "../components/Camera";
 
-const DashboardMachine = ({ realTimeData }) => {
-  const [selectedMachine, setSelectedMachine] = useState(1);
+// 메시지 슬라이더용 데이터 (MonitoringMain에서 복사)
+const MESSAGE_ROW_HEIGHT = 35;
+const alertMessages = [
+  { machine: "4호기", text: "긴급위험 발생." },
+  { machine: "4호기", text: "온도 수치가 허용범위를 초과하였습니다." },
+  { machine: "4호기", text: "습도 비정상." },
+];
+
+const DashboardMachine = () => {
+  // 시간 표시
   const [currentTime, setCurrentTime] = useState(new Date());
-
-  // 작동 여부 (임시 : realTimeData에 값이 들어있는지 여부 -> 추후에 소켓 작동 여부로 변경)
-  const isWorking = realTimeData.length !== 0;
-
-  // 현재 시간 보여주는 거 추후에 커스텀 훅으로 수정
-  const formattedDate = `${currentTime.getFullYear()}/${(currentTime.getMonth()+1)}/${currentTime.getDate()}`;
-  const hours = String(currentTime.getHours()).padStart(2, '0');
-  const minutes = String(currentTime.getMinutes()).padStart(2, '0');
-  const seconds = String(currentTime.getSeconds()).padStart(2, '0');
-  const time = `${hours}:${minutes}:${seconds}`;
-
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
+  const formattedDate = `${currentTime.getFullYear()}/${(currentTime.getMonth()+1).toString().padStart(2,'0')}/${currentTime.getDate().toString().padStart(2,'0')}`;
+  const time = `${currentTime.getHours().toString().padStart(2,'0')}:${currentTime.getMinutes().toString().padStart(2,'0')}:${currentTime.getSeconds().toString().padStart(2,'0')}`;
+
+  // 메시지 슬라이더 (MonitoringMain과 동일)
+  const [messageIndex, setMessageIndex] = useState(0);
+  const [transitionOn, setTransitionOn] = useState(true);
+  useEffect(() => {
+    const ticker = setInterval(() => {
+      setMessageIndex((prev) => prev + 1);
+    }, 3500);
+    return () => clearInterval(ticker);
+  }, []);
+  const handleMessageTransitionEnd = () => {
+    if (messageIndex === alertMessages.length) {
+      setTransitionOn(false);
+      setMessageIndex(0);
+      setTimeout(() => setTransitionOn(true), 50);
+    }
+  };
+
+  // 센서 상태 예시 데이터
+  const sensors = [
+    { label: "온도", value: "35℃", status: "정상" },
+    { label: "습도", value: "35℃", status: "비정상" },
+    { label: "소음", value: "35℃", status: "비정상" },
+    { label: "누수", value: "정상", status: "정상" },
+  ];
 
   return (
     <>
-      <div className="wrap">
-        <div className="dashboard_main">
-          <PageHeader
-            selectedMachine={selectedMachine}
-            onMachineChange={setSelectedMachine}
-          />
-          <div className="dashboard_title_area">
-            <div className="dashboard_isWorking">
-              <p className={isWorking ? 'working_on' : 'working_off'}>작동 {isWorking ? "ON" : "OFF"}</p>
+      <div className="dashboard-layout">
+        {/* 상단 */}
+        <div className="dash-status-row">
+          <div className="dash-status-on">정상작동중 ON</div>
+          <div className="dash-title">1호기</div>
+          <div className="dash-date">{formattedDate} {time}</div>
+        </div>
+        <div className="dash-sensor-row">
+          {sensors.map((s, idx) => (
+            <div key={idx} className={`dash-sensor-box ${s.status === '정상' ? 'normal' : 'abnormal'}`}>
+              <div className="dash-sensor-label">{s.label}</div>
+              <div className="dash-sensor-value">
+                <span className={s.status === '정상' ? 'text-green' : 'text-red'}>{s.status}</span> {s.value}
+              </div>
             </div>
-            <div className="dashboard_title">
-              <h1>{selectedMachine}호기</h1>
-            </div>
-            <div className="dashboard_nowTime">
-              <p>{formattedDate} {time}</p>
-            </div>
+          ))}
+        </div>
+        <div className="dash-main-row">
+          <div className="dash-graph-box">
+            <div className="dash-graph-title">위험 점수 그래프<br/>(선 그래프)</div>
           </div>
-          {/* (임시) 주석 처리 -> 실시간 데이터가 들어오지 않으면 대시보드 대신 로딩 스페너를 보여주는 코드임. */}
-          {/* { realTimeData.length === 0 && (
-            <div className="current_sensor_container">
-              <Loading message="센서 데이터 수신 대기 중..." />
-            </div>
-          )} */}
-          <CurrentSensors realTimeData={realTimeData} />
+          <div className="dash-warning-box">
+            <div className="dash-warning-icon" />
+            <div className="dash-warning-text">주의</div>
+          </div>
+          <div className="dash-cctv-box">
+            <Camera />
+          </div>
+        </div>
+        {/* Message 영역 - MessageSlider 컴포넌트로 분리 */}
+        <div className="message-area">
+          <MessageSlider messages={alertMessages} rowHeight={35} interval={3500} />
         </div>
       </div>
     </>
