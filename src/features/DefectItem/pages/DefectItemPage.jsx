@@ -63,6 +63,7 @@ const DefectItemPage = () => {
 
   return (
     <>
+    <div className="wrap">
       <MachineLayout
         title="제품 불량률 통계 페이지"
         machines={[1, 2, 3, 4]}
@@ -124,7 +125,8 @@ const DefectItemPage = () => {
               </ResponsiveContainer>
             </section>
           </div>
-      </MachineLayout>           
+      </MachineLayout>
+    </div>           
     </>
   )
 };
