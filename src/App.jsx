@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import './App.css'
+import EmergencyAlertModal from './features/emergency/components/EmergencyAlertModal'
 import Routers from './Route'
 import Header from "./components/Header/Header.jsx";
 import UseSocket from './hooks/UseSocket.jsx';
@@ -13,7 +14,7 @@ function App() {
     // console.log("실시간 들어오는 데이터 : ", newData)  // 개발 끝나면 삭제
     setRealTimeData(prev => {
       const newItem = {
-        // timestamp : newData.timestamp,
+        timestamp : newData.timestamp,
         temperature_factory : newData.temperature,  // 공장 내부 온도 (온습도 센서)
         temperature : newData.temperature_DS18B20,  // 기계 온도 (부착형 온도 센서)
         humidity : newData.humidity,
@@ -28,13 +29,17 @@ function App() {
   UseSocket("sensor_data", handleSensorData);
 
   return (
+    
     <div className="app-layout">
       <Header  />
       <main className="app-main">
         <Routers realTimeData={realTimeData} />
       </main>
+        
+      <EmergencyAlertModal />
     </div>
-  );
+    
+  )
 }
 
 export default App

@@ -2,6 +2,7 @@ import "../styles/MonitoringMain.css";
 import { useState, useEffect } from "react";
 import factoryImg from "../../../img/factory_bg.png";
 import UseNavi from "../../../hooks/UseNavi";
+import MessageSlider from "../../../components/MessageSlider/MessageSlider";
 
 const MESSAGE_ROW_HEIGHT = 35;
 const alertMessages = [
@@ -16,6 +17,36 @@ const MonitoringMain = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [messageIndex, setMessageIndex] = useState(0);
   const [transitionOn, setTransitionOn] = useState(true);
+  // WebSocket으로 받아올 온도/습도 상태
+  const [temperature, setTemperature] = useState(null);
+  const [humidity, setHumidity] = useState(null);
+  // WebSocket 연결 및 데이터 수신
+  useEffect(() => {
+    // 실제 센서 서버 주소로 변경 필요
+    const ws = new WebSocket('ws://localhost:5173/ws/sensor');
+
+    ws.onopen = () => {
+      // 연결 성공 시 필요시 인증/구독 메시지 전송 가능
+    };
+
+    ws.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (typeof data.temperature !== 'undefined') setTemperature(data.temperature);
+        if (typeof data.humidity !== 'undefined') setHumidity(data.humidity);
+      } catch (e) {
+        // 데이터 파싱 실패 시 무시
+      }
+    };
+
+    ws.onerror = (err) => {
+      // 에러 핸들링 (옵션)
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -71,9 +102,9 @@ const MonitoringMain = () => {
             </div>
           </div>
           <div className="right_container">
-               <div className="factory_image">
-                 <img src={factoryImg} alt="factory" className="factory_img" />
-               </div>
+            <div className="factory_image">
+              <img src={factoryImg} alt="factory" className="factory_img" />
+            </div>
             <div className="machine_status">
               <div className="status_green">정상가동</div>
               <div className="status_yellow">작동대기</div>
@@ -81,36 +112,17 @@ const MonitoringMain = () => {
             </div>
             <div className="factory_TH">
               <div className="TH_text">공장 내부 온도 | 습도</div>
-              <div className="temp">온도 : {sec}℃</div>
-              <div className="hum">습도 : {Number(sec) + 2}%</div>
+              <div className="temp">온도 : {temperature !== null ? `${temperature}℃` : "--"}</div>
+              <div className="hum">습도 : {humidity !== null ? `${humidity}%` : "--"}</div>
             </div>
-            <div className="machine_1" onClick={() => goTo('/dashboard')}>1호기</div>
+            <div className="machine_1" onClick={() => goTo("/dashboard")}>
+              1호기
+            </div>
             <div className="machine_2">2호기</div>
             <div className="machine_3">3호기</div>
             <div className="machine_4">4호기</div>
-            <div className="monitor_message">
-              <div className="message_left">
-                <p>Message</p>
-              </div>
-              <div className="message_right">
-                <div className="message_slider">
-                  <div
-                    className="message_track"
-                    style={{
-                      transform: `translateY(-${messageIndex * MESSAGE_ROW_HEIGHT}px)`,
-                      transition: transitionOn ? "transform 0.45s ease-in-out" : "none",
-                    }}
-                    onTransitionEnd={handleMessageTransitionEnd}
-                  >
-                    {[...alertMessages, alertMessages[0]].map((msg, idx) => (
-                      <div className="message_item" key={`${msg.machine}-${idx}`}>
-                        <div className="machine_num">{msg.machine}</div>
-                        <div className="message_text">{msg.text}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+            <div className="message-area">
+              <MessageSlider messages={alertMessages} rowHeight={35} interval={3500} />
             </div>
           </div>
         </div>

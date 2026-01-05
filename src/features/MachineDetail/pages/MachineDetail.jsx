@@ -22,8 +22,6 @@ const MachineDetail = ({ realTimeData }) => {
   const [selectedSensor, setSelectedSensor] = useState( sensorKey || 'temperature' );
   const [selectedPeriod, setSelectedPeriod] = useState('live');
   
-  const machines = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  
   const sideButtons = [
     { id: 1, name: '실시간 모니터링', key: 'live' },
     { id: 2, name: '일간 추이', key: 'today' },
@@ -55,7 +53,7 @@ const MachineDetail = ({ realTimeData }) => {
   return (
     <MachineLayout
       title={`[ ${selectedMachine}호기 ] 센서 정보`}
-      machines={machines}              // 호기 리스트 전달
+      sort='센서 상세'  // 페이지 네비바에 들어갈 상세 페이지 정보 전달
       selectedMachine={selectedMachine} // 현재 값 전달
       onMachineChange={setSelectedMachine} // 변경 함수 전달
       tabs={SENSOR_LIST}

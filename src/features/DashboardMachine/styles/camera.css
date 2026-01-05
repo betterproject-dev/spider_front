@@ -2,22 +2,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 2rem;
-    background-color: #1a1a1a; /* 어두운 배경 */
+    padding-bottom: 20px;
+    background-color: #7a7a7a; /* 어두운 배경 */
     border-radius: 12px;
     color: #ffffff;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     margin: 20px;
-}
-
-.camera-header {
-    margin-bottom: 1.5rem;
-}
-
-.camera-header h2 {
-    margin: 0;
-    font-size: 1.8rem;
-    color: #00d1ff; /* 포인트 컬러 */
 }
 
 .video-wrapper {
@@ -26,12 +16,11 @@
     border-radius: 8px;
     overflow: hidden;
     background-color: #000;
-    line-height: 0; /* 이미지 하단 공백 제거 */
 }
 
 .video-feed {
     width: 100%;
-    max-width: 720px;
+    max-width: 1660px;
     height: auto;
     display: block;
 }
@@ -47,6 +36,15 @@
     gap: 8px;
 }
 
+.video_status {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #131313cc;
+    padding: 10px;
+    text-align: center;
+}
+
 .status-dot {
     width: 10px;
     height: 10px;
@@ -59,4 +57,29 @@
     0% { opacity: 1; }
     50% { opacity: 0.4; }
     100% { opacity: 1; }
+}
+
+/* 리스트 기본 스타일 */
+.video_status_list li {
+  list-style: none;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+  color: #ffffff;
+}
+
+/* 양호/정상 스타일 */
+.status-ok {
+  color: #2ecc71 !important; /* 초록색 */
+  font-weight: bold;
+}
+
+/* 불량 스타일 */
+.status-fail {
+  color: #e74c3c !important; /* 빨간색 */
+  font-weight: bold;
+}
+
+/* 대기/데이터 없음 스타일 */
+.status-wait {
+  color: #ffffff;
 }
