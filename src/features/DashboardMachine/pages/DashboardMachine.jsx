@@ -6,7 +6,7 @@ import MessageSlider from "../../../components/MessageSlider/MessageSlider";
 import Camera from "../components/Camera";
 import Loading from "../../../components/Loading/Loading";
 import CurrentSensors from "../components/CurrentSensors";
-import PageHeader from "../../../components/PageHeader/PageHeader";
+import UseNavi from "../../../hooks/UseNavi.jsx";
 
 // 메시지 슬라이더용 데이터 (MonitoringMain에서 복사)
 const MESSAGE_ROW_HEIGHT = 35;
@@ -17,10 +17,15 @@ const alertMessages = [
 ];
 
 const DashboardMachine = ({ realTimeData }) => {
-  // 현재 선택한 기계 번호
-  const [selectedMachine, setSelectedMachine] = useState(1);
+  const { goTo } = UseNavi();
+
   // 시간 표시
   const [currentTime, setCurrentTime] = useState(new Date());
+  // 현재 선택한 기계 번호
+  const [selectedMachine, setSelectedMachine] = useState(1);
+  // 메시지 슬라이더 (MonitoringMain과 동일)
+  const [messageIndex, setMessageIndex] = useState(0);
+  const [transitionOn, setTransitionOn] = useState(true);
 
   // 작동 여부 (임시 : realTimeData에 값이 들어있는지 여부 -> 추후에 소켓 작동 여부로 변경)
   const isWorking = realTimeData.length !== 0;
@@ -32,10 +37,6 @@ const DashboardMachine = ({ realTimeData }) => {
   const formattedDate = `${currentTime.getFullYear()}/${(currentTime.getMonth()+1).toString().padStart(2,'0')}/${currentTime.getDate().toString().padStart(2,'0')}`;
   const time = `${currentTime.getHours().toString().padStart(2,'0')}:${currentTime.getMinutes().toString().padStart(2,'0')}:${currentTime.getSeconds().toString().padStart(2,'0')}`;
 
-  // 메시지 슬라이더 (MonitoringMain과 동일)
-  const [selectedMachine, setSelectedMachine] = useState(1);
-  const [messageIndex, setMessageIndex] = useState(0);
-  const [transitionOn, setTransitionOn] = useState(true);
   useEffect(() => {
     const ticker = setInterval(() => {
       setMessageIndex((prev) => prev + 1);
@@ -84,7 +85,7 @@ const DashboardMachine = ({ realTimeData }) => {
           <div className="dash-graph-box">
             <DangerScoreGraph machine_number={selectedMachine} />
           </div>
-          <div className="dash-cctv-box">
+          <div className="dash-cctv-box" onClick={() => {goTo('/items/defect')}}>
             <Camera />
           </div>
         </div>
