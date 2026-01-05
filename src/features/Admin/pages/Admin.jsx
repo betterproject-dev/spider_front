@@ -20,7 +20,7 @@ const Admin = () => {
       onSuccess: (data) => {
         if (data.success) {
           alert(data.message);
-          goTo('/camera') // 인증 성공 시 이동할 페이지
+          goTo('/monitor') // 인증 성공 시 이동할 페이지
         } else {
           alert(data.message);
           setPin(""); // 틀리면 입력창 초기화

@@ -1,0 +1,80 @@
+
+/* 메시지 영역 - 하단 */
+.monitor_message {
+  margin: 0 auto;
+  width: 800px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 30px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(90deg, rgba(40, 50, 65, 0.95), rgba(50, 60, 75, 0.95));
+  border-top: 2px solid #2a3a4a;
+  border-radius: 50px;
+  padding: 5px 15px;
+}
+
+.message_left {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  border-radius: 50px;
+}
+
+.message_left p {
+  margin: 0;
+  color: #e0e0e0;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.message_right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  background-color: rgb(34, 36, 49);
+  padding: 5px 15px;
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+.message_slider {
+  position: relative;
+  width: 100%;
+  height: 35px;
+  overflow: hidden;
+}
+
+.message_track {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.45s ease-in-out;
+}
+
+.message_item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 35px;
+}
+
+.machine_num {
+  background: linear-gradient(135deg, #ff3333, #dd1111);
+  color: #fff;
+  border: 1px solid #bb0000;
+  border-radius: 50px;
+  padding: 5px 15px;
+  font-weight: 600;
+  font-size: 13px;
+  margin-right: 10px;
+}
+
+.message_text {
+  color: #fff;
+  font-size: 13px;
+  padding: 8px 15px;
+  flex: 1;
+}

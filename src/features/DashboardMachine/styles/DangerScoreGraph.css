@@ -1,25 +1,20 @@
-/* 부모 레이아웃 */
-.dashboard-layout {
-  display: flex;
-  align-items: stretch; /* 그래프와 설명칸 높이를 똑같이 맞춤 */
-  gap: 15px;            /* 그래프와 설명칸 사이 간격 */
-  width: 50%;
-  height: 60%;
-  
-}
-
 /* 그래프 영역 */
 .graph-container {
-  flex: 4;              /* 그래프가 더 넓게 (4:1 비율) */
+  display: inline-block;  /* 가로로 나열되게 함 */
+  vertical-align: top;    /* 옆 요소와 윗줄 맞춤 */
+  width: calc(80% - 15px); /* 4/5 지점인 80%에서 간격 제외 */
+  height: 100%;          /* Recharts를 위해 높이 필수! */
   background: #fff;
   border-radius: 12px;
   padding: 15px;
   border: 1px solid #eee;
+  box-sizing: border-box;
 }
 
 /* 설명 칸 영역 */
 .status-legend-container {
   flex: 1;
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 10px; /* 아이템 사이 간격 */

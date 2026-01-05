@@ -51,17 +51,17 @@ const DangerScoreGraph = ({machine_number}) => {
   }, []); // 빈 배열이므로 마운트 시에만 타이머 생성
 
   return (
-    <div className="dashboard-layout">
+    <>
       {/* 왼쪽: 그래프 영역 */}
       <div className="graph-container">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={scores} margin={{ top: 5, right: 30, left: 20, bottom: 25 }}>
             <CartesianGrid strokeDasharray="5 5" stroke="#e2e8f0" vertical={false} />
-            <XAxis tickFormatter={(value, index) => index + 1} interval={0} padding={{ left: 30, right: 30 }}>
-              <Label value="데이터 순번 (Index)" offset={-10} position="insideBottom" />
+            <XAxis tickFormatter={(value, index) => index + 1} interval={0} padding={{ left: 30, right: 30 }} tick={{ fontSize: 12 }}>
+              <Label value="데이터 순번 (Index)" offset={-10} position="insideBottom" style={{ fontSize: '20px'}}/>
             </XAxis>
-            <YAxis domain={[0, 100]}>
-              <Label value="위험도 점수" angle={-90} position="insideLeft" style={{ textAnchor: 'middle', fill: '#666' }} />
+            <YAxis domain={[0, 100]} tick={{ fontSize: 12 }}>
+              <Label value="위험도 점수" angle={-90} position="insideLeft" style={{ textAnchor: 'middle', fill: '#666', fontSize: '20px' }} />
             </YAxis>
             <Tooltip
               labelFormatter={(value, index) => `${value + 1}번째 데이터`}
@@ -100,7 +100,7 @@ const DangerScoreGraph = ({machine_number}) => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
