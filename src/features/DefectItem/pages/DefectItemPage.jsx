@@ -3,6 +3,7 @@ import MachineLayout from "../../DetailLayout/pages/MachineLayout";
 import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import requestHandler from "../../../utils/requestHandler";
 import '../styles/defectItem.css';
+import Loading from "../../../components/Loading/Loading";
 
 const COLORS = ['#4A90E2', '#FF8042', '#FFBB28', '#00C49F', '#8884d8'];
 
@@ -81,7 +82,7 @@ const DefectItemPage = () => {
         ]}
         currentValue={{label: "평균 불량률", value: `${summary.avgRate}%`}}
         >
-          {loading && <div className="loading-overlay">데이터 로딩 중...</div>}
+          {loading && <Loading message="데이터 로딩 중..."/>}
           <div className="stats-chart-container">
             <section className="chart-section">
               <h3 className="chart-title">어떤 불량이 많이 나오는가?</h3>
