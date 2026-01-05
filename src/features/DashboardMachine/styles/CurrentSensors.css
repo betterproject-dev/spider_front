@@ -3,7 +3,6 @@
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  padding: 10px;
 }
 
 /* 개별 센서 박스 */
