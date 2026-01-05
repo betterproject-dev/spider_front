@@ -14,6 +14,7 @@ const DefectItemPage = () => {
   const [trendData, setTrendData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [summary, setSummary] = useState({totalInspected: 0, totalRejected: 0, avgRate: 0});
+  const visibleTrendData = trendData.filter(item => (item.rejectionRate || 0) > 0);
 
   const fetchDefectSummary = (onSuccess, type, setLoading) => {
     return requestHandler({
@@ -109,7 +110,7 @@ const DefectItemPage = () => {
               <h3 className="chart-title">언제 제품 불량이 많이 나오는가?</h3>
               <p className="chart-subtitle">(%)일일 불량률 추이</p>
               <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={trendData}>
+                <BarChart data={visibleTrendData}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} />
                   <XAxis dataKey="createdAt" />
                   <YAxis unit='%'/>
