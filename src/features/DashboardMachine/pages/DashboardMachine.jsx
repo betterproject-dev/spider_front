@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import "../styles/DashboardMachine.css";
+import DangerScoreGraph from "../components/DangerScoreGraph.jsx";
+import PageHeader from "../../../components/PageHeader/PageHeader";
 import MessageSlider from "../../../components/MessageSlider/MessageSlider";
 import Camera from "../components/Camera";
 import Loading from "../../../components/Loading/Loading";
@@ -31,6 +33,7 @@ const DashboardMachine = ({ realTimeData }) => {
   const time = `${currentTime.getHours().toString().padStart(2,'0')}:${currentTime.getMinutes().toString().padStart(2,'0')}:${currentTime.getSeconds().toString().padStart(2,'0')}`;
 
   // 메시지 슬라이더 (MonitoringMain과 동일)
+  const [selectedMachine, setSelectedMachine] = useState(1);
   const [messageIndex, setMessageIndex] = useState(0);
   const [transitionOn, setTransitionOn] = useState(true);
   useEffect(() => {
@@ -79,11 +82,7 @@ const DashboardMachine = ({ realTimeData }) => {
         </div>
         <div className="dash-main-row">
           <div className="dash-graph-box">
-            <div className="dash-graph-title">위험 점수 그래프<br/>(선 그래프)</div>
-          </div>
-          <div className="dash-warning-box">
-            <div className="dash-warning-icon" />
-            <div className="dash-warning-text">주의</div>
+            <DangerScoreGraph machine_number={selectedMachine} />
           </div>
           <div className="dash-cctv-box">
             <Camera />
