@@ -3,7 +3,7 @@ import {useState} from "react";
 import UseSocket from "../../../hooks/UseSocket"; // 경로 재확인 필수
 import UseNavi from "../../../hooks/UseNavi.jsx";
 
-const Camera = () => {
+const Camera = ({ selectedMachine }) => {
   const FlaskUrl = import.meta.env.VITE_FLASK_API_URL || "http://localhost:5000";
   const videoStreamUrl = `${FlaskUrl}/camera/video_feed`;
 
@@ -101,7 +101,7 @@ const Camera = () => {
         />
 
         <div className="video_status">
-          <ul className="video_status_list" onClick={() => {goTo('/items/defect')}}>{renderStatusContent()}</ul>
+          <ul className="video_status_list" onClick={() => {goTo(`/machine/${selectedMachine}/items/defect`)}}>{renderStatusContent()}</ul>
         </div>
       </div>
 

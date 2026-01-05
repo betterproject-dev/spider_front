@@ -3,11 +3,14 @@ import MachineLayout from "../../DetailLayout/pages/MachineLayout";
 import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import requestHandler from "../../../utils/requestHandler";
 import '../styles/defectItem.css';
+import { useParams } from "react-router-dom";
 
 const COLORS = ['#4A90E2', '#FF8042', '#FFBB28', '#00C49F', '#8884d8'];
 
 const DefectItemPage = () => {
-  const [selectedMachine, setSelectedMachine] = useState(1);
+  const { machineNum } = useParams();
+
+  const [selectedMachine, setSelectedMachine] = useState(Number(machineNum) || 1);
   const [selectedSide, setSelectedSide] = useState('today');
   const [defectData, setDefectData] = useState([]);
   const [trendData, setTrendData] = useState([]);

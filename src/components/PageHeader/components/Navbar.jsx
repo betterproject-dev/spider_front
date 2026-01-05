@@ -22,7 +22,7 @@ const Navbar = ({ detail, sort, selectedMachine }) => {
             /* 상세 페이지(센서/불량 등)인 경우의 경로 표시 */
             <>
             {/* 선택한 기계 대시보드로 이동 */}
-            <span className='navi-cursor' onClick={() => goTo("/dashboard")}> &gt; {selectedMachine}호기</span>
+            <span className='navi-cursor' onClick={() => goTo(`/dashboard/${selectedMachine}`)}> &gt; {selectedMachine}호기</span>
             {/* 현재 보고 있는 상세 메뉴 이름 (클릭 불가) */}
             <span> &gt; {sort}</span>
             </>
