@@ -4,6 +4,8 @@
   align-items: stretch; /* 그래프와 설명칸 높이를 똑같이 맞춤 */
   gap: 15px;            /* 그래프와 설명칸 사이 간격 */
   width: 50%;
+  height: 60%;
+  
 }
 
 /* 그래프 영역 */

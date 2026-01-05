@@ -3,13 +3,13 @@ import requestHandler from "../../../utils/requestHandler.js"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Label, LabelList, ReferenceArea } from 'recharts';
 import "../styles/DangerScoreGraph.css"
 
-const DangerScoreGraph = (machine_number) => {
+const DangerScoreGraph = ({machine_number}) => {
   const [scores, setScores] = useState([]);
 
   const getScore = async () => {
     const res = await requestHandler({
       method: "get",
-      url: '/sensormodel/load_score/1'
+      url: '/sensormodel/load_score/'+machine_number
     })
     console.log(res.data)
     const { data, message, ok } = res.data

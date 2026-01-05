@@ -1,7 +1,64 @@
 .dashboard_main {
   width: 100%;
-  height: 90%;
+  height: 100%;
+}
+
+.dashboard_title_area {
+  display: flex; 
+  padding: 30px 60px;
+  color: #fff;
+  border-bottom: 1px solid rgba(238, 238, 238, 0.1);
+  margin-bottom: 20px;
+}
+
+.dashboard_isWorking {
+  flex: 1;
   display: flex;
-  flex-direction: column;
-  background-color: #2a3a4a;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.dashboard_isWorking > p {
+  padding: 10px 30px;
+  background-color: #1f1f1f;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-radius: 4px;
+}
+
+.dashboard_isWorking .working_on {
+  color: var(--color-normal);
+}
+
+.dashboard_isWorking .working_off {
+  color: var(--color-danger);
+}
+
+.dashboard_title {
+  flex: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dashboard_title h1 {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin: 0;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.dashboard_nowTime {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: end;
+}
+
+.dashboard_nowTime > p {
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 1px;
 }
