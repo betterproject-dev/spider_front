@@ -1,35 +1,51 @@
-import { useEffect } from 'react';
-import { io } from 'socket.io-client';
+import {useEffect} from "react";
+import {io} from "socket.io-client";
 
-const socket = io(import.meta.env.VITE_FLASK_API_URL, {
-  reconnectionAttempts: 3,  // 재연결 시도 3회
-  timeout: 5000
+// 주소를 명시적으로 확인하기 위해 로그 추가 (디버깅용)
+const SOCKET_URL = import.meta.env.VITE_FLASK_API_URL || "http://localhost:5000";
+console.log(" 소켓 서버 주소 시도 중:", SOCKET_URL);
+
+const socket = io(SOCKET_URL, {
+  transports: ["websocket"], // 400 에러를 유발하는 polling을 건너뜁니다.
+  reconnection: true,
+  reconnectionAttempts: 5,
+  reconnectionDelay: 1000,
+  forceNew: false,
 });
-
-/**
- * 특정 웹소켓 이벤트를 구독하고 해제하는 커스텀 훅
- * @param {string} eventName - 서버에서 보낸 이벤트 이름 (예: 'sensor_data')
- * @param {function} callback - 데이터를 받았을 때 실행할 함수
- */
 
 const UseSocket = (eventName, callback) => {
   useEffect(() => {
-    // 이벤트 이름이나 콜백이 없으면 실행하지 않음
     if (!eventName || !callback) return;
 
-    socket.on(eventName, callback);
-
-    // 공통 연결 에러 처리
-    const handleConnectError = (err) => {
-      console.warn(`[Socket] '${eventName}' 연결 시도 중 에러 발생 (서버 확인 필요)`);
+    // 1. 연결 성공 핸들러
+    const onConnect = () => {
+      console.log(`✅ [Socket] '${eventName}' 채널 연결 성공! (ID: ${socket.id})`);
     };
-    socket.on("connect_error", handleConnectError);
 
+    // 2. 데이터 수신 핸들러
+    const onMessage = (data) => {
+      callback(data);
+    };
+
+    // 3. 연결 에러 핸들러 (상세 이유 출력)
+    const onConnectError = (err) => {
+      // 서버에서 거절한 구체적인 이유를 확인하기 위함
+      console.error(`❌ [Socket] '${eventName}' 연결 실패:`, err.message);
+    };
+
+    socket.on("connect", onConnect);
+    socket.on(eventName, onMessage);
+    socket.on("connect_error", onConnectError);
+
+    // 컴포넌트 언마운트 시 정리
     return () => {
-      socket.off(eventName, callback);
-      socket.off("connect_error", handleConnectError);
-    }
+      socket.off("connect", onConnect);
+      socket.off(eventName, onMessage);
+      socket.off("connect_error", onConnectError);
+    };
   }, [eventName, callback]);
+
+  return socket;
 };
 
 export default UseSocket;

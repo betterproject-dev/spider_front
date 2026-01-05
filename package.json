@@ -19,14 +19,9 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^6.30.2",
-<<<<<<< HEAD
     "socket.io-client": "^4.8.3",
     "ws": "^8.18.3",
     "recharts": "^3.6.0"
-=======
-    "recharts": "^3.6.0",
-    "socket.io-client": "^4.8.3"
->>>>>>> develop
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
