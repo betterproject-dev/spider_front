@@ -94,7 +94,7 @@ const MonitoringMain = () => {
               <p className="time">{time}</p>
             </div>
             <div className="main_button_list">
-              <div className="main_btn" onClick={() => goTo('/items/defect')}>
+              <div className="main_btn" onClick={() => goTo('/machine/1/items/defect')}>
                 제품 불량 통계
               </div>
               <div className="main_btn">생산현황</div>
@@ -115,7 +115,7 @@ const MonitoringMain = () => {
               <div className="temp">온도 : {temperature !== null ? `${temperature}℃` : "--"}</div>
               <div className="hum">습도 : {humidity !== null ? `${humidity}%` : "--"}</div>
             </div>
-            <div className="machine_1" onClick={() => goTo("/dashboard")}>
+            <div className="machine_1" onClick={() => goTo("/dashboard/1")}>
               1호기
             </div>
             <div className="machine_2">2호기</div>
