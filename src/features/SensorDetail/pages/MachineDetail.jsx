@@ -20,7 +20,7 @@ const MachineDetail = ({ realTimeData }) => {
     leak : 1
   }
 
-  const { sensorKey } = useParams();
+  const { machineNum, sensorKey } = useParams();
   const { SENSOR_LIST, checkIsNormal } = sensorConfig;
   
   // 마지막으로 들어온 센서 데이터
@@ -28,7 +28,7 @@ const MachineDetail = ({ realTimeData }) => {
     ? realTimeData[realTimeData.length - 1] 
     : testData;
 
-  const [selectedMachine, setSelectedMachine] = useState(1);
+  const [selectedMachine, setSelectedMachine] = useState(Number(machineNum) || 1);
   const [selectedSensor, setSelectedSensor] = useState(() => {
   return sensorKey || SENSOR_LIST[0]?.key || 'temperature';
 });

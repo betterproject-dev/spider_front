@@ -5,19 +5,19 @@ import PageHeader from "../../../components/PageHeader/PageHeader";
 import Camera from "../components/Camera";
 import Loading from "../../../components/Loading/Loading";
 import CurrentSensors from "../components/CurrentSensors";
-import UseNavi from "../../../hooks/UseNavi.jsx";
+import requestHandler from "../../../utils/requestHandler.js";
+import { useParams } from "react-router-dom";
 
 const DashboardMachine = ({ realTimeData, scores, lastScore }) => {
-  const { goTo } = UseNavi();
+  const { machineNum } = useParams();
 
   // 시간 표시
   const [currentTime, setCurrentTime] = useState(new Date());
   // 현재 선택한 기계 번호
-  const [selectedMachine, setSelectedMachine] = useState(1);
-  const [transitionOn, setTransitionOn] = useState(true);
+  const [selectedMachine, setSelectedMachine] = useState(Number(machineNum) || 1);
 
-  // 작동 여부 (임시 : realTimeData에 값이 들어있는지 여부 -> 추후에 소켓 작동 여부로 변경)
-  const isWorking = realTimeData.length !== 0;
+  // spring에서 센서의 작동 여부를 가져옴
+  const [isWorking, setIsWorking] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -25,6 +25,24 @@ const DashboardMachine = ({ realTimeData, scores, lastScore }) => {
   }, []);
   const formattedDate = `${currentTime.getFullYear()}/${(currentTime.getMonth()+1).toString().padStart(2,'0')}/${currentTime.getDate().toString().padStart(2,'0')}`;
   const time = `${currentTime.getHours().toString().padStart(2,'0')}:${currentTime.getMinutes().toString().padStart(2,'0')}:${currentTime.getSeconds().toString().padStart(2,'0')}`;
+
+  useEffect(() => {
+    const fetchHeartbeatStatus = async () => {
+      const { ok, data } = await requestHandler({
+        method: "get",
+        url: `/api/heartbeat/status/${selectedMachine}`,
+        server: "spring",
+        onError: (msg) => console.error(msg)
+      });
+
+      if (ok) setIsWorking(data.status === "ONLINE");
+      else setIsWorking(false);
+    };
+
+    fetchHeartbeatStatus();
+    const interval = setInterval(fetchHeartbeatStatus, 5000);
+    return () => clearInterval(interval);
+  }, [selectedMachine]);
 
   return (
     <>
@@ -54,14 +72,14 @@ const DashboardMachine = ({ realTimeData, scores, lastScore }) => {
               <Loading message="센서 데이터 수신 대기 중..." />
             </div>
           )} */}
-          <CurrentSensors realTimeData={realTimeData} />
+          <CurrentSensors realTimeData={realTimeData} selectedMachine={selectedMachine} />
         </div>
         <div className="dash-main-row">
           <div className="dash-graph-box">
             <DangerScoreGraph machine_number={selectedMachine} scores={scores} lastScore={lastScore} />
           </div>
-          <div className="dash-cctv-box" onClick={() => {goTo('/items/defect')}}>
-            <Camera />
+          <div className="dash-cctv-box">
+            <Camera selectedMachine={selectedMachine} />
           </div>
         </div>
       </div>

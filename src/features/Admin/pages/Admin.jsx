@@ -37,6 +37,7 @@ const Admin = () => {
   return(
     <>
     {loading && <Loading message='인증 확인 중...'/>}
+    <div className="wrap">
     <div className="admin-login-box">
       <form className="login-form" onSubmit={handleLogin}>
         <h2>Admin Access</h2>
@@ -52,6 +53,7 @@ const Admin = () => {
         />
         <button type='submit' className='login-btn'>인증하기</button>
       </form>
+    </div>
     </div>
     </>
   )

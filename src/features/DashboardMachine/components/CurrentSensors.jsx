@@ -2,7 +2,7 @@ import '../styles/CurrentSensors.css'
 import UseNavi from '../../../hooks/UseNavi';
 import sensorConfig from '../../../utils/sensorConfig';
 
-const CurrentSensors = ({ realTimeData }) => {
+const CurrentSensors = ({ realTimeData, selectedMachine }) => {
   const { goTo } = UseNavi();
   const { SENSOR_LIST, checkIsNormal } = sensorConfig;
     
@@ -23,7 +23,7 @@ const CurrentSensors = ({ realTimeData }) => {
     const isNormal = checkIsNormal(sensor, data);
 
     return (
-      <div className="current_sensor_box" key={sensor.id} onClick={() => goTo(`/sensor/${sensor.key}`)} >
+      <div className="current_sensor_box" key={sensor.id} onClick={() => goTo(`/machine/${selectedMachine}/sensor/${sensor.key}`)} >
         <div className="sensor_name_area">
           <div className="sensor_name">{sensor.name}</div>
         </div>
