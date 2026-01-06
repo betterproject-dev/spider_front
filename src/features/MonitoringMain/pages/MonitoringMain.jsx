@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import factoryImg from "../../../img/factory_bg.png";
 import UseNavi from "../../../hooks/UseNavi";
 import MessageSlider from "../../../components/MessageSlider/MessageSlider";
+import { io } from "socket.io-client";
 
 const MESSAGE_ROW_HEIGHT = 35;
 const alertMessages = [
@@ -33,28 +34,22 @@ const MonitoringMain = ({ lastScore }) => {
   // WebSocket 연결 및 데이터 수신
   useEffect(() => {
     // 실제 센서 서버 주소로 변경 필요
-    const ws = new WebSocket('ws://localhost:5173/ws/sensor');
+    const ws = io('ws://localhost:5000', {
+      transports: ['websocket'],
+    });
 
-    ws.onopen = () => {
-      // 연결 성공 시 필요시 인증/구독 메시지 전송 가능
-    };
+    ws.on('sensor_data', (data) => {      
+      if (data.temperature !== undefined) setTemperature(data.temperature);
+      if (typeof data.humidity !== undefined) setHumidity(data.humidity);
+    });
 
-    ws.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        if (typeof data.temperature !== 'undefined') setTemperature(data.temperature);
-        if (typeof data.humidity !== 'undefined') setHumidity(data.humidity);
-      } catch (e) {
-        // 데이터 파싱 실패 시 무시
-      }
-    };
-
-    ws.onerror = (err) => {
-      // 에러 핸들링 (옵션)
-    };
-
+    // 연결 성공 확인
+    ws.on('connect', () => {
+      console.log("서버와 연결되었습니다 ID:", ws.id);
+    })
+    // 컴포넌트 언마운트 시 연결 종료
     return () => {
-      ws.close();
+      ws.disconnect();
     };
   }, []);
 
