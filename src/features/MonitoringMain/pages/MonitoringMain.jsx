@@ -12,14 +12,24 @@ const alertMessages = [
   { machine: "4호기", text: "진동 수치가 기준을 초과했습니다." },
 ];
 
-const MonitoringMain = () => {
+const MonitoringMain = ({ lastScore }) => {
   const { goTo } = UseNavi();
+  
   const [currentTime, setCurrentTime] = useState(new Date());
   const [messageIndex, setMessageIndex] = useState(0);
   const [transitionOn, setTransitionOn] = useState(true);
   // WebSocket으로 받아올 온도/습도 상태
   const [temperature, setTemperature] = useState(null);
   const [humidity, setHumidity] = useState(null);
+
+  const getStatus = (score) => {
+    if (score >= 70) return { label: "위험", class: "danger" };
+    if (score >= 40) return { label: "주의", class: "warning" };
+    return { label: "정상", class: "safe" };
+  };
+
+  const currentStatus = getStatus(lastScore);
+
   // WebSocket 연결 및 데이터 수신
   useEffect(() => {
     // 실제 센서 서버 주소로 변경 필요
@@ -106,16 +116,16 @@ const MonitoringMain = () => {
               <img src={factoryImg} alt="factory" className="factory_img" />
             </div>
             <div className="machine_status">
-              <div className="status_green">정상가동</div>
-              <div className="status_yellow">작동대기</div>
-              <div className="status_red">작동중지</div>
+              <div className="status_green">정상</div>
+              <div className="status_yellow">주의</div>
+              <div className="status_red">위험</div>
             </div>
             <div className="factory_TH">
               <div className="TH_text">공장 내부 온도 | 습도</div>
               <div className="temp">온도 : {temperature !== null ? `${temperature}℃` : "--"}</div>
               <div className="hum">습도 : {humidity !== null ? `${humidity}%` : "--"}</div>
             </div>
-            <div className="machine_1" onClick={() => goTo("/dashboard")}>
+            <div className={`machine_1 ${currentStatus.class}`} onClick={() => goTo("/dashboard")}>
               1호기
             </div>
             <div className="machine_2">2호기</div>

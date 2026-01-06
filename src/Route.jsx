@@ -9,13 +9,13 @@ import SensorDetailPage from "./features/SensorDetail/pages/SensorDetailPage.jsx
 import DefectItemPage from "./features/DefectItem/pages/DefectItemPage.jsx";
 
 
-const Routers = ({ realTimeData }) => {
+const Routers = ({ realTimeData, scores, lastScore }) => {
   return (
     <>
       <Routes>
         <Route path="/" element={<Admin/>} />
-        <Route path="/monitor" element={<MonitoringMain />} />
-        <Route path="/dashboard" element={<DashboardMachine realTimeData={realTimeData} />} />
+        <Route path="/monitor" element={<MonitoringMain lastScore={lastScore} />} />
+        <Route path="/dashboard" element={<DashboardMachine realTimeData={realTimeData} scores={scores} lastScore={lastScore} />} />
         <Route path="/camera" element={<Camera />} />
         <Route path="/chart" element={<ProductChart />} />
         <Route path="/machineDetail" element={<MachineDetail realTimeData={realTimeData} />} />

@@ -261,9 +261,24 @@
 .machine_1 {
   bottom: 35%;
   left: 25%;
-  background-color: #4ade80;
-  border: 1px solid #22dd22;
-  box-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
+}
+
+.machine_1.safe {
+  background-color: var(--color-normal);
+  border: 1px solid var(--border-normal);
+  box-shadow: 0 0 14px rgba(74, 222, 128, 0.5);
+}
+
+.machine_1.warning {
+  background-color: var(--color-warning);
+  border: 1px solid var(--border-warning);
+  box-shadow: 0 0 14px rgba(250, 204, 21, 0.8);
+}
+
+.machine_1.danger {
+  background-color: var(--color-danger);
+  border: 1px solid var(--border-danger);
+  box-shadow: 0 0 14px rgba(255, 50, 50, 0.8);
 }
 
 .machine_1 a {
@@ -274,7 +289,6 @@
 
 .machine_1:hover {
   transform: translateY(-3px) scale(1.04);
-  box-shadow: 0 0 14px rgba(74, 222, 128, 0.8);
   filter: brightness(1.05);
 }
 

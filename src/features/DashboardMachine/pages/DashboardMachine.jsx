@@ -7,7 +7,7 @@ import Loading from "../../../components/Loading/Loading";
 import CurrentSensors from "../components/CurrentSensors";
 import UseNavi from "../../../hooks/UseNavi.jsx";
 
-const DashboardMachine = ({ realTimeData }) => {
+const DashboardMachine = ({ realTimeData, scores, lastScore }) => {
   const { goTo } = UseNavi();
 
   // 시간 표시
@@ -58,7 +58,7 @@ const DashboardMachine = ({ realTimeData }) => {
         </div>
         <div className="dash-main-row">
           <div className="dash-graph-box">
-            <DangerScoreGraph machine_number={selectedMachine} />
+            <DangerScoreGraph machine_number={selectedMachine} scores={scores} lastScore={lastScore} />
           </div>
           <div className="dash-cctv-box" onClick={() => {goTo('/items/defect')}}>
             <Camera />
