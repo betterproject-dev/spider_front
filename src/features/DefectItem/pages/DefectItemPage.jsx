@@ -4,11 +4,14 @@ import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveCo
 import requestHandler from "../../../utils/requestHandler";
 import '../styles/defectItem.css';
 import Loading from "../../../components/Loading/Loading";
+import { useParams } from "react-router-dom";
 
 const COLORS = ['#4A90E2', '#FF8042', '#FFBB28', '#00C49F', '#8884d8'];
 
 const DefectItemPage = () => {
-  const [selectedMachine, setSelectedMachine] = useState(1);
+  const { machineNum } = useParams();
+
+  const [selectedMachine, setSelectedMachine] = useState(Number(machineNum) || 1);
   const [selectedSide, setSelectedSide] = useState('today');
   const [defectData, setDefectData] = useState([]);
   const [trendData, setTrendData] = useState([]);
@@ -67,7 +70,7 @@ const DefectItemPage = () => {
     <div className="wrap">
       <MachineLayout
         title="제품 불량률 통계 페이지"
-        machines={[1, 2, 3, 4]}
+        sort="제품 불량률 통계"
         selectedMachine={selectedMachine}
         onMachineChange={setSelectedMachine}
         sideButtons={[

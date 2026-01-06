@@ -6,7 +6,7 @@ import MessageSlider from "../../../components/MessageSlider/MessageSlider";
 import Camera from "../components/Camera";
 import Loading from "../../../components/Loading/Loading";
 import CurrentSensors from "../components/CurrentSensors";
-import UseNavi from "../../../hooks/UseNavi.jsx";
+import { useParams } from "react-router-dom";
 
 // 메시지 슬라이더용 데이터 (MonitoringMain에서 복사)
 const MESSAGE_ROW_HEIGHT = 35;
@@ -17,12 +17,12 @@ const alertMessages = [
 ];
 
 const DashboardMachine = ({ realTimeData }) => {
-  const { goTo } = UseNavi();
+  const { machineNum } = useParams();
 
   // 시간 표시
   const [currentTime, setCurrentTime] = useState(new Date());
   // 현재 선택한 기계 번호
-  const [selectedMachine, setSelectedMachine] = useState(1);
+  const [selectedMachine, setSelectedMachine] = useState(Number(machineNum) || 1);
   // 메시지 슬라이더 (MonitoringMain과 동일)
   const [messageIndex, setMessageIndex] = useState(0);
   const [transitionOn, setTransitionOn] = useState(true);
@@ -79,14 +79,14 @@ const DashboardMachine = ({ realTimeData }) => {
               <Loading message="센서 데이터 수신 대기 중..." />
             </div>
           )} */}
-          <CurrentSensors realTimeData={realTimeData} />
+          <CurrentSensors realTimeData={realTimeData} selectedMachine={selectedMachine} />
         </div>
         <div className="dash-main-row">
           <div className="dash-graph-box">
             <DangerScoreGraph machine_number={selectedMachine} />
           </div>
-          <div className="dash-cctv-box" onClick={() => {goTo('/items/defect')}}>
-            <Camera />
+          <div className="dash-cctv-box">
+            <Camera selectedMachine={selectedMachine} />
           </div>
         </div>
         {/* Message 영역 - MessageSlider 컴포넌트로 분리 */}
