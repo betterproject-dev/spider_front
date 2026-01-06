@@ -17,8 +17,8 @@ function App() {
     setRealTimeData(prev => {
       const newItem = {
         timestamp : newData.timestamp,
-        temperature_factory : newData.temperature,  // 공장 내부 온도 (온습도 센서)
-        temperature : newData.temperature_DS18B20,  // 기계 온도 (부착형 온도 센서)
+        temperature : newData.temperature,  // 공장 내부 온도 (온습도 센서)
+        temperature_DS18B20 : newData.temperature_DS18B20,  // 기계 온도 (부착형 온도 센서)
         humidity : newData.humidity,
         noise : newData.noise,
         leak : newData.leak ? 1 : 0,  // 1(정상) or 0(누수)

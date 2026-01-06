@@ -30,7 +30,7 @@ const MachineDetail = ({ realTimeData }) => {
 
   const [selectedMachine, setSelectedMachine] = useState(Number(machineNum) || 1);
   const [selectedSensor, setSelectedSensor] = useState(() => {
-  return sensorKey || SENSOR_LIST[0]?.key || 'temperature';
+  return sensorKey || SENSOR_LIST[0]?.eng_name || 'temperature';
 });
   const [selectedPeriod, setSelectedPeriod] = useState('live');
   
@@ -77,7 +77,7 @@ const MachineDetail = ({ realTimeData }) => {
     }, [selectedMachine, selectedPeriod, selectedDate]);
 
     // 4. 가공 데이터 (UI에 뿌려줄 값들)
-    const currentSensorConfig = SENSOR_LIST.find(s => s.key === selectedSensor) || SENSOR_LIST[0];;
+    const currentSensorConfig = SENSOR_LIST.find(s => s.eng_name === selectedSensor) || SENSOR_LIST[0];;
     // // 안전하게 (빈배열일 때 )
 
   // ✅ 수정: sensorKey가 변경될 때만 업데이트
@@ -145,7 +145,7 @@ const MachineDetail = ({ realTimeData }) => {
 
       {/* 이 부분이 MachineLayout의 {children} 자리로 들어갑니다 */}
       <h3 className="chart-title">
-        {SENSOR_LIST.find(s => s.key === selectedSensor)?.name}
+        {SENSOR_LIST.find(s => s.eng_name === selectedSensor)?.name}
         {selectedPeriod === 'today' ? ' 일간 변동 추이' : 
          selectedPeriod === 'week' ? ' 주간 변동 추이' : ' 실시간 모니터링'}
       </h3>
