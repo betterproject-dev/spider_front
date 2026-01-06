@@ -1,6 +1,6 @@
 const SENSOR_LIST = [
   // noraml : 정상 기준 값 (추후 다시 결정)
-  { id: 1, name: "온도", key: "temperature", unit: "℃", normal : 30.0 },
+  { id: 1, name: "온도", key: "temperature_DS18B20", unit: "℃", normal : 30.0 },
   { id: 2, name: "습도", key: "humidity", unit: "%", normal : 70.0 },
   { id: 3, name: "소음", key: "noise", unit: "dB", normal : 80.0 },
   { id: 4, name: "누수", key: "leak", unit: "", normal : 1 }

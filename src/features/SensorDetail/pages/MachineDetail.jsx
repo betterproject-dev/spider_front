@@ -131,7 +131,7 @@ const MachineDetail = ({ realTimeData }) => {
       }}
     >
       {/* 5. 날짜 선택 영역 (차트 상단에 배치) */}
-      {selectedPeriod !== 'live' &&
+      {selectedPeriod === 'today' &&
         <div className="date-selection-bar" style={{ marginBottom: '20px' }}>
           <span style={{ fontSize: '14px', fontWeight: '600', marginRight: '10px' }}>데이터 조회 날짜:</span>
           <input 
