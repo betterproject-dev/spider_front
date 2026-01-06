@@ -19,7 +19,7 @@ a {
 
   /* 위험도 기본 색상 */
   --rgb-normal: 74, 222, 128;  /* #4ade80 */
-  --rgb-warning: 50, 204, 21;  /* #facc15 */
+  --rgb-warning: 250, 204, 21;  /* #facc15 */
   --rgb-danger: 255, 50, 50;  /* #ff3333 */
   
   --color-normal: rgb(var(--rgb-normal));  /* 초록 (정상) */
