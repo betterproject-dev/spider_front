@@ -8,7 +8,7 @@ const CurrentSensors = ({ realTimeData, selectedMachine }) => {
     
   // (임시) 더미데이터
   const testData = {
-    temperature : 21.62,
+    temperature_DS18B20 : 21.62,
     humidity : 9,
     noise : 59.06,
     leak : 1
@@ -23,7 +23,7 @@ const CurrentSensors = ({ realTimeData, selectedMachine }) => {
     const isNormal = checkIsNormal(sensor, data);
 
     return (
-      <div className="current_sensor_box" key={sensor.id} onClick={() => goTo(`/machine/${selectedMachine}/sensor/${sensor.key}`)} >
+      <div className="current_sensor_box" key={sensor.id} onClick={() => goTo(`/machine/${selectedMachine}/sensor/${sensor.eng_name}`)} >
         <div className="sensor_name_area">
           <div className="sensor_name">{sensor.name}</div>
         </div>
