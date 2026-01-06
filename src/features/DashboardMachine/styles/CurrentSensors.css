@@ -17,6 +17,10 @@
   cursor: pointer;
 }
 
+.current_sensor_box:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
 /* 상단 이름 영역 */
 .sensor_name_area {
   background: rgba(255, 255, 255, 0.1);
