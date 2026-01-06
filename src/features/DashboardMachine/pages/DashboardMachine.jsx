@@ -6,6 +6,8 @@ import MessageSlider from "../../../components/MessageSlider/MessageSlider";
 import Camera from "../components/Camera";
 import Loading from "../../../components/Loading/Loading";
 import CurrentSensors from "../components/CurrentSensors";
+import UseNavi from "../../../hooks/UseNavi.jsx";
+import requestHandler from "../../../utils/requestHandler.js";
 import { useParams } from "react-router-dom";
 
 // 메시지 슬라이더용 데이터 (MonitoringMain에서 복사)
@@ -28,7 +30,8 @@ const DashboardMachine = ({ realTimeData }) => {
   const [transitionOn, setTransitionOn] = useState(true);
 
   // 작동 여부 (임시 : realTimeData에 값이 들어있는지 여부 -> 추후에 소켓 작동 여부로 변경)
-  const isWorking = realTimeData.length !== 0;
+  // spring에서 센서의 작동 여부를 가져오는 걸로 변경
+  const [isWorking, setIsWorking] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -50,6 +53,24 @@ const DashboardMachine = ({ realTimeData }) => {
       setTimeout(() => setTransitionOn(true), 50);
     }
   };
+
+  useEffect(() => {
+    const fetchHeartbeatStatus = async () => {
+      const { ok, data } = await requestHandler({
+        method: "get",
+        url: `/api/heartbeat/status/${selectedMachine}`,
+        server: "spring",
+        onError: (msg) => console.error(msg)
+      });
+
+      if (ok) setIsWorking(data.status === "ONLINE");
+      else setIsWorking(false);
+    };
+
+    fetchHeartbeatStatus();
+    const interval = setInterval(fetchHeartbeatStatus, 5000);
+    return () => clearInterval(interval);
+  }, [selectedMachine]);
 
   return (
     <>
