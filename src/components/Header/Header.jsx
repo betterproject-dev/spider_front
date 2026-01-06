@@ -1,6 +1,5 @@
 import "./Header.css";
 import logo from "../../img/logov3.png";
-import porfile from "../../img/profileWH.png";
 import UseNavi from "../../hooks/UseNavi.jsx";
 import { useEmergencyAlertContext } from "../../features/emergency/context/EmergencyAlertContext.jsx";
 import NotificationBell from "../../features/alerts/components/NotificationBell.jsx";
@@ -21,7 +20,6 @@ function Header() {
               <FontAwesomeIcon icon={faBell} />
             </NotificationBell>
           </li>
-          <li className="login"><img src={porfile} alt="profile" className="profile_img" /></li>
         </ul>
       </header>
     </>
