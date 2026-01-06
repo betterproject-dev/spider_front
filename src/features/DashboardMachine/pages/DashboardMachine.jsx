@@ -2,35 +2,21 @@ import { useState, useEffect } from "react";
 import "../styles/DashboardMachine.css";
 import DangerScoreGraph from "../components/DangerScoreGraph.jsx";
 import PageHeader from "../../../components/PageHeader/PageHeader";
-import MessageSlider from "../../../components/MessageSlider/MessageSlider";
 import Camera from "../components/Camera";
 import Loading from "../../../components/Loading/Loading";
 import CurrentSensors from "../components/CurrentSensors";
-import UseNavi from "../../../hooks/UseNavi.jsx";
 import requestHandler from "../../../utils/requestHandler.js";
 import { useParams } from "react-router-dom";
 
-// 메시지 슬라이더용 데이터 (MonitoringMain에서 복사)
-const MESSAGE_ROW_HEIGHT = 35;
-const alertMessages = [
-  { machine: "4호기", text: "긴급위험 발생." },
-  { machine: "4호기", text: "온도 수치가 허용범위를 초과하였습니다." },
-  { machine: "4호기", text: "습도 비정상." },
-];
-
-const DashboardMachine = ({ realTimeData }) => {
+const DashboardMachine = ({ realTimeData, scores, lastScore }) => {
   const { machineNum } = useParams();
 
   // 시간 표시
   const [currentTime, setCurrentTime] = useState(new Date());
   // 현재 선택한 기계 번호
   const [selectedMachine, setSelectedMachine] = useState(Number(machineNum) || 1);
-  // 메시지 슬라이더 (MonitoringMain과 동일)
-  const [messageIndex, setMessageIndex] = useState(0);
-  const [transitionOn, setTransitionOn] = useState(true);
 
-  // 작동 여부 (임시 : realTimeData에 값이 들어있는지 여부 -> 추후에 소켓 작동 여부로 변경)
-  // spring에서 센서의 작동 여부를 가져오는 걸로 변경
+  // spring에서 센서의 작동 여부를 가져옴
   const [isWorking, setIsWorking] = useState(false);
 
   useEffect(() => {
@@ -39,20 +25,6 @@ const DashboardMachine = ({ realTimeData }) => {
   }, []);
   const formattedDate = `${currentTime.getFullYear()}/${(currentTime.getMonth()+1).toString().padStart(2,'0')}/${currentTime.getDate().toString().padStart(2,'0')}`;
   const time = `${currentTime.getHours().toString().padStart(2,'0')}:${currentTime.getMinutes().toString().padStart(2,'0')}:${currentTime.getSeconds().toString().padStart(2,'0')}`;
-
-  useEffect(() => {
-    const ticker = setInterval(() => {
-      setMessageIndex((prev) => prev + 1);
-    }, 3500);
-    return () => clearInterval(ticker);
-  }, []);
-  const handleMessageTransitionEnd = () => {
-    if (messageIndex === alertMessages.length) {
-      setTransitionOn(false);
-      setMessageIndex(0);
-      setTimeout(() => setTransitionOn(true), 50);
-    }
-  };
 
   useEffect(() => {
     const fetchHeartbeatStatus = async () => {
@@ -104,15 +76,11 @@ const DashboardMachine = ({ realTimeData }) => {
         </div>
         <div className="dash-main-row">
           <div className="dash-graph-box">
-            <DangerScoreGraph machine_number={selectedMachine} />
+            <DangerScoreGraph machine_number={selectedMachine} scores={scores} lastScore={lastScore} />
           </div>
           <div className="dash-cctv-box">
             <Camera selectedMachine={selectedMachine} />
           </div>
-        </div>
-        {/* Message 영역 - MessageSlider 컴포넌트로 분리 */}
-        <div className="message-area">
-          <MessageSlider messages={alertMessages} rowHeight={35} interval={3500} />
         </div>
       </div>
     </>
