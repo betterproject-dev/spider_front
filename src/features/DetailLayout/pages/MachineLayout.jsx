@@ -77,7 +77,7 @@ const MachineLayout = ({
             {/* 오른쪽 현재값 강조 박스 */}
             <div className="info-item current-value-box">
               <span className="info-label">{currentValue.label}</span>
-              <span className="info-value highlight-value">
+              <span className="info-value highlight-value" style={{ color: currentValue.color }}>
                 {currentValue.value}
               </span>
             </div>
