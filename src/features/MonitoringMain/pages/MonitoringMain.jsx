@@ -4,6 +4,7 @@ import factoryImg from "../../../img/factory_bg.png";
 import UseNavi from "../../../hooks/UseNavi";
 import MessageSlider from "../../../components/MessageSlider/MessageSlider";
 import { io } from "socket.io-client";
+import Loading from "../../../components/Loading/Loading";
 
 const MESSAGE_ROW_HEIGHT = 35;
 const alertMessages = [
@@ -13,7 +14,7 @@ const alertMessages = [
   { machine: "4호기", text: "진동 수치가 기준을 초과했습니다." },
 ];
 
-const MonitoringMain = ({ lastScore }) => {
+const MonitoringMain = ({ realTimeData, lastScore }) => {
   const { goTo } = UseNavi();
   
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -24,12 +25,28 @@ const MonitoringMain = ({ lastScore }) => {
   const [humidity, setHumidity] = useState(null);
 
   const getStatus = (score) => {
-    if (score >= 70) return { label: "위험", class: "danger" };
-    if (score >= 40) return { label: "주의", class: "warning" };
-    return { label: "정상", class: "safe" };
+    if (score >= 70) return "danger";
+    if (score >= 40) return "warning";
+    return "safe";
   };
 
-  const currentStatus = getStatus(lastScore);
+  const currentData = realTimeData[realTimeData.length - 1];
+  const currentLeak = currentData && currentData.leak; // 누수 최신 데이터 (1개)
+
+  // 현재 기계 1호기 위험도 상태
+  // 위험점수 + 누수 여부(누수 발생 시 곧바로 위험)
+  const currentStatus = currentLeak === 0 ? "danger" : getStatus(lastScore);
+
+  // 센서 데이터 또는 위험점수가 들어오지 않는 경우 로딩
+  if (!realTimeData || !lastScore) {
+    return (
+      <>
+      <div className="wrap">
+        <Loading />
+      </div>
+      </>
+    )
+  }
 
   // WebSocket 연결 및 데이터 수신
   useEffect(() => {
@@ -88,6 +105,7 @@ const MonitoringMain = ({ lastScore }) => {
   const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const dayName = dayNames[todayweek];
 
+
   return (
     <>
       <div className="wrap">
@@ -120,7 +138,7 @@ const MonitoringMain = ({ lastScore }) => {
               <div className="temp">온도 : {temperature !== null ? `${temperature}℃` : "--"}</div>
               <div className="hum">습도 : {humidity !== null ? `${humidity}%` : "--"}</div>
             </div>
-            <div className={`machine_1 ${currentStatus.class}`} onClick={() => goTo("/dashboard/1")}>
+            <div className={`machine_1 ${currentStatus}`} onClick={() => goTo("/dashboard/1")}>
               1호기
             </div>
             <div className="machine_2">2호기</div>

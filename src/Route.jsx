@@ -12,7 +12,7 @@ const Routers = ({ realTimeData, scores, lastScore }) => {
     <>
       <Routes>
         <Route path="/" element={<Admin/>} />
-        <Route path="/monitor" element={<MonitoringMain lastScore={lastScore} />} />
+        <Route path="/monitor" element={<MonitoringMain realTimeData={realTimeData} lastScore={lastScore} />} />
         <Route path="/dashboard/:machineNum" element={<DashboardMachine realTimeData={realTimeData} scores={scores} lastScore={lastScore} />} />
         <Route path="/chart" element={<ProductChart />} />
         <Route path="/machine/:machineNum/sensor/:sensorKey" element={<SensorDetailPage realTimeData={realTimeData} />} />
