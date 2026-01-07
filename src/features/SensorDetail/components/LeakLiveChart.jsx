@@ -30,7 +30,7 @@ const LeakLiveChart =({ realTimeData, sensor }) => {
           {processedData.map((entry, i) => (
             <Cell
               key={`cell-${i}`}
-              fill={entry.leakStatusValue > 0 ? 'var(--color-danger)' : 'var(--color-normal)'} 
+              fill={entry.leakStatusValue > 0 ? 'var(--color-danger)' : 'var(--color-safe)'} 
               fillOpacity={0.8}
             />
           ))}

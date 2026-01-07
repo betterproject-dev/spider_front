@@ -91,7 +91,7 @@ const MachineDetail = ({ realTimeData }) => {
   // 현재 선택된 센서의 값 정상 판별
   const isNormal = checkIsNormal(currentSensorConfig, currentData);
   // 현재 선택된 센서의 정상 여부에 따른 색과 텍스트
-  const statusColor = isNormal ? STATUS_COLOR.NORMAL : STATUS_COLOR.DANGER;
+  const statusColor = isNormal ? STATUS_COLOR.SAFE : STATUS_COLOR.DANGER;
   const statusText = isNormal ? "정상 작동" : "비정상"
 
   // 센서 데이터가 들어오지 않는 경우 로딩

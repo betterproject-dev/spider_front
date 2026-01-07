@@ -56,8 +56,8 @@
 
 /* 네온 효과 */
 .status_text.normal {
-  color: var(--color-normal);
-  text-shadow: 0 0 10px rgba(var(--rgb-normal), 0.6);
+  color: var(--color-safe);
+  text-shadow: 0 0 10px rgba(var(--rgb-safe), 0.6);
 }
 
 .status_text.abnormal {
@@ -91,8 +91,8 @@
 }
 
 .sensor_value_leak.normal {
-  color: var(--color-normal);
-  text-shadow: 0 0 10px rgba(var(--rgb-normal), 0.4);
+  color: var(--color-safe);
+  text-shadow: 0 0 10px rgba(var(--rgb-safe), 0.4);
 }
 
 .sensor_value_leak.abnormal {

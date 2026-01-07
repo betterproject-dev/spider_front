@@ -256,8 +256,8 @@
 }
 
 .machine_1.safe {
-  background-color: var(--color-normal);
-  border: 1px solid var(--border-normal);
+  background-color: var(--color-safe);
+  border: 1px solid var(--border-safe);
   box-shadow: 0 0 14px rgba(74, 222, 128, 0.5);
 }
 
