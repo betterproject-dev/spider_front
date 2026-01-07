@@ -1,13 +1,5 @@
 /* 메시지 슬라이더 하단 고정 및 가시성 개선 */
 .message-area {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 100;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
   pointer-events: none; /* 내부 클릭 방지 시 해제 */
 }
 .message-area .monitor_message {

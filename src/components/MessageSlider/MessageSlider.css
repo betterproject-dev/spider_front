@@ -72,6 +72,21 @@
   margin-right: 10px;
 }
 
+.machine_num.safe {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border: 1px solid #15803d;
+}
+
+.machine_num.warning {
+  background: linear-gradient(135deg, #fde047, #f59e0b); 
+  border: 1px solid #eab308;
+}
+
+.machine_num.danger {
+  background: linear-gradient(135deg, #ff3333, #dd1111);
+  border: 1px solid #bb0000;
+}
+
 .message_text {
   color: #fff;
   font-size: 13px;
