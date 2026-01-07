@@ -25,7 +25,7 @@ const requestHandler = async ({
 }) => {
   const api = server === "spring" ? axiosSpring : axiosFlask
   const m = (method || "get").toLowerCase();
-
+  console.log("요청 주소:", api.defaults.baseURL + url);
   try {
     setLoading?.(true)
 

@@ -1,0 +1,64 @@
+/* 그래프 영역 */
+.graph-container {
+  display: inline-block;  /* 가로로 나열되게 함 */
+  vertical-align: top;    /* 옆 요소와 윗줄 맞춤 */
+  width: calc(80% - 15px); /* 4/5 지점인 80%에서 간격 제외 */
+  height: 100%;          /* Recharts를 위해 높이 필수! */
+  background: #fff;
+  border-radius: 12px;
+  padding: 15px;
+  border: 1px solid #eee;
+  box-sizing: border-box;
+}
+
+/* 설명 칸 영역 */
+.status-legend-container {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* 아이템 사이 간격 */
+  background: #fdfdfd;
+  border-radius: 12px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+/* 기본 상태 아이템 (비활성화 상태처럼 보이게 연하게 설정) */
+.guide-item { 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+  padding: 8px 12px; 
+  border-radius: 6px; 
+  color: #ccc; /* 기본은 흐리게 */
+  font-size: 0.9rem;
+}
+
+/* 현재 상태인 항목만 진하게 표시 */
+.guide-item.active { 
+  color: #333; 
+  font-weight: bold; 
+  background: #f8f9fa; 
+  border: 1px solid #eee;
+}
+
+/* 상태창 폰트 */
+.current-status-box p { color: #888; font-size: 0.9rem; margin-bottom: 5px; }
+
+.status-text { font-size: 2rem; font-weight: 800; margin: 10px 0; }
+.status-text.danger { color: #e53e3e; }
+.status-text.warning { color: #d69e2e; }
+.status-text.safe { color: #38a169; }
+
+.current-score .score-val { font-size: 2.5rem; font-weight: 700; color: #333; }
+.current-score .score-unit { font-size: 1.2rem; color: #666; margin-left: 5px; }
+
+/* 하단 가이드 아이템 배치 */
+.status-guide { display: flex; flex-direction: column; gap: 10px; text-align: left; }
+
+/* 상태 옆에 점 */
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.dot.danger { background: #feb2b2; }
+.dot.warning { background: #faf089; }
+.dot.safe { background: #9ae6b4; }

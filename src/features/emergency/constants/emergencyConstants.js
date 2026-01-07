@@ -1,0 +1,2 @@
+export const ALERT_MODE = { ALERT: "ALERT", RECHECK: "RECHECK" };
+export const ALERT_LEVEL = { EMERGENCY: "EMERGENCY" };

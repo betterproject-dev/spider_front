@@ -4,8 +4,6 @@ import MachineLayout from './MachineLayout';
 import { useParams } from 'react-router-dom';
 import sensorConfig from '../../../utils/sensorConfig';
 import STATUS_COLOR from '../../../utils/statusColor';
-import SensorLiveChart from '../../SensorDetail/components/SensorLiveChart';
-import LeakLiveChart from '../../SensorDetail/components/LeakLiveChart';
 
 const MachineDetail = ({ realTimeData }) => {
    // (임시) 더미데이터
@@ -23,8 +21,6 @@ const MachineDetail = ({ realTimeData }) => {
   const [selectedMachine, setSelectedMachine] = useState(7);
   const [selectedSensor, setSelectedSensor] = useState( sensorKey || 'temperature' );
   const [selectedPeriod, setSelectedPeriod] = useState('live');
-  
-  const machines = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   
   const sideButtons = [
     { id: 1, name: '실시간 모니터링', key: 'live' },
@@ -57,7 +53,7 @@ const MachineDetail = ({ realTimeData }) => {
   return (
     <MachineLayout
       title={`[ ${selectedMachine}호기 ] 센서 정보`}
-      machines={machines}              // 호기 리스트 전달
+      sort='센서 상세'  // 페이지 네비바에 들어갈 상세 페이지 정보 전달
       selectedMachine={selectedMachine} // 현재 값 전달
       onMachineChange={setSelectedMachine} // 변경 함수 전달
       tabs={SENSOR_LIST}
@@ -83,11 +79,7 @@ const MachineDetail = ({ realTimeData }) => {
          selectedPeriod === 'week' ? ' 주간 변동 추이' : ' 실시간 모니터링'}
       </h3>
       <div className="chart-placeholder">
-        {/* 누수 그래프 : LeakLiveChart컴포넌트 / 나머지 그래프 : SensorLiveChart컴포넌트 */}
-        {selectedSensor === "leak"
-          ? <LeakLiveChart realTimeData={realTimeData} sensor={selectedSensor} />
-          : <SensorLiveChart realTimeData={realTimeData} sensor={selectedSensor} />
-        }
+        그래프 영역 (여기에 실제 차트 컴포넌트 삽입)
       </div>
     </MachineLayout>
   );

@@ -1,0 +1,273 @@
+.emergency-backdrop {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.emergency-backdrop::before {
+  content: "";
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 0, 0, 0.85) 0%,
+    rgba(220, 0, 0, 0.65) 35%,
+    rgba(180, 0, 0, 0.45) 55%,
+    rgba(120, 0, 0, 0.25) 70%,
+    rgba(0, 0, 0, 0) 80%
+  );
+  animation: sirenPulseStrong 1.6s cubic-bezier(.4,0,.2,1) infinite;
+}
+
+.emergency-backdrop::after {
+  content: "";
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 40, 40, 1) 0%,
+    rgba(220, 0, 0, 0.95) 35%,
+    rgba(160, 0, 0, 0.8) 55%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  animation: sirenCorePulse 1.6s cubic-bezier(.4,0,.2,1) infinite;
+}
+
+/* 모달 본체 */
+.emergency-modal {
+  width: 520px;
+  text-align: center;
+  background: #f2f2f2;
+  border-radius: 22px;
+  padding: 36px 32px;
+  position: relative;
+  z-index: 2;
+  box-shadow:
+    0 0 0 4px #c62828,
+    0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+/* 제목 */
+.emergency-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+/* 내용 영역 */
+.emergency-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* 경고 삼각형 */
+.emergency-icon {
+  position: relative;
+  width: 0;
+  height: 0;
+  border-left: 65px solid transparent;
+  border-right: 65px solid transparent;
+  border-bottom: 120px solid #c62828; /* 더 깊은 위험 레드 */
+  margin: 16px auto 28px;
+
+  /* 강한 경고 광원 효과 */
+  filter: drop-shadow(0 0 20px rgba(198, 40, 40, 0.9));
+  animation: dangerPulse 1.6s cubic-bezier(.4,0,.2,1) infinite;
+}
+
+/* 느낌표 위치 */
+.emergency-icon-text {
+  position: absolute;
+  top: 38px;
+  left: -14px;
+  font-size: 56px;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+}
+
+/* 상태 텍스트 */
+.emergency-status {
+  font-size: 22px;
+  font-weight: 800;
+  color: #b71c1c;
+  letter-spacing: 1px;
+}
+
+/* 메시지 */
+.emergency-message {
+  font-size: 17px;
+  color: #333;
+}
+
+/* dangerScore 표시 */
+.emergency-score {
+  font-size: 15px;
+  font-weight: 700;
+  color: #b71c1c;
+  background: rgba(183, 28, 28, 0.08);
+  border: 1px solid rgba(183, 28, 28, 0.25);
+  padding: 10px 14px;
+  border-radius: 12px;
+  margin-top: 6px;
+}
+
+/* RECHECK 질문 문구 */
+.emergency-recheck {
+  margin-top: 12px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #111;
+  letter-spacing: 0.2px;
+}
+
+/* 버튼이 2개일 때 보기 좋게 */
+.emergency-footer {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+
+/* 확인 버튼 */
+.emergency-btn {
+  padding: 10px 36px;
+  font-size: 16px;
+  font-weight: 600;
+  background: #b71c1c;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.emergency-btn:hover {
+  background: #7f0000;
+}
+
+.emergency-backdrop::before,
+.emergency-backdrop::after,
+.emergency-icon {
+  animation-delay: 0s;
+}
+
+/* 버튼 공통: 눌림/포커스 상태 강화 */
+.emergency-btn:active {
+  transform: translateY(1px);
+}
+
+.emergency-btn:focus-visible {
+  outline: 3px solid rgba(255, 0, 0, 0.35);
+  outline-offset: 3px;
+}
+
+/* RECHECK 모드 버튼 2개 스타일 분리 (선택) */
+/* "정상 작동" 버튼: 긍정(그린) */
+.emergency-btn--ok {
+  background: #1b5e20;
+}
+.emergency-btn--ok:hover {
+  background: #0b3d10;
+}
+
+/* "아니오" 버튼: 주의(레드 유지) */
+.emergency-btn--no {
+  background: #b71c1c;
+}
+.emergency-btn--no:hover {
+  background: #7f0000;
+}
+
+.emergency-backdrop::before,
+.emergency-backdrop::after {
+  pointer-events: none;
+}
+
+/* 반응형(모바일) 대응 */
+@media (max-width: 560px) {
+  .emergency-modal {
+    width: calc(100vw - 32px);
+    padding: 28px 18px;
+  }
+
+  .emergency-header h2 {
+    font-size: 18px;
+    margin-bottom: 18px;
+  }
+
+  .emergency-status {
+    font-size: 18px;
+  }
+
+  .emergency-message {
+    font-size: 15px;
+  }
+
+  .emergency-btn {
+    width: 100%;
+    padding: 12px 14px;
+  }
+
+  .emergency-footer {
+    width: 100%;
+  }
+}
+
+@keyframes dangerPulse {
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 12px rgba(198, 40, 40, 0.6));
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.06);
+    filter: drop-shadow(0 0 28px rgba(255, 0, 0, 1));
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 12px rgba(198, 40, 40, 0.6));
+    opacity: 0.9;
+  }
+}
+
+@keyframes sirenPulseStrong {
+  0% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(4.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+}
+
+@keyframes sirenCorePulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.95;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.95;
+  }
+}

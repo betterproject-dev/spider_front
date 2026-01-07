@@ -1,0 +1,26 @@
+.machine_selector_wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  background-color: #fff;
+  max-height: 40px;
+}
+
+.machine_selector_text {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.machine_selector {
+  padding: 6px 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2a3a4a;
+  border: none;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  outline: none;
+}

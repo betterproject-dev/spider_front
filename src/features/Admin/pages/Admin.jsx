@@ -1,33 +1,43 @@
 import { useState } from 'react';
 import '../styles/admin.css';
-import axios from 'axios';
 import UseNavi from '../../../hooks/UseNavi';
+import requestHandler from '../../../utils/requestHandler';
+import Loading from '../../../components/Loading/Loading';
 
 const Admin = () => {
   const [pin, setPin] = useState("");
-  const {goTo} = UseNavi();
-
-  const SpringUrl = import.meta.env.VITE_SPRING_API_URL;
+  const { goTo } = UseNavi();
+  const [loading, setLoading] = useState(false)
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    try {
-      const res = await axios.post(`${SpringUrl}/api/check-admin`, {number: pin});
-      if (res.data.success) {
-        alert(res.data.message);
-        goTo('/monitor') // 인증 성공 시 이동할 페이지
-      } else {
-        alert(res.data.message);
-        setPin(""); // 틀리면 입력창 초기화
+
+    await requestHandler({
+      method: "post",
+      url: "/api/check-admin",
+      payload: {number: pin},
+      server: "spring",
+      setLoading,
+      onSuccess: (data) => {
+        if (data.success) {
+          alert(data.message);
+          goTo('/monitor') // 인증 성공 시 이동할 페이지
+        } else {
+          alert(data.message);
+          setPin(""); // 틀리면 입력창 초기화
+        }
+      },
+      onError: (msg, err) => {
+        console.error(err)
+        alert(msg || "서버 연결 실패")
       }
-    } catch (err) {
-      console.error(err)
-      alert("서버 연결 실패")
-    }
+    })
   };
 
   return(
     <>
+    {loading && <Loading message='인증 확인 중...'/>}
+    <div className="wrap">
     <div className="admin-login-box">
       <form className="login-form" onSubmit={handleLogin}>
         <h2>Admin Access</h2>
@@ -39,9 +49,11 @@ const Admin = () => {
           onChange={(e) => setPin(e.target.value)}
           maxLength="4"
           placeholder='* * * *'
+          disabled={loading}
         />
         <button type='submit' className='login-btn'>인증하기</button>
       </form>
+    </div>
     </div>
     </>
   )
