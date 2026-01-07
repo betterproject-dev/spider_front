@@ -159,8 +159,6 @@ const MachineDetail = ({ realTimeData }) => {
       ? <LeakLiveChart realTimeData={realTimeData} sensor={selectedSensor} />
       : <SensorLiveChart 
           realTimeData={realTimeData} 
-          sensor={selectedSensor} 
-          data={sensorData} 
           dataKey={currentSensorConfig?.key}
           unit={currentSensorConfig?.unit}
           sensorName={currentSensorConfig?.name}
