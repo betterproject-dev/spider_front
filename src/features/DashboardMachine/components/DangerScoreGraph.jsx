@@ -27,9 +27,9 @@ const DangerScoreGraph = ({machine_number, scores, lastScore}) => {
               labelFormatter={(value, index) => `${value + 1}번째 데이터`}
               formatter={(value) => [`${value}점`, "위험도"]}
             />
-            <ReferenceArea y1={0} y2={40} fill={"#9ae6b4"} fillOpacity={0.3} />
-            <ReferenceArea y1={40} y2={70} fill={"#faf089"} fillOpacity={0.3} />
-            <ReferenceArea y1={70} y2={100} fill={"#feb2b2"} fillOpacity={0.3} />
+            <ReferenceArea y1={0} y2={40} fill={"#9ae6b4"} fillOpacity={0.3} stroke="none" />
+            <ReferenceArea y1={40} y2={70} fill={"#faf089"} fillOpacity={0.3} stroke="none" />
+            <ReferenceArea y1={70} y2={100} fill={"#feb2b2"} fillOpacity={0.3} stroke="none" />
             <Line type="monotone" dataKey="dangerScore" stroke="#8884d8" strokeWidth={3} activeDot={{ r: 8 }}>
               <LabelList dataKey="dangerScore" position="top" offset={10} style={{ fontSize: '12px', fill: '#8884d8' }} />
             </Line>
