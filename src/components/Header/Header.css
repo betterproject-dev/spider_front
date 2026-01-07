@@ -38,7 +38,7 @@ header li {
 /* 알림 아이콘 */
 .alarm{
   position: absolute;
-  right: 80px;
+  right: 30px;
   top: 45%;
   transform: translateY(-50%);
   color: #fff;

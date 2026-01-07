@@ -2,6 +2,7 @@ import { useState } from 'react';
 import '../styles/admin.css';
 import UseNavi from '../../../hooks/UseNavi';
 import requestHandler from '../../../utils/requestHandler';
+import Loading from '../../../components/Loading/Loading';
 
 const Admin = () => {
   const [pin, setPin] = useState("");
@@ -35,6 +36,8 @@ const Admin = () => {
 
   return(
     <>
+    {loading && <Loading message='인증 확인 중...'/>}
+    <div className="wrap">
     <div className="admin-login-box">
       <form className="login-form" onSubmit={handleLogin}>
         <h2>Admin Access</h2>
@@ -50,6 +53,7 @@ const Admin = () => {
         />
         <button type='submit' className='login-btn'>인증하기</button>
       </form>
+    </div>
     </div>
     </>
   )

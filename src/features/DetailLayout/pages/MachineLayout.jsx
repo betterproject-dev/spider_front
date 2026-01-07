@@ -35,8 +35,8 @@ const MachineLayout = ({
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              className={`sensor-tab ${selectedTab === tab.key ? 'active' : ''}`}
-              onClick={() => goTo(`/sensor/${tab.key}`)}
+              className={`sensor-tab ${selectedTab === tab.eng_name ? 'active' : ''}`}
+              onClick={() => goTo(`/machine/${selectedMachine}/sensor/${tab.eng_name}`)}
             >
               {tab.name}
             </button>

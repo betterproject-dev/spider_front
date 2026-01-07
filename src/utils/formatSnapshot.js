@@ -19,6 +19,7 @@ export const SNAPSHOT_LABELS = {
   leak: "누수",
   danger_score: "위험도",
   created_at: "스냅샷 시간",
+  heartbeat_last_seen: "마지막 통신 시각"
 }
 
 /**
@@ -70,7 +71,7 @@ export const formatSnapshotValue = (key, value) => {
   }
 
   // 스냅샷 시간
-  if ( key === "created_at") {
+  if ( key === "created_at" || key === "heartbeat_last_seen") {
     return formatDateTime(value)
   }
 
