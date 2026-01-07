@@ -31,7 +31,7 @@
 
 .sensor_name {
   color: #b7d4ff; /* 연한 파란색 톤 -> 추후 프로젝트 컬러로 변경 가능성 */
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
   letter-spacing: 1px;
 }
