@@ -1,5 +1,4 @@
 import { formatDateTime } from "../../../utils/formatDate"
-import { alertApi } from "../api/alertApi";
 
 const NotificationItem = ({ data, onClick, onResolveClick }) => {
   const isActive = !data.endedAt
