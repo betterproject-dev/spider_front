@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 
+const CLOCK_UPDATE_INTERVAL = 1000; // 1초
+
 /**
  * 실시간 현재 시간을 관리하고 다양한 포맷으로 제공하는 커스텀 훅
  * @returns {Object} 현재 시간 객체 및 포맷팅된 문자열들
@@ -7,9 +9,9 @@ import { useState, useEffect } from 'react';
 export const UseCurrentTime = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
 
-  // 1000ms(1초)마다 새로운 Date 객체를 생성하여 상태 업데이트
+  // CLOCK_UPDATE_INTERVAL마다 새로운 Date 객체를 생성하여 상태 업데이트
   useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    const timer = setInterval(() => setCurrentTime(new Date()), CLOCK_UPDATE_INTERVAL);
     return () => clearInterval(timer);
   }, []);
 

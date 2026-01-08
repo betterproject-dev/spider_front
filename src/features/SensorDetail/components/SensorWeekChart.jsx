@@ -7,7 +7,7 @@ const formatFullDate = (label) => {
   return label.split(' ')[0];
 };
 
-const SensorWeekChart = memo(({data, dataKey, unit, sensorName}) => {
+const SensorWeekChart = memo(({data, dataKey, unit, sensorName, normal}) => {
   if (!data || !Array.isArray(data) || data.length === 0) {
     return <div style={{padding: '50px', textAlign: 'center'}}>데이터가 없습니다</div>;
   }
@@ -23,7 +23,7 @@ const SensorWeekChart = memo(({data, dataKey, unit, sensorName}) => {
           {data.map((entry, index) => (
             <Cell 
               key={`cell-${index}`} 
-              // fill={dataKey === 'noise' && entry[dataKey] > 70 ? '#ff4d4f' : '#82ca9d'}
+              fill={entry[dataKey] > normal ? '#ff4d4f' : '#82ca9d'}
             />
           ))}
         </Bar>

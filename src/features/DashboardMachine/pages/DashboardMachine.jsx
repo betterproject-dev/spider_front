@@ -7,32 +7,18 @@ import Loading from "../../../components/Loading/Loading";
 import CurrentSensors from "../components/CurrentSensors";
 import requestHandler from "../../../utils/requestHandler.js";
 import { useParams } from "react-router-dom";
+import UseCurrentTime from "../../../hooks/UseCurrentTime.jsx";
 
 /** [상수 분리] */
 const HEARTBEAT_INTERVAL = 5000;
-const CLOCK_UPDATE_INTERVAL = 1000; // 1초
 const WORKING_STATUS = {
   ONLINE: { class: 'working_on', label: '작동 ON' },
   OFFLINE: { class: 'working_off', label: '작동 OFF' }
 };
 
-// 시계만 담당하는 컴포넌트를 분리하여 부모의 리렌더링 전파를 막음
-const DigitalClock = memo(() => {
-  // 시간 표시
-  const [currentTime, setCurrentTime] = useState(new Date());
-
-  useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), CLOCK_UPDATE_INTERVAL);
-    return () => clearInterval(timer);
-  }, []);
-  const formattedDate = `${currentTime.getFullYear()}/${(currentTime.getMonth()+1).toString().padStart(2,'0')}/${currentTime.getDate().toString().padStart(2,'0')}`;
-  const time = `${currentTime.getHours().toString().padStart(2,'0')}:${currentTime.getMinutes().toString().padStart(2,'0')}:${currentTime.getSeconds().toString().padStart(2,'0')}`;
-
-  return <p>{formattedDate} {time}</p>
-})
-
 const DashboardMachine = ({ realTimeData, scores, lastScore }) => {
   const { machineNum } = useParams();
+  const { formattedDate, time } = UseCurrentTime();
 
   // 현재 선택한 기계 번호
   const [selectedMachine, setSelectedMachine] = useState(Number(machineNum) || 1);
@@ -87,7 +73,7 @@ const DashboardMachine = ({ realTimeData, scores, lastScore }) => {
               <h1>{selectedMachine}호기</h1>
             </div>
             <div className="dash-date">
-              <DigitalClock />
+              <p>{formattedDate} {time}</p>
             </div>
           </div>
         </div>

@@ -190,6 +190,7 @@ const MachineDetail = memo(({ realTimeData }) => {
                   dataKey={currentSensorConfig?.key} 
                   unit={currentSensorConfig?.unit}
                   sensorName={currentSensorConfig?.name}
+                  normal={currentSensorConfig.normal}
                 />
           ) : null}
           </>
