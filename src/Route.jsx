@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom"
+import { Route, Routes,Navigate } from "react-router-dom"
 import MonitoringMain from "./features/MonitoringMain/pages/MonitoringMain.jsx";
 import Admin from "./features/Admin/pages/Admin"
 import { lazy, Suspense } from "react";
@@ -14,8 +14,8 @@ const Routers = ({ realTimeData, scores, lastScore }) => {
   return (
     <Suspense fallback={<Loading message="화면을 준비하고 있습니다..." />}>
       <Routes>
-        <Route path="/" element={<Admin/>} />
-
+        <Route path="/" element={<Navigate to="/admin" replace />} /> {/* / → /admin 리다이렉트 */}
+        <Route path="/admin" element={<Admin />} />
         <Route path="/monitor" element={<PrivateRoute><MonitoringMain realTimeData={realTimeData} lastScore={lastScore} /></PrivateRoute>} />
         <Route path="/dashboard/:machineNum" element={<PrivateRoute><DashboardMachine realTimeData={realTimeData} scores={scores} lastScore={lastScore} /></PrivateRoute>} />
         <Route path="/machine/:machineNum/sensor/:sensorKey" element={<PrivateRoute><SensorDetailPage realTimeData={realTimeData} /></PrivateRoute>} />
