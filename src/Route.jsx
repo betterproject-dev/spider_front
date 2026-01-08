@@ -14,7 +14,7 @@ const Routers = ({ realTimeData, scores, lastScore }) => {
     <Suspense fallback={<Loading message="화면을 준비하고 있습니다..." />}>
       <Routes>
         <Route path="/" element={<Admin/>} />
-        <Route path="/monitor" element={<MonitoringMain lastScore={lastScore} />} />
+        <Route path="/monitor" element={<MonitoringMain realTimeData={realTimeData} lastScore={lastScore} />} />
         <Route path="/dashboard/:machineNum" element={<DashboardMachine realTimeData={realTimeData} scores={scores} lastScore={lastScore} />} />
         <Route path="/machine/:machineNum/sensor/:sensorKey" element={<SensorDetailPage realTimeData={realTimeData} />} />
         <Route path="/machine/:machineNum/items/defect" element={<DefectItemPage />} />
