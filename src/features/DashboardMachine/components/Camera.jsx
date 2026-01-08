@@ -57,7 +57,7 @@ const Camera = ({selectedMachine}) => {
   const FlaskBase = useMemo(() => axiosFlask.defaults.baseURL || "http://localhost:5000")
 
   // 1. URL을 상태(State)로 관리해야 타임스탬프 업데이트가 가능합니다.
-  const [videoStreamUrl, setVideoStreamUrl] = useState("");
+  const [videoStreamUrl, setVideoStreamUrl] = useState(null);
   const [isCameraLoading, setIsCameraLoading] = useState(true);
   const [yoloResult, setYoloResult] = useState([]);
 
@@ -139,7 +139,7 @@ const Camera = ({selectedMachine}) => {
           </div>
         )}
         <img
-          src={videoStreamUrl}
+          src={videoStreamUrl || null}
           alt="AI Live Stream"
           className="video-feed"
           onLoad={handleVideoLoad}
