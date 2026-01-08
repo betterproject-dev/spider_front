@@ -5,19 +5,8 @@ import sensorConfig from '../../../utils/sensorConfig';
 const CurrentSensors = ({ realTimeData, selectedMachine }) => {
   const { goTo } = UseNavi();
   const { SENSOR_LIST, checkIsNormal } = sensorConfig;
-    
-  // (임시) 더미데이터
-  const testData = {
-    temperature_DS18B20 : 21.62,
-    humidity : 9,
-    noise : 59.06,
-    leak : 1
-  }
 
-  // const currentData = realTimeData[realTimeData.length - 1
-  const currentData = realTimeData.length > 0 
-    ? realTimeData[realTimeData.length - 1] 
-    : testData;
+  const currentData = realTimeData[realTimeData.length - 1]
 
   const sensorBox = (sensor, data) => {
     const isNormal = checkIsNormal(sensor, data);
@@ -55,13 +44,7 @@ const CurrentSensors = ({ realTimeData, selectedMachine }) => {
     <>
       <div className="current_sensor_container">
         <div className="current_sensor_wrap">
-        {/* 임시 주석 처리 */}
-        {/* { realTimeData.length !== 0 &&
-          SENSOR_LIST.map((sensor) => {
-            return sensorBox(sensor, currentData)
-          })
-        } */}
-        {
+        { realTimeData.length !== 0 &&
           SENSOR_LIST.map((sensor) => {
             return sensorBox(sensor, currentData)
           })

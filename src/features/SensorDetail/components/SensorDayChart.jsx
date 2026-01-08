@@ -12,7 +12,7 @@ const SensorDayChart =  ({data, dataKey, unit, sensorName}) => {
 
   return (
 
-<ResponsiveContainer width="100%" height={400}>
+    <ResponsiveContainer width="100%" height={400}>
       <AreaChart data={data}>
         <defs>
           <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
@@ -23,7 +23,7 @@ const SensorDayChart =  ({data, dataKey, unit, sensorName}) => {
         <CartesianGrid strokeDasharray="3 3" vertical={false} />
         <XAxis dataKey="createdAt" tickFormatter={(t) => t.split(' ')[1].substring(0, 5)} />
         <YAxis domain={['auto', 'auto']} unit={unit} />
-        <Tooltip />
+        <Tooltip labelFormatter={(label) => label && label.split(' ')[1] ? label.split(' ')[1].substring(0, 5) : label} />
         <Area
           type="monotone"
           dataKey={dataKey}

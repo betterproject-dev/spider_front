@@ -39,21 +39,12 @@ header li {
 .alarm{
   position: absolute;
   right: 30px;
-  top: 45%;
+  top: calc(50% + 1px); /* 또는 +2px */
   transform: translateY(-50%);
   color: #fff;
   font-size: 22px;
   cursor: pointer;
   z-index: 10;
-}
-
-.alarm svg {
-  font-size: 28px;   /* 기존보다 확실히 큼 */
-}
-
-/* 마우스 올렸을 때 */
-.alarm .nbell-trigger:hover svg {
-  color: #ff4d4d;
 }
 
 /* emergency도 아이콘(svg)만 */
@@ -63,14 +54,24 @@ header li {
   font-size: 32px;
 }
 
+.alarm svg {
+  font-size: 28px;
+  display: inline-block;      /* transform 안정화 */
+  transform-origin: 50% 20%;  /* 흔들 축 */
+}
 
-/* 흔들림 애니메이션 */
+/* 마우스 올렸을 때 */
+.alarm .nbell-trigger:hover svg {
+  color: #ff4d4d;
+}
+
+/* 흔들림: rotate만! (translateY 제거) */
 @keyframes alarm-shake{
-  0%   { transform: translateY(-50%) rotate(0deg); }
-  20%  { transform: translateY(-50%) rotate(-15deg); }
-  40%  { transform: translateY(-50%) rotate(15deg); }
-  60%  { transform: translateY(-50%) rotate(-10deg); }
-  80%  { transform: translateY(-50%) rotate(10deg); }
-  100% { transform: translateY(-50%) rotate(0deg); }
+  0%   { transform: rotate(0deg); }
+  20%  { transform: rotate(-15deg); }
+  40%  { transform: rotate(15deg); }
+  60%  { transform: rotate(-10deg); }
+  80%  { transform: rotate(10deg); }
+  100% { transform: rotate(0deg); }
 }
 

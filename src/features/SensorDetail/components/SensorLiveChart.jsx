@@ -1,8 +1,6 @@
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import sensorConfig from '../../../utils/sensorConfig';
 
-const SensorLiveChart = ({ realTimeData, sensor, unit, sensorName }) => {
-  const { SENSOR_LIST } = sensorConfig;
+const SensorLiveChart = ({ realTimeData, dataKey, unit, sensorName }) => {
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -14,17 +12,29 @@ const SensorLiveChart = ({ realTimeData, sensor, unit, sensorName }) => {
           </linearGradient>
         </defs>
         <CartesianGrid strokeDasharray="3 3" vertical={false} />
-        <XAxis dataKey="timestamp" />
-        <YAxis domain={['auto', 'auto']} unit={unit} />
+        <XAxis
+          dataKey="timestamp"
+          interval={1}
+          padding={{ left: 40, right: 20 }}
+        />
+        <YAxis
+          domain={["dataMin - 5", "dataMax + 5"]}
+          unit={unit}
+          tickFormatter={(value) => value.toFixed(1)}
+          width={60}
+        />
         <Tooltip />
         <Area
           type="monotone"
-          dataKey={sensor}
+          dataKey={dataKey}
           stroke="#3b82f6"
           fill="url(#colorValue)"
           strokeWidth={2}
           connectNulls
           name={sensorName}
+          isAnimationActive={true} 
+          animationDuration={1500}
+          animationEasing="linear"
         />
       </AreaChart>
     </ResponsiveContainer>
