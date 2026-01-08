@@ -103,6 +103,7 @@ const DefectItemPage = () => {
     }, setLoading);
   }, [selectedMachine]);
 
+  //test주석
   return (
     <>
       <div className="wrap">
