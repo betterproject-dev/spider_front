@@ -2,12 +2,12 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from "@fullcalendar/interaction";
 import "../styles/SidebarCalendar.css"; // 전용 스타일
-import { useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import requestHandler from '../../../utils/requestHandler';
 import { formatDateTime } from '../../../utils/formatDate';
 
 
-const SidebarCalendar = () => {
+const SidebarCalendar = memo(() => {
   const [events, setEvents] = useState([]);
   const [currentYearMonth, setCurrentYearMonth] = useState(new Date().toISOString().slice(0, 7));
   const [selectedDate, setSelectedDate] = useState(null); 
@@ -15,7 +15,7 @@ const SidebarCalendar = () => {
     loadNotionMemos();
   }, []);
 
-const loadNotionMemos = async () => {
+const loadNotionMemos = useCallback(async () => {
     await requestHandler({
       method: "get",
       url: "/api/notion/memos",
@@ -26,32 +26,31 @@ const loadNotionMemos = async () => {
       },
       onError: (err) => console.error("데이터 로드 실패:", err)
     });
-  };
+  }, []);
 
   // ✅ 2. 달력의 월이 바뀔 때마다 실행되는 함수
-  const handleDatesSet = (dateInfo) => {
+  const handleDatesSet = useCallback((dateInfo) => {
     // view의 현재 타이틀이나 범위를 통해 'YYYY-MM' 추출
     const midDate = new Date(dateInfo.start.getTime() + (dateInfo.end.getTime() - dateInfo.start.getTime()) / 2);
     const yyyymm = midDate.toISOString().slice(0, 7);
     setCurrentYearMonth(yyyymm);
     
-  };
+  }, []);
 
     // ✅ 날짜 클릭 시 해당 날짜만 필터링 (메모 입력 X)
-  const handleDateClick = (arg) => {
+  const handleDateClick = useCallback((arg) => {
     setSelectedDate(arg.dateStr); // 선택된 날짜 저장
-  };
+  }, []);
 
   const handleAddMemo = async () => {
-
-  const today = new Date().toISOString().slice(0, 10);
-  const dateStr = selectedDate || today;
+    const today = new Date().toISOString().slice(0, 10);
+    const dateStr = selectedDate || today;
   
-  // ✅ 오늘 날짜가 아니면 추가 불가
-  if (dateStr !== today) {
-    alert("메모는 오늘 날짜에만 추가할 수 있습니다.");
-    return;
-  }
+    // ✅ 오늘 날짜가 아니면 추가 불가
+    if (dateStr !== today) {
+      alert("메모는 오늘 날짜에만 추가할 수 있습니다.");
+      return;
+    }
     const memoText = prompt(`${dateStr} 메모 입력:`);
     if (!memoText) return;
 
@@ -69,33 +68,28 @@ const loadNotionMemos = async () => {
   };
 
   const handleDelete = async (id) => {
-  if (!window.confirm("메모를 삭제하시겠습니까?")) return;
+    if (!window.confirm("메모를 삭제하시겠습니까?")) return;
 
-  await requestHandler({
-    method: "delete",
-    url: `/api/notion/memo/${id}`,
-    server: "spring",
-    onSuccess: () => {
-      // ✅ 삭제 후 목록을 다시 불러와서 화면 갱신
-      loadNotionMemos(); 
-      setEvents(prev => prev.filter(ev => ev.id !== id));
-          },
-          onError: (err) => console.log("삭제 실패: " + err)
-        });
-      };
+    await requestHandler({
+      method: "delete",
+      url: `/api/notion/memo/${id}`,
+      server: "spring",
+      onSuccess: () => {
+        // ✅ 삭제 후 목록을 다시 불러와서 화면 갱신
+        loadNotionMemos(); 
+        setEvents(prev => prev.filter(ev => ev.id !== id));
+      },
+      onError: (err) => console.log("삭제 실패: " + err)
+    });
+  };
 
   // ✅ 3. 현재 월(currentYearMonth)과 일치하는 데이터만 필터링
-   const filteredMemos = events
-    .filter(ev => {
-      if (selectedDate) {
-        // 선택된 날짜의 메모만 표시
-        return ev.date.startsWith(selectedDate);
-      }
-      // 선택 안 했으면 현재 월의 메모 표시
-      return false;
-    })
-    .sort((a, b) => new Date(b.date) - new Date(a.date));
-
+  const filteredMemos = useMemo(() => {
+    if (!selectedDate) return [];
+    return events
+      .filter(ev => ev.date.startsWith(selectedDate))
+      .sort((a, b) => new Date(b.date) - new Date(a.date));
+  }, [events, selectedDate]);
 
   return (
     <div className="sidebar_calendar_wrapper">
@@ -144,6 +138,6 @@ const loadNotionMemos = async () => {
       </div>
     </div>
   );
-};
+});
 
 export default SidebarCalendar;
