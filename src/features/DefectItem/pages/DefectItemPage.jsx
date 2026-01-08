@@ -6,6 +6,7 @@ import '../styles/defectItem.css';
 import Loading from "../../../components/Loading/Loading";
 import { useParams } from "react-router-dom";
 
+/** [상수 분리] 디자인 및 설정값 */
 const COLORS = ['#4A90E2', '#fa7735ff', '#FFBB28', '#00C49F', '#8884d8'];
 const BAR_COLOR = '#fd6a6aff'
 const DEFECT_LABEL_MAP = {
@@ -16,6 +17,34 @@ const DEFECT_LABEL_MAP = {
   weight: "무게"
 }
 
+// 서버 데이터 키 -> 차트 라벨 매핑
+const SERVER_KEY_MAPPING = {
+  labelCount: "Label",
+  crushedCount: "Crushed",
+  discoloredCount: "Discolored",
+  weightCount: "weight"
+};
+
+const SIDE_BUTTONS = [
+  { id: 1, name: '오늘', key: 'today' },
+  { id: 2, name: '직전 7일', key: 'week' }
+];
+
+const INITIAL_SUMMARY = { totalInspected: 0, totalRejected: 0, avgRate: "0.00" };
+
+/** [스타일 상수] 차트 미출력 시 보여줄 빈 박스 스타일 */
+const EMPTY_CHART_STYLE = {
+  height: '300px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: '#666',
+  fontSize: '14px',
+  width: '100%',
+  backgroundColor: '#f9f9f9',
+  borderRadius: '8px'
+};
+
 const DefectItemPage = () => {
   const { machineNum } = useParams();
 
@@ -24,27 +53,18 @@ const DefectItemPage = () => {
   const [defectData, setDefectData] = useState([]);
   const [trendData, setTrendData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [summary, setSummary] = useState({totalInspected: 0, totalRejected: 0, avgRate: 0});
+  const [summary, setSummary] = useState(INITIAL_SUMMARY);
 
   // 가공 데이터 메모제이션: 렌더링 시 매번 map/filter 돌리는 것 방지
   const chartDefectData = useMemo(() => {
     // 데이터가 없거나 배열이 아니더라도 객체일 경우를 대비해 방어 로직 구축
     if (!defectData || typeof defectData !== 'object') return [];
 
-    // 서버 응답 객체의 키값과 매핑할 라벨 정의
-    const mapping = {
-      labelCount: "Label",
-      crushedCount: "Crushed",
-      discoloredCount: "Discolored",
-      weightCount: "weight"
-    };
-
-    // 객체를 배열로 변환: [ {defectType: 'Label', count: 6}, ... ]
-    return Object.keys(mapping).map(key => ({
-      defectType: mapping[key],
-      name: DEFECT_LABEL_MAP[mapping[key]] || mapping[key],
+    return Object.keys(SERVER_KEY_MAPPING).map(key => ({
+      defectType: SERVER_KEY_MAPPING[key],
+      name: DEFECT_LABEL_MAP[SERVER_KEY_MAPPING[key]] || SERVER_KEY_MAPPING[key],
       value: Number(defectData[key] || 0)
-    })).filter(item => item.value > 0); // 값이 0인 항목은 차트에서 제외
+    })).filter(item => item.value > 0);
   }, [defectData]);
 
   // 바 차트용 데이터 필터링 
@@ -82,7 +102,7 @@ const DefectItemPage = () => {
             const avg = totalIns > 0 ? ((totalRej / totalIns) * 100).toFixed(2) : "0.00";
             setSummary({ totalInspected: totalIns, totalRejected: totalRej, avgRate: avg });
           } else {
-            setSummary({ totalInspected: 0, totalRejected: 0, avgRate: "0.00" });
+            setSummary(INITIAL_SUMMARY);
           }
         }
         setLoading(false);
@@ -100,10 +120,7 @@ const DefectItemPage = () => {
         sort="제품 불량률 통계"
         selectedMachine={selectedMachine}
         onMachineChange={setSelectedMachine}
-        sideButtons={[
-          { id: 1, name: '오늘', key: 'today'},
-          { id: 2, name: '직전 7일', key: 'week'}
-        ]}
+        sideButtons={SIDE_BUTTONS}
         selectedSide={selectedSide}
         onSideChange={setSelectedSide}
         summaryItems={[
@@ -139,17 +156,7 @@ const DefectItemPage = () => {
                   </PieChart>
                 </ResponsiveContainer>
               ): (
-                <div style={{ 
-                  height: '300px', // 차트와 동일한 높이 유지
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center', 
-                  color: '#666',
-                  fontSize: '14px',
-                  width: '100%',   // 가로폭 100% 명시
-                  backgroundColor: '#f9f9f9', // 영역 구분용 (선택사항)
-                  borderRadius: '8px'
-                }}>
+                <div style={EMPTY_CHART_STYLE}>
                   표시할 불량 데이터가 없습니다.
                 </div>
               )}

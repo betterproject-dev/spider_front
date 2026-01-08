@@ -5,6 +5,14 @@ import UseNavi from "../../../hooks/UseNavi.jsx";
 import Loading from "../../../components/Loading/Loading.jsx";
 import { axiosFlask } from "../../../utils/axiosFactory.js";
 
+/** * [상수 분리] 
+ * 컴포넌트 외부에 선언하여 리렌더링 시 재생성 방지
+ */
+const DEFAULT_FLASK_URL = "http://localhost:5000";
+const DISCONNECT_THRESHOLD = 3000;
+const INITIAL_STATUS_LABELS = ["라벨", "색상", "무게", "찌그러짐"];
+const getStatusClassName = (status) => (status === "불량" ? "status-fail" : "status-ok");
+
 // 상태 리스트 렌더링 부분을 별도 컴포넌트로  분리 ( 메모제이션 적용 )
 const StatusOverlay = memo(({ yoloResult, onNavigate }) => {
   // 결과 데이터 가공 로직을 useMemo로 최적화
@@ -31,30 +39,28 @@ const StatusOverlay = memo(({ yoloResult, onNavigate }) => {
     return (
       <ul className="video_status_list" onClick={onNavigate}>
         <li className="status-wait">객체 탐색 중...</li>
-        {["라벨", "색상", "무게", "찌그러짐"].map(text => (
+        {INITIAL_STATUS_LABELS.map(text => (
           <li key={text} className="status-wait">{text} : -</li>
         ))}
       </ul>
     )
   }
 
-  const getCn = (status) => (status === "불량" ? "status-fail" : "status-ok");
-
   return (
     <ul className="video_status_list" onClick={onNavigate}>
       <li className={statusInfo.isSystemOK ? "status-ok" : "status-fail"} style={{ fontSize: "1.3rem", fontWeight: "bold", borderBottom: "2px solid #ddd", marginBottom: "10px", paddingBottom: "10px" }}>
         {statusInfo.isSystemOK ? "정상" : "불량"}
       </li>
-      <li>라벨 상태: <span className={getCn(statusInfo.labelStatus)}>{statusInfo.labelStatus}</span></li>
-      <li>색상 오염: <span className={getCn(statusInfo.colorStatus)}>{statusInfo.colorStatus}</span></li>
+      <li>라벨 상태: <span className={getStatusClassName(statusInfo.labelStatus)}>{statusInfo.labelStatus}</span></li>
+      <li>색상 오염: <span className={getStatusClassName(statusInfo.colorStatus)}>{statusInfo.colorStatus}</span></li>
       <li>무게 측정: <span className="status-ok">정상</span></li>
-      <li>외관 변형: <span className={getCn(statusInfo.dentStatus)}>{statusInfo.dentStatus}</span></li>
+      <li>외관 변형: <span className={getStatusClassName(statusInfo.dentStatus)}>{statusInfo.dentStatus}</span></li>
     </ul>
   )
 })
 
 const Camera = ({selectedMachine}) => {
-  const FlaskBase = useMemo(() => axiosFlask.defaults.baseURL || "http://localhost:5000")
+  const FlaskBase = useMemo(() => axiosFlask.defaults.baseURL || DEFAULT_FLASK_URL, [])
 
   // 1. URL을 상태(State)로 관리해야 타임스탬프 업데이트가 가능합니다.
   const [videoStreamUrl, setVideoStreamUrl] = useState(null);
@@ -78,7 +84,7 @@ const Camera = ({selectedMachine}) => {
     if (disconnectTimer.current) clearTimeout(disconnectTimer.current)
     disconnectTimer.current = setTimeout(() => {
       setIsCameraLoading(true)
-    }, 3000)
+    }, DISCONNECT_THRESHOLD)
   }, []));
 
   useEffect(() => {
