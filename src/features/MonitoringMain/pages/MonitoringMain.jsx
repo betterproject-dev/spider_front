@@ -4,6 +4,7 @@ import factoryImg from "../../../img/factory_bg.png";
 import UseNavi from "../../../hooks/UseNavi";
 import MessageSlider from "../../../components/MessageSlider/MessageSlider";
 import { io } from "socket.io-client";
+import SidebarCalendar from "../components/SidebarCalendar";
 
 const MESSAGE_ROW_HEIGHT = 35;
 const alertMessages = [
@@ -98,14 +99,11 @@ const MonitoringMain = ({ lastScore }) => {
               <p className="todayweek">{dayName}</p>
               <p className="time">{time}</p>
             </div>
-            <div className="main_button_list">
-              <div className="main_btn" onClick={() => goTo('/machine/1/items/defect')}>
-                제품 불량 통계
-              </div>
-              <div className="main_btn">생산현황</div>
-              <div className="main_btn">생산현황</div>
-            </div>
+{/* ✅ 기존 버튼 리스트를 치우고 캘린더 컴포넌트 삽입 */}
+          <div className="sidebar_content_area">
+             <SidebarCalendar />
           </div>
+        </div>
           <div className="right_container">
             <div className="factory_image">
               <img src={factoryImg} alt="factory" className="factory_img" />

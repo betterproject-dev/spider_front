@@ -29,7 +29,7 @@
 
 /* LEFT CONTAINER - 왼쪽 패널 */
 .left_container {
-  width: 280px;
+  width: 345px;
   background: linear-gradient(135deg, #2a3a4a 0%, #1f2d3d 100%);
   padding: 20px;
   display: flex;

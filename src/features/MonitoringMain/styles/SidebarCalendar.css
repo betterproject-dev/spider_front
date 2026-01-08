@@ -1,0 +1,232 @@
+.sidebar_calendar_wrapper {
+  margin-top: 40px;
+  width: 100%;
+  padding: 0 10px;
+}
+
+/* 📌 1. 달력 카드 영역 */
+.calendar_card {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.fc { 
+  color: #fff;
+  font-size: 0.75rem;
+}
+
+/* 📌 2. 글자 가림 방지 (핵심) */
+/* 달력 안의 이벤트 텍스트를 숨기고 작은 점(Dot)으로 대체 */
+.fc-event-title, .fc-event-time {
+  display: none !important;
+}
+
+.fc-daygrid-event-harness {
+  display: flex;
+  justify-content: center;
+  margin-top: -10px !important; /* 숫자 바로 아래 배치 */
+}
+
+/* 점 모양 커스텀 (파란색 포인트) */
+.fc-daygrid-event {
+  background-color: #3b82f6 !important;
+  border: none !important;
+  width: 5px !important;
+  height: 5px !important;
+  border-radius: 50% !important;
+}
+
+/* 📌 3. 셀 높이 및 헤더 정리 */
+.fc .fc-daygrid-day-frame {
+  height: 35px !important; /* 세로 크기 축소 */
+  min-height: 35px !important;
+}
+
+/* 📌 1. 요일 헤더 영역 (라인 추가 및 색상 설정) */
+.fc-theme-standard th {
+  /* 요일 영역 배경을 살짝 주어 구분감 생성 */
+  background: rgba(255, 255, 255, 0.03) !important; 
+  /* 연한 테두리 추가 (끊겨 보이지 않게 모든 면 설정) */
+  border: none !important;
+  padding: 10px 0 !important;
+}
+
+.fc-col-header-cell {
+  border-left: none !important;
+  border-right: none !important;
+}
+
+.fc-col-header-cell-cushion {
+  color: #fcf9f9 !important; /* 요일 글자 색상 (너무 어둡지 않게) */
+  font-size: 0.75rem;
+  text-decoration: none !important;
+}
+
+/* 📌 2. 전체 그리드 라인 통합 (연하게 조정) */
+.fc-scrollgrid {
+  /* 외부 테두리 연하게 */
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.fc-theme-standard td {
+  /* 날짜 칸 사이의 선을 아주 연하게 설정 */
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+}
+
+/* 📌 3. 날짜 셀 및 이벤트 점(Dot) 조정 */
+.fc .fc-daygrid-day-frame {
+  height: 40px !important;
+  min-height: 40px !important;
+}
+
+/* 날짜 숫자 위치 */
+.fc-daygrid-day-number {
+  color: #ddd;
+  font-size: 0.8rem;
+  padding: 5px !important;
+  width: 100%;
+  text-align: center;
+}
+
+/* 이벤트 점 위치 (숫자와 겹치지 않게 살짝 아래로) */
+.fc-daygrid-event-harness {
+  display: flex;
+  justify-content: center;
+  margin-top: -5px !important;
+}
+
+.fc-daygrid-event {
+  background-color: #3b82f6 !important;
+  border: none !important;
+  width: 4px !important;
+  height: 4px !important;
+  border-radius: 50% !important;
+}
+
+/* 📌 4. 툴바 및 메모 요약 영역 톤앤매너 */
+.fc-toolbar-title {
+  font-size: 0.95rem !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+.memo_summary {
+  margin-top: 25px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-left: 4px solid #3b82f6; /* 포인트 컬러 유지 */
+  border-radius: 8px;
+}
+
+.summary_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+
+.summary_title {
+  font-size: 13px;
+  color: #3b82f6;
+  font-weight: bold;
+  margin: 0;
+  flex: 0 0 auto; /* flex 속성 변경 */
+}
+
+.selected_date_label {
+  font-size: 11px;
+  color: #666;
+}
+
+.summary_list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.summary_list li {
+  font-size: 13px;
+  color: #ddd;
+  padding: 4px 0;
+}
+
+.empty_msg {
+  color: #555 !important;
+  font-style: italic;
+  font-size: 12px;
+}
+
+/* 📌 메모 아이템 레이아웃 */
+.memo_item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* 구분선 추가 */
+  transition: background 0.2s;
+}
+
+.memo_item:hover {
+  background: rgba(255, 255, 255, 0.02); /* 살짝 강조 */
+}
+
+.memo_text {
+  flex: 1;
+  font-size: 13px;
+  color: #ddd;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.memo_add_btn {
+  background: #4a9eff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(74, 158, 255, 0.3);
+  flex-shrink: 0;
+  margin-left: auto; /* ✅ 이걸 추가하면 오른쪽 끝으로 */
+
+}
+
+.memo_add_btn:hover {
+  background: #3a8ee6;
+  transform: scale(1.1);
+  box-shadow: 0 3px 6px rgba(74, 158, 255, 0.4);
+}
+
+.memo_add_btn:active {
+  transform: scale(0.95);
+}
+/* 📌 삭제 버튼 커스텀 (세련된 스타일) */
+.memo_delete_btn {
+  background: none !important;
+  border: none !important;
+  color: rgba(255, 255, 255, 0.3) !important; /* 기본은 연한 회색으로 짜치지 않게 */
+  font-size: 16px !important;
+  cursor: pointer !important;
+  padding: 0 8px !important;
+  line-height: 1 !important;
+  transition: all 0.2s ease-in-out !important;
+  margin-left: 10px;
+}
+
+/* 마우스 올렸을 때만 선명한 빨간색으로 변경 */
+.memo_delete_btn:hover {
+  color: #ff4d4f !important;
+  transform: scale(1.2); /* 살짝 커지는 효과 */
+  text-shadow: 0 0 8px rgba(255, 77, 79, 0.4); /* 빨간 광채 효과 */
+}
