@@ -3,12 +3,13 @@ import {useState, useEffect, useRef} from "react"; // useRef 추가됨
 import UseSocket from "../../../hooks/UseSocket";
 import UseNavi from "../../../hooks/UseNavi.jsx";
 import Loading from "../../../components/Loading/Loading.jsx";
+import { axiosFlask } from "../../../utils/axiosFactory.js";
 
 const Camera = ({selectedMachine}) => {
-  const FlaskUrl = import.meta.env.VITE_FLASK_API_URL || "http://localhost:5000";
+  const FlaskBase = axiosFlask.defaults.baseURL || "http://localhost:5000"
 
   // 1. URL을 상태(State)로 관리해야 타임스탬프 업데이트가 가능합니다.
-  const [videoStreamUrl, setVideoStreamUrl] = useState(`${FlaskUrl}/camera/video_feed`);
+  const [videoStreamUrl, setVideoStreamUrl] = useState(`${FlaskBase}/camera/video_feed`);
   const [isCameraLoading, setIsCameraLoading] = useState(true);
   const [yoloResult, setYoloResult] = useState([]);
 
@@ -36,13 +37,13 @@ const Camera = ({selectedMachine}) => {
     setIsCameraLoading(true);
     setHasStreamStarted(false); // 머신 변경 시 초기화
     // 2. 새로고침이나 머신 변경 시 URL 뒤에 시간을 붙여 캐시를 방지합니다.
-    const newUrl = `${FlaskUrl}/camera/video_feed?t=${new Date().getTime()}`;
+    const newUrl = `${FlaskBase}/camera/video_feed?t=${new Date().getTime()}`;
     setVideoStreamUrl(newUrl);
 
     return () => {
       if (disconnectTimer.current) clearTimeout(disconnectTimer.current);
     };
-  }, [selectedMachine, FlaskUrl]);
+  }, [selectedMachine, FlaskBase]);
 
   const handleVideoLoad = () => {
     // 이미 소켓 데이터가 오고 있다면 로딩 해제
