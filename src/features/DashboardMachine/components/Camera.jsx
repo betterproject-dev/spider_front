@@ -118,14 +118,8 @@ const Camera = ({selectedMachine}) => {
     <div className="camera-container">
       <div
         className="video-wrapper"
-        style={{
-          position: "relative",
-          width: "100%",
-          // 4:3 비율 (640x480) 유지. 화면이 줄어들면 높이도 자동으로 계산됨
-          aspectRatio: "640 / 480",
-          backgroundColor: "#000",
-          overflow: "hidden",
-        }}
+        onClick={() => goTo(`/machine/${selectedMachine}/items/defect`)}
+        title="클릭 시 제품 불량률 통계 페이지로 이동합니다"
       >
         {isCameraLoading && (
           <div
@@ -155,10 +149,7 @@ const Camera = ({selectedMachine}) => {
         />
         {!isCameraLoading && (
           <div className="video_status">
-            <ul
-              className="video_status_list"
-              onClick={() => goTo(`/machine/${selectedMachine}/items/defect`)}
-            >
+            <ul className="video_status_list">
               {renderStatusContent()}
             </ul>
           </div>

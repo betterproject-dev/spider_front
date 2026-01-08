@@ -28,8 +28,6 @@ const MachineDetail = ({ realTimeData }) => {
   const [sensorData, setSensorData] = useState([]);
   const [loading, setLoading] = useState(false)
   
-  const machines = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  
   const sideButtons = [
     { id: 1, name: '실시간 모니터링', key: 'live' },
     { id: 2, name: '일간 추이', key: 'today' },
@@ -109,7 +107,6 @@ const MachineDetail = ({ realTimeData }) => {
     <MachineLayout
       title={`[ ${selectedMachine}호기 ] 센서 정보`}
       sort="센서 정보"
-      machines={machines}              // 호기 리스트 전달
       selectedMachine={selectedMachine} // 현재 값 전달
       onMachineChange={setSelectedMachine} // 변경 함수 전달
       tabs={SENSOR_LIST}

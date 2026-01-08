@@ -12,7 +12,12 @@ const CurrentSensors = ({ realTimeData, selectedMachine }) => {
     const isNormal = checkIsNormal(sensor, data);
 
     return (
-      <div className="current_sensor_box" key={sensor.id} onClick={() => goTo(`/machine/${selectedMachine}/sensor/${sensor.eng_name}`)} >
+      <div
+        className="current_sensor_box"
+        key={sensor.id}
+        onClick={() => goTo(`/machine/${selectedMachine}/sensor/${sensor.eng_name}`)}
+        title={`클릭 시 ${sensor.name} 센서 정보 페이지로 이동합니다`}
+      >
         <div className="sensor_name_area">
           <div className="sensor_name">{sensor.name}</div>
         </div>
