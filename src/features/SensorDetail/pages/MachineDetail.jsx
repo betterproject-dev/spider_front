@@ -1,44 +1,53 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import '../../DetailLayout/styles/sensorDetail.css';
-import MachineLayout from '../../DetailLayout/pages/MachineLayout';  // ✅ 수정
+import MachineLayout from '../../DetailLayout/pages/MachineLayout';
 import { useParams } from 'react-router-dom';
 import sensorConfig from '../../../utils/sensorConfig';
 import STATUS_COLOR from '../../../utils/statusColor';
-import SensorDayChart from '../components/SensorDayChart';  // ✅ 수정
-import SensorWeekChart from '../components/SensorWeekChart';  // ✅ 수정
+import SensorDayChart from '../components/SensorDayChart';
+import SensorWeekChart from '../components/SensorWeekChart';
 import requestHandler from '../../../utils/requestHandler';
-import SensorLiveChart from '../components/SensorLiveChart';  // ✅ 수정
+import SensorLiveChart from '../components/SensorLiveChart';
 import LeakLiveChart from '../components/LeakLiveChart'; 
 import LeakStateChart from '../components/LeakStateChart';
+import Loading from "../../../components/Loading/Loading.jsx";
 
 const MachineDetail = ({ realTimeData }) => {
   const { machineNum, sensorKey } = useParams();
   const { SENSOR_LIST, checkIsNormal } = sensorConfig;
   
-  // 마지막으로 들어온 센서 데이터
-  const currentData = realTimeData[realTimeData.length - 1] 
-
-  const [selectedMachine, setSelectedMachine] = useState(Number(machineNum) || 1);
+  // =====  state  =====
+  const [selectedMachine, setSelectedMachine] = useState(Number(machineNum) || 1);  // 현재 선택된 기계 번호
   const [selectedSensor, setSelectedSensor] = useState(() => {
     return sensorKey || SENSOR_LIST[0]?.eng_name || 'temperature';
-  });
-  const [selectedPeriod, setSelectedPeriod] = useState('live');
-  
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  });   // 현재 선택된 센서의 영문명
+  const [selectedPeriod, setSelectedPeriod] = useState('live'); // 현재 선택된 사이드 버튼
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);   // 현재 선택된 조회 일자 (일간 추이에서만 변경 가능)
   const [sensorData, setSensorData] = useState([]);
   const [loading, setLoading] = useState(false)
   
-  const sideButtons = [
-    { id: 1, name: '실시간 모니터링', key: 'live' },
-    { id: 2, name: '일간 추이', key: 'today' },
-    { id: 3, name: '주간 추이', key: 'week' }
-  ];
 
+  // =====  Memoized Values  =====
+  // 마지막으로 들어온 센서 데이터
+  const currentData = realTimeData[realTimeData.length - 1]
+
+  // 현재 선택된 센서의 SENSOR_LIST 값 (id, name, key, unit, eng_name, normal)
+  const currentSensorConfig = useMemo(() => {
+    return SENSOR_LIST.find(s => s.eng_name === selectedSensor) || SENSOR_LIST[0];
+  }, [selectedSensor]);
+
+  // 현재 선택된 센서의 값 정상 판별
+  const isNormal = useMemo(() => {
+    return checkIsNormal(currentSensorConfig, currentData);
+  }, [currentSensorConfig, currentData]);
+
+
+  // =====  API  =====
   // 데이터 로딩 호출 (requesthandler)
-  const getSensorData = async (period) => {
+  const getSensorData = useCallback(async () => {
+    if (selectedPeriod === 'live') return;  // 실시간 탭에서는 호출 필요x
 
     const url = selectedPeriod === 'today' ? '/api/sensors/day' : '/api/sensors/week';
-
     await requestHandler({
       method : "get",
       url : url,
@@ -50,148 +59,137 @@ const MachineDetail = ({ realTimeData }) => {
       setLoading : setLoading,
       onSuccess : (data) =>  {
         setSensorData(data);
-        console.log(data)
       }, 
       onError : (msg) => console.log(msg)
-
-      });
-    };
-
-  useEffect(() => {
-    console.log("현재 모드 변경됨:", selectedPeriod);
-    if (selectedPeriod !== 'live'){
-      getSensorData(selectedPeriod);
-    }
+    });
   }, [selectedMachine, selectedPeriod, selectedDate]);
 
-  // 4. 가공 데이터 (UI에 뿌려줄 값들)
-  const currentSensorConfig = SENSOR_LIST.find(s => s.eng_name === selectedSensor) || SENSOR_LIST[0];;
-  // // 안전하게 (빈배열일 때 )
 
-  // ✅ 수정: sensorKey가 변경될 때만 업데이트
+  // =====  Effects  =====
   useEffect(() => {
-    if (sensorKey) {
-      setSelectedSensor(sensorKey);
-    }
+    getSensorData();
+  }, [selectedMachine, selectedPeriod, selectedDate]);
+
+  // 파라미터(sensorKey)가 변경될 때마다 현재 선택된 센서(selectedSensor)도 변경
+  useEffect(() => {
+    if (sensorKey) setSelectedSensor(sensorKey);
   }, [sensorKey]);
+
+  // 사이드 탭이 변경될 때 조회 날짜를 오늘로 리셋
+  useEffect(() => {
+    setSelectedDate(new Date().toISOString().split('T')[0]);
+  }, [selectedPeriod]);
   
-  // 현재 선택된 센서의 값 (단위 포함)
+
+  // =====  기타  =====
+  // 그래프 상단에 표시할 현재 선택된 센서의 값 (단위 포함)
   const selectedSensorData = () => {
     if (!currentData) return "--";
-
     if (currentSensorConfig.name === "누수") {
       return currentData["leak"] === 1 ? "정상" : "누수 발생"
     }
-    
     const value = currentData[currentSensorConfig.key];
     return value !== undefined ? `${value}${currentSensorConfig.unit || ''}` : "--";
   };
-  // 현재 선택된 센서의 값 정상 판별
-  const isNormal = checkIsNormal(currentSensorConfig, currentData);
-  // 현재 선택된 센서의 정상 여부에 따른 색과 텍스트
-  const statusColor = isNormal ? STATUS_COLOR.SAFE : STATUS_COLOR.DANGER;
-  const statusText = isNormal ? "정상 작동" : "비정상"
 
   // 센서 데이터가 들어오지 않는 경우 로딩
-  if (!realTimeData) {
-    return (
-      <>
-      <div className="wrap">
-        <Loading message="센서 데이터 수신 대기 중..." />
-      </div>
-      </>
-    )
-  }
+  if (!realTimeData) return <div className="wrap"><Loading message="데이터 수신 대기 중..." /></div>;
 
   return (
     <MachineLayout
       title={`[ ${selectedMachine}호기 ] 센서 정보`}
-      sort="센서 정보"
-      selectedMachine={selectedMachine} // 현재 값 전달
-      onMachineChange={setSelectedMachine} // 변경 함수 전달
-      tabs={SENSOR_LIST}
-      selectedTab={selectedSensor}
-      sideButtons={sideButtons}
-      selectedSide={selectedPeriod}
+      sort="센서 정보"  // 페이지 네비바에 들어갈 상세 페이지 정보
+      selectedMachine={selectedMachine} // 현재 기계 번호
+      onMachineChange={setSelectedMachine} // 기계 변경 함수 전달
+      tabs={SENSOR_LIST}  // 상단 센서 탭
+      selectedTab={selectedSensor}  // 현재 선택된 센서의 영문명
+      sideButtons={[
+        { id: 1, name: '실시간 모니터링', key: 'live' },
+        { id: 2, name: '일간 추이', key: 'today' },
+        { id: 3, name: '주간 추이', key: 'week' }
+      ]}  // 왼쪽 사이드바 버튼 배열 (일간, 주간, 실시간 등)
+      selectedSide={selectedPeriod} // 현재 선택된 사이드 버튼
       onSideChange={setSelectedPeriod}
-
       summaryItems={[
         { label: '장비명', value: `${selectedMachine}호기` },
-        // { label: '선택 센서', value: sensors.find(s => s.key === selectedSensor)?.name },
         { label: '조회 일자', value: selectedDate },
         { label: '선택 센서', value: currentSensorConfig?.name || "센서 선택됨" },
-        { label: '상태', value: statusText, color: statusColor }
-      ]}
-
-    // ✅ 우측 상단 현재 수치 강조
+        { label: '상태', value: isNormal ? "정상 작동" : "비정상", color: isNormal ? STATUS_COLOR.SAFE : STATUS_COLOR.DANGER }
+      ]}  // 요약 바 왼쪽 아이템들
       currentValue={{
         label: `현재 ${currentSensorConfig?.name || '센서'} 센서 현황`,
         value: selectedSensorData()
-      }}
+      }}  // 요약 바 오른쪽 강조 수치
     >
-      {/* 5. 날짜 선택 영역 (차트 상단에 배치) */}
+
+      {/* 날짜 선택 영역 (일간 추이일 경우) */}
       {selectedPeriod === 'today' &&
-        <div className="date-selection-bar" style={{ marginBottom: '20px' }}>
-          <span style={{ fontSize: '14px', fontWeight: '600', marginRight: '10px' }}>데이터 조회 날짜:</span>
+        <div className="date-selection-bar">
+          <span>데이터 조회 날짜:</span>
           <input 
             type="date" 
-            value={selectedDate} 
+            value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            style={{ padding: '4px 8px', borderRadius: '4px', border: '1px solid #ddd' }}
           />
         </div>
       }
 
-      {/* 이 부분이 MachineLayout의 {children} 자리로 들어갑니다 */}
+      {/* 그래프 제목 영역 */}
       <h3 className="chart-title">
-        {SENSOR_LIST.find(s => s.eng_name === selectedSensor)?.name}
+        {currentSensorConfig?.name}
         {selectedPeriod === 'today' ? ' 일간 변동 추이' : 
          selectedPeriod === 'week' ? ' 주간 변동 추이' : ' 실시간 모니터링'}
       </h3>
 
 
-      {/* 6. 그래프 영역 (자식 컴포넌트 호출) */}
-<div className="chart-area" style={{ minHeight: '400px', marginTop: '10px' }}>
-  {selectedPeriod === 'live' ? (
-    // 실시간 모니터링
-    selectedSensor === "leak"
-      ? <LeakLiveChart realTimeData={realTimeData} sensor={selectedSensor} />
-      : <SensorLiveChart 
-          realTimeData={realTimeData} 
-          dataKey={currentSensorConfig?.key}
-          unit={currentSensorConfig?.unit}
-          sensorName={currentSensorConfig?.name}
-        />
-  ) : selectedPeriod === 'today' ? (
-    // // ✅ 일간 추이 - 누수 체크 추가
-    selectedSensor === "leak"
-      ? <LeakStateChart 
-          data={sensorData} 
-          dataKey={currentSensorConfig?.key} 
-        />
-      : <SensorDayChart 
-          data={sensorData} 
-          dataKey={currentSensorConfig?.key} 
-          unit={currentSensorConfig?.unit}
-          sensorName={currentSensorConfig?.name}
-        />
-  ) : selectedPeriod === 'week' ? (
-    // ✅ 주간 추이 - 누수 체크 추가
-    selectedSensor === "leak"
-      ? <LeakStateChart 
-          data={sensorData} 
-          dataKey={currentSensorConfig?.key} 
-        />
-      : <SensorWeekChart
-          data={sensorData} 
-          dataKey={currentSensorConfig?.key} 
-          unit={currentSensorConfig?.unit}
-          sensorName={currentSensorConfig?.name}
-        />
-  ) : null}
-</div>
+      {/* 그래프 영역 */}
+      <div className="chart-area">
+        {loading ? (
+          <Loading message='그래프를 불러오는 중...' backColor='#fff' fontColor='#000' />
+        ) : (
+          <>
+          {selectedPeriod === 'live' ? (
+            // 실시간 모니터링
+            selectedSensor === "leak"
+              ? <LeakLiveChart realTimeData={realTimeData} sensor={selectedSensor} />
+              : <SensorLiveChart 
+                  realTimeData={realTimeData} 
+                  dataKey={currentSensorConfig?.key}
+                  unit={currentSensorConfig?.unit}
+                  sensorName={currentSensorConfig?.name}
+                />
+          ) : selectedPeriod === 'today' ? (
+            // 일간 추이
+            selectedSensor === "leak"
+              ? <LeakStateChart 
+                  data={sensorData} 
+                  dataKey={currentSensorConfig?.key} 
+                />
+              : <SensorDayChart 
+                  data={sensorData} 
+                  dataKey={currentSensorConfig?.key} 
+                  unit={currentSensorConfig?.unit}
+                  sensorName={currentSensorConfig?.name}
+                />
+          ) : selectedPeriod === 'week' ? (
+            // 주간 추이
+            selectedSensor === "leak"
+              ? <LeakStateChart 
+                  data={sensorData} 
+                  dataKey={currentSensorConfig?.key} 
+                />
+              : <SensorWeekChart
+                  data={sensorData} 
+                  dataKey={currentSensorConfig?.key} 
+                  unit={currentSensorConfig?.unit}
+                  sensorName={currentSensorConfig?.name}
+                />
+          ) : null}
+          </>
+        )}
+      </div>
 
-  </MachineLayout>
+    </MachineLayout>
   );
    };
 
