@@ -102,7 +102,7 @@ const DefectItemPage = () => {
         ]}
         currentValue={{label: "평균 불량률", value: `${summary.avgRate}%`, color: "red"}}
         >
-          {loading && <Loading message="데이터 로딩 중..."/>}
+          {loading && <Loading message="데이터 로딩 중..." backColor="#fff" fontColor="#000" />}
           <div className="stats-chart-container">
             <section className="chart-section">
               <h3 className="chart-title">제품 불량 종류별 빈도</h3>

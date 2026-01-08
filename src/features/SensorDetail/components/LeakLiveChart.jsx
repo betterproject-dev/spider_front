@@ -1,12 +1,14 @@
+import { memo, useMemo } from 'react';
 import { Bar, BarChart, Cell, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-const LeakLiveChart =({ realTimeData, sensor }) => {
+const LeakLiveChart = memo(({ realTimeData, sensor }) => {
   // 누수용 데이터 변환 (정상은 -1, 누수는 1)
-  const processedData =
-    realTimeData.map(item => ({
+  const processedData = useMemo(() => {
+    return realTimeData.map(item => ({
       ...item,
       leakStatusValue: item[sensor] === 0 ? 1 : -1 // 누수(0) -> 1, 정상(1) -> -1
     }))
+  }, [realTimeData, sensor]);
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -38,6 +40,6 @@ const LeakLiveChart =({ realTimeData, sensor }) => {
       </BarChart>
     </ResponsiveContainer>
   )
-}
+});
 
 export default LeakLiveChart;

@@ -1,6 +1,7 @@
+import { memo } from "react";
 import MachineDetail from "./MachineDetail";
 
-const SensorDetailPage = ({ realTimeData }) => {
+const SensorDetailPage = memo(({ realTimeData }) => {
   return (
     <>
       <div className="wrap">
@@ -8,6 +9,6 @@ const SensorDetailPage = ({ realTimeData }) => {
       </div>
     </>
   )
-};
+});
 
 export default SensorDetailPage;
