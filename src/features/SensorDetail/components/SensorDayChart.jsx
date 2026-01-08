@@ -1,6 +1,10 @@
+import { memo } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-const SensorDayChart =  ({data, dataKey, unit, sensorName}) => {
+const SensorDayChart = memo(({data, dataKey, unit, sensorName}) => {
+  if (!data || !Array.isArray(data) || data.length === 0) {
+    return <div style={{padding: '50px', textAlign: 'center'}}>데이터가 없습니다</div>;
+  }
 
   return (
 
@@ -28,6 +32,6 @@ const SensorDayChart =  ({data, dataKey, unit, sensorName}) => {
       </AreaChart>
     </ResponsiveContainer>
   )
-}
+});
 
 export default SensorDayChart;

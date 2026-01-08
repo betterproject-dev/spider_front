@@ -117,14 +117,8 @@ const Camera = ({selectedMachine}) => {
     <div className="camera-container">
       <div
         className="video-wrapper"
-        style={{
-          position: "relative",
-          width: "100%",
-          // 4:3 비율 (640x480) 유지. 화면이 줄어들면 높이도 자동으로 계산됨
-          aspectRatio: "640 / 480",
-          backgroundColor: "#000",
-          overflow: "hidden",
-        }}
+        onClick={handleNavigate}
+        title="클릭 시 제품 불량률 통계 페이지로 이동합니다"
       >
         {isCameraLoading && (
           <div

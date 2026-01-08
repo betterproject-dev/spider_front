@@ -1,20 +1,21 @@
+import { memo, useMemo } from 'react';
 import { Bar, BarChart, Cell, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-const LeakStateChart = ({ data, dataKey }) => {
-
+const LeakStateChart = memo(({ data, dataKey }) => {
   if (!data || !Array.isArray(data) || data.length === 0) {
     return <div style={{padding: '50px', textAlign: 'center'}}>데이터가 없습니다</div>;
   }
 
   // ✅ 백엔드 데이터: leak: true(누수) -> 위쪽(1), leak: false(정상) -> 아래쪽(-1)
-  const processedData = data.map(item => {
-    const isLeak = item[dataKey] === true;  // true면 누수
-    
-    return {
-      ...item,
-      leakStatusValue: isLeak ? 1 : -1  // 누수(true) -> 1, 정상(false) -> -1
-    };
-  });
+  const processedData = useMemo(() => {
+    return data.map(item => {
+      const isLeak = item[dataKey] === true;  // true면 누수
+      return {
+        ...item,
+        leakStatusValue: isLeak ? 1 : -1  // 누수(true) -> 1, 정상(false) -> -1
+      };
+    });
+  }, [data, dataKey]);
 
   return (
     <ResponsiveContainer width="100%" height={400}>
@@ -53,6 +54,6 @@ const LeakStateChart = ({ data, dataKey }) => {
       </BarChart>
     </ResponsiveContainer>
   );
-};
+});
 
 export default LeakStateChart;
