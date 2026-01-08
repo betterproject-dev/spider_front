@@ -13,7 +13,6 @@ function App() {
   // === 실시간 센서값 불러오기 ===
   // 가장 최신 데이터가 realTimeData 배열 마지막 방에 있음 (최대 20개까지 저장)
   const handleSensorData = useCallback((newData) => {
-    // console.log("실시간 들어오는 데이터 : ", newData)  // 개발 끝나면 삭제
     setRealTimeData(prev => {
       const newItem = {
         timestamp : newData.timestamp,
@@ -36,7 +35,6 @@ function App() {
       method: "get",
       url: '/sensormodel/load_score/1'
     })
-    console.log(res.data)
     const { data, message, ok } = res.data
     return data
   }
@@ -57,14 +55,12 @@ function App() {
 
     // 2. 1분(60,000ms)마다 load 함수를 실행하는 타이머 설정
     const timerId = setInterval(() => {
-      console.log("1분 경과: 데이터를 새로 불러옵니다.");
       load();
     }, 60000);
 
     // 3. Cleanup 함수: 컴포넌트가 사라질 때 타이머를 제거하여 메모리 누수 방지
     return () => {
       clearInterval(timerId);
-      console.log("타이머가 종료되었습니다.");
     };
   }, []); // 빈 배열이므로 마운트 시에만 타이머 생성
 

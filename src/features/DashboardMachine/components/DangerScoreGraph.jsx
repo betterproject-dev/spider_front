@@ -1,21 +1,45 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Label, LabelList, ReferenceArea } from 'recharts';
 import "../styles/DangerScoreGraph.css"
+import { memo, useCallback, useMemo } from 'react';
+
+const CHART_MARGIN = { top: 5, right: 30, left: 20, bottom: 25 };
 
 const DangerScoreGraph = ({machine_number, scores, lastScore}) => {
-  const getStatus = (score) => {
+  const currentStatus = useMemo(() => {
+    const score = Number(lastScore ?? 0)
     if (score >= 70) return { label: "위험", class: "danger", color: "#feb2b2" };
     if (score >= 40) return { label: "주의", class: "warning", color: "#faf089" };
     return { label: "정상", class: "safe", color: "#9ae6b4" };
-  };
+  }, [lastScore])
 
-  const currentStatus = getStatus(lastScore);
+  // Tooltip 함수 레퍼런스 고정
+  const tooltipLabelFormatter = useCallback((label) => {
+    // 최근 10개 기준으로 시간을 만듬
+    // payload[0].payload.__idx 같은 값을 사전에 넣어주는 게 가장 안전
+    // 일단 현재 방식 유지하되 label이 number일 때만 적용
+    const n = Number(label)
+    if (Number.isFinite(n)) {
+      const now = new Date()
+      const minutesAgo = 10 - n
+      const d = new Date(now.getTime() - (minutesAgo * 60000));
+      const h = d.getHours().toString().padStart(2, '0');
+      const m = d.getMinutes().toString().padStart(2, '0');
+      return `${h}:${m}`
+    }
+    return String(label)
+  }, [])
+
+  const tooltipValueFormatter = useCallback(
+    (value) => [`${value}점`, "위험도"],
+    []
+  );
 
   return (
     <>
       {/* 왼쪽: 그래프 영역 */}
       <div className="graph-container">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={scores} margin={{ top: 5, right: 30, left: 20, bottom: 25 }}>
+          <LineChart data={scores} margin={CHART_MARGIN}>
             <CartesianGrid strokeDasharray="5 5" stroke="#e2e8f0" vertical={false} />
             <XAxis tickFormatter={(value, index) => index + 1} interval={0} padding={{ left: 30, right: 30 }} tick={{ fontSize: 12 }}>
               <Label value="데이터 순번 (Index)" offset={-10} position="insideBottom" style={{ fontSize: '20px' }} />
@@ -24,19 +48,8 @@ const DangerScoreGraph = ({machine_number, scores, lastScore}) => {
               <Label value="위험도 점수" angle={-90} position="insideLeft" style={{ textAnchor: 'middle', fill: '#666', fontSize: '20px' }} />
             </YAxis>
             <Tooltip
-              labelFormatter={(value, index) => {
-                const now = new Date();
-                // 배열의 index를 활용해 (10 - index)분 전을 계산
-                // 데이터가 0번부터 9번까지 총 10개라면:
-                const minutesAgo = 10 - value   
-
-                const d = new Date(now.getTime() - (minutesAgo * 60000));
-                const h = d.getHours().toString().padStart(2, '0');
-                const m = d.getMinutes().toString().padStart(2, '0');
-
-                return `${h}:${m}`;
-              }}
-              formatter={(value) => [`${value}점`, "위험도"]}
+              labelFormatter={tooltipLabelFormatter}
+              formatter={tooltipValueFormatter}
             />
             <ReferenceArea y1={0} y2={40} fill={"#9ae6b4"} fillOpacity={0.3} stroke="none" />
             <ReferenceArea y1={40} y2={70} fill={"#faf089"} fillOpacity={0.3} stroke="none" />
@@ -75,4 +88,4 @@ const DangerScoreGraph = ({machine_number, scores, lastScore}) => {
   );
 }
 
-export default DangerScoreGraph;
+export default memo(DangerScoreGraph);

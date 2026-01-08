@@ -36,25 +36,25 @@ const Admin = () => {
 
   return(
     <>
-    {loading && <Loading message='인증 확인 중...'/>}
-    <div className="wrap">
-    <div className="admin-login-box">
-      <form className="login-form" onSubmit={handleLogin}>
-        <h2>Admin Access</h2>
-        <p>관리자 번호 4자리를 입력하세요.</p>
-        <input 
-          type="password" 
-          className='pin-input'
-          value={pin}
-          onChange={(e) => setPin(e.target.value)}
-          maxLength="4"
-          placeholder='* * * *'
-          disabled={loading}
-        />
-        <button type='submit' className='login-btn'>인증하기</button>
-      </form>
-    </div>
-    </div>
+      {loading && <Loading message='인증 확인 중...'/>}
+      <div className="wrap">
+        <div className="admin-login-box">
+          <form className="login-form" onSubmit={handleLogin}>
+            <h2>Admin Access</h2>
+            <p>관리자 번호 4자리를 입력하세요.</p>
+            <input 
+              type="password" 
+              className='pin-input'
+              value={pin}
+              onChange={(e) => setPin(e.target.value)}
+              maxLength="4"
+              placeholder='* * * *'
+              disabled={loading}
+            />
+            <button type='submit' className='login-btn'>인증하기</button>
+          </form>
+        </div>
+      </div>
     </>
   )
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react"
+import { useCallback, useEffect, useMemo, useRef } from "react"
 import { useOutsideClick } from "../hooks/useOutsideClick"
 import { formatDateTime } from "../../../utils/formatDate"
 import { createPortal } from "react-dom"
@@ -28,13 +28,15 @@ import { formatSnapshotValue, SNAPSHOT_LABELS } from "../../../utils/formatSnaps
 const AlertDetailModal = ({ open, alert, onClose }) => {
   const ref = useRef(null)
 
+  const handleOutside = useCallback(() => {
+    if (open) onClose()
+  }, [open, onClose])
+
   /**
    * 모달 외부 클릭 시 닫기 처리
    * - ref 영역(모달 본체)을 제외한 클릭만 감지
    */
-  useOutsideClick(ref, () => {
-    if (open) onClose()
-  })
+  useOutsideClick(ref, handleOutside)
 
   /**
    * ESC 키로 모달 닫기
@@ -49,28 +51,29 @@ const AlertDetailModal = ({ open, alert, onClose }) => {
     return () => window.removeEventListener("keydown", onKeyDown)
   }, [open, onClose])
 
-  // 모달 비활성화 또는 알림 데이터 없음
-  if (!open || !alert) return null
-  
   /**
    * 스냅샷 데이터 파싱
-   *
-   * - 서버에서 string(JSON) 또는 object 형태로 올 수 있음
-   * - 이중 stringify 된 경우까지 고려하여 최대 2회 파싱 시도
-   */
-  let snapshot = alert?.snapshot
-  for (let i = 0; i < 2; i++) {
-    if (typeof snapshot === "string") {
-      try {
-        snapshot = JSON.parse(snapshot)
-      } catch {
-        break
+  *
+  * - 서버에서 string(JSON) 또는 object 형태로 올 수 있음
+  * - 이중 stringify 된 경우까지 고려하여 최대 2회 파싱 시도
+  */
+ const snapshot = useMemo(() => {
+   let s = alert?.snapshot
+   for (let i = 0; i < 2; i++) {
+     if (typeof s === "string") {
+       try {
+         s = JSON.parse(s)
+        } catch {
+          break
+        }
       }
     }
-  }
+    if (!s || typeof s !== "object") return null
+    return s
+  }, [alert?.snapshot])
   
-  // 스냅샷이 객체가 아니면 무효 처리
-  if (!snapshot || typeof snapshot !== "object") snapshot = null;
+  // 모달 비활성화 또는 알림 데이터 없음
+  if (!open || !alert) return null
 
   // 알림 진행 상태 (종료 시간이 없으면 진행중)
   const isActive = !alert.endedAt
