@@ -51,7 +51,15 @@ const DefectItemPage = () => {
   useEffect(() => {
     setLoading(true);
     // 파이 차트 데이터 호출
-    fetchDefectSummary(selectedMachine, (data) => setDefectData(data), selectedSide, setLoading);
+    fetchDefectSummary(selectedMachine, (data) => {
+      const formattedData = [
+        { defectType: 'Label', count: data.labelCount || 0 },
+        { defectType: 'Crushed', count: data.crushedCount || 0 },
+        { defectType: 'Discolored', count: data.discoloredCount || 0 },
+        { defectType: 'weight', count: data.weightCount || 0 }
+      ];
+      setDefectData(formattedData);
+    }, selectedSide, setLoading);
 
     // 바 차트 데이터 호출
     fetchRejectionTrend(selectedMachine, selectedSide, (data) => {
@@ -90,7 +98,7 @@ const DefectItemPage = () => {
         onSideChange={setSelectedSide}
         summaryItems={[
           { label: "총 검사수", value: summary.totalInspected.toLocaleString(), color: "#333"},
-          { label: "불량수", value: defectData.reduce((acc, cur) => acc + cur.count, 0), color: "red"}
+          { label: "불량수", value: summary.totalRejected.toLocaleString(), color: "red"}
         ]}
         currentValue={{label: "평균 불량률", value: `${summary.avgRate}%`, color: "red"}}
         >
