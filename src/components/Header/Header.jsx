@@ -1,5 +1,5 @@
 import "./Header.css";
-import logo from "../../img/logov3.png";
+import logo from "../../img/logo_final.png";
 import UseNavi from "../../hooks/UseNavi.jsx";
 import { useEmergencyAlertContext } from "../../features/emergency/context/EmergencyAlertContext.jsx";
 import NotificationBell from "../../features/alerts/components/NotificationBell.jsx";
