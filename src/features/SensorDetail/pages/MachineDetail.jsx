@@ -52,15 +52,13 @@ const MachineDetail = ({ realTimeData }) => {
       setLoading : setLoading,
       onSuccess : (data) =>  {
         setSensorData(data);
-        console.log(data)
       }, 
-      onError : (msg) => console.log(msg)
+      onError : (msg) => console.error(msg)
 
       });
     };
 
   useEffect(() => {
-    console.log("현재 모드 변경됨:", selectedPeriod);
     if (selectedPeriod !== 'live'){
       getSensorData(selectedPeriod);
     }
@@ -126,7 +124,7 @@ const MachineDetail = ({ realTimeData }) => {
         { label: '상태', value: statusText, color: statusColor }
       ]}
 
-    // ✅ 우측 상단 현재 수치 강조
+      // ✅ 우측 상단 현재 수치 강조
       currentValue={{
         label: `현재 ${currentSensorConfig?.name || '센서'} 센서 현황`,
         value: selectedSensorData()
@@ -154,49 +152,49 @@ const MachineDetail = ({ realTimeData }) => {
 
 
       {/* 6. 그래프 영역 (자식 컴포넌트 호출) */}
-<div className="chart-area" style={{ minHeight: '400px', marginTop: '10px' }}>
-  {selectedPeriod === 'live' ? (
-    // 실시간 모니터링
-    selectedSensor === "leak"
-      ? <LeakLiveChart realTimeData={realTimeData} sensor={selectedSensor} />
-      : <SensorLiveChart 
-          realTimeData={realTimeData} 
-          dataKey={currentSensorConfig?.key}
-          unit={currentSensorConfig?.unit}
-          sensorName={currentSensorConfig?.name}
-        />
-  ) : selectedPeriod === 'today' ? (
-    // // ✅ 일간 추이 - 누수 체크 추가
-    selectedSensor === "leak"
-      ? <LeakStateChart 
-          data={sensorData} 
-          dataKey={currentSensorConfig?.key} 
-        />
-      : <SensorDayChart 
-          data={sensorData} 
-          dataKey={currentSensorConfig?.key} 
-          unit={currentSensorConfig?.unit}
-          sensorName={currentSensorConfig?.name}
-        />
-  ) : selectedPeriod === 'week' ? (
-    // ✅ 주간 추이 - 누수 체크 추가
-    selectedSensor === "leak"
-      ? <LeakStateChart 
-          data={sensorData} 
-          dataKey={currentSensorConfig?.key} 
-        />
-      : <SensorWeekChart
-          data={sensorData} 
-          dataKey={currentSensorConfig?.key} 
-          unit={currentSensorConfig?.unit}
-          sensorName={currentSensorConfig?.name}
-        />
-  ) : null}
-</div>
+      <div className="chart-area" style={{ minHeight: '400px', marginTop: '10px' }}>
+        {selectedPeriod === 'live' ? (
+          // 실시간 모니터링
+          selectedSensor === "leak"
+            ? <LeakLiveChart realTimeData={realTimeData} sensor={selectedSensor} />
+            : <SensorLiveChart 
+                realTimeData={realTimeData} 
+                dataKey={currentSensorConfig?.key}
+                unit={currentSensorConfig?.unit}
+                sensorName={currentSensorConfig?.name}
+              />
+        ) : selectedPeriod === 'today' ? (
+          // // ✅ 일간 추이 - 누수 체크 추가
+          selectedSensor === "leak"
+            ? <LeakStateChart 
+                data={sensorData} 
+                dataKey={currentSensorConfig?.key} 
+              />
+            : <SensorDayChart 
+                data={sensorData} 
+                dataKey={currentSensorConfig?.key} 
+                unit={currentSensorConfig?.unit}
+                sensorName={currentSensorConfig?.name}
+              />
+        ) : selectedPeriod === 'week' ? (
+          // ✅ 주간 추이 - 누수 체크 추가
+          selectedSensor === "leak"
+            ? <LeakStateChart 
+                data={sensorData} 
+                dataKey={currentSensorConfig?.key} 
+              />
+            : <SensorWeekChart
+                data={sensorData} 
+                dataKey={currentSensorConfig?.key} 
+                unit={currentSensorConfig?.unit}
+                sensorName={currentSensorConfig?.name}
+              />
+        ) : null}
+      </div>
 
-  </MachineLayout>
+    </MachineLayout>
   );
-   };
+};
 
 
 export default MachineDetail;

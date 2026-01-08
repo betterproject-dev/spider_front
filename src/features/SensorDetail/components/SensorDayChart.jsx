@@ -2,14 +2,6 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 
 const SensorDayChart =  ({data, dataKey, unit, sensorName}) => {
 
-  //   console.log('=== SensorDayChart 디버깅 ===');
-  // console.log('받은 data:', data);
-  // console.log('받은 dataKey:', dataKey);
-  // console.log('받은 unit:', unit);
-  // console.log('data 길이:', data?.length);
-  // console.log('첫 번째 데이터:', data?.[0]);
-  // console.log('데이터에 해당 키 있나?:', data?.[0]?.[dataKey]);
-
   return (
 
     <ResponsiveContainer width="100%" height={400}>
@@ -23,7 +15,7 @@ const SensorDayChart =  ({data, dataKey, unit, sensorName}) => {
         <CartesianGrid strokeDasharray="3 3" vertical={false} />
         <XAxis dataKey="createdAt" tickFormatter={(t) => t.split(' ')[1].substring(0, 5)} />
         <YAxis domain={['auto', 'auto']} unit={unit} />
-        <Tooltip />
+        <Tooltip labelFormatter={(label) => label && label.split(' ')[1] ? label.split(' ')[1].substring(0, 5) : label} />
         <Area
           type="monotone"
           dataKey={dataKey}
