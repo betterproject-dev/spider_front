@@ -8,5 +8,5 @@ const createAxios = (baseURL) => axios.create({
   withCredentials: false
 })
 
-export const axiosFlask = createAxios(import.meta.env.VITE_FLASK_API_URL)
-export const axiosSpring = createAxios(import.meta.env.VITE_SPRING_API_URL)
+export const axiosFlask = createAxios(import.meta.env.VITE_FLASK_API_URL || "http://localhost:5000")
+export const axiosSpring = createAxios(import.meta.env.VITE_SPRING_API_URL || "http://localhost:8888")
