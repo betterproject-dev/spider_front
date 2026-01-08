@@ -4,7 +4,7 @@
  * 색상 값을 수정해야 할 경우 'src/App.css'의 root 설정을 변경하세요.
  */
 const STATUS_COLOR = {
-  NORMAL: 'var(--color-normal)',
+  SAFE: 'var(--color-safe)',
   WARNING: 'var(--color-warning)',
   DANGER: 'var(--color-danger)',
 };

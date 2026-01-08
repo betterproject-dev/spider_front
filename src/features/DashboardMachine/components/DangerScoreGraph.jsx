@@ -18,18 +18,29 @@ const DangerScoreGraph = ({machine_number, scores, lastScore}) => {
           <LineChart data={scores} margin={{ top: 5, right: 30, left: 20, bottom: 25 }}>
             <CartesianGrid strokeDasharray="5 5" stroke="#e2e8f0" vertical={false} />
             <XAxis tickFormatter={(value, index) => index + 1} interval={0} padding={{ left: 30, right: 30 }} tick={{ fontSize: 12 }}>
-              <Label value="데이터 순번 (Index)" offset={-10} position="insideBottom" style={{ fontSize: '20px'}}/>
+              <Label value="데이터 순번 (Index)" offset={-10} position="insideBottom" style={{ fontSize: '20px' }} />
             </XAxis>
             <YAxis domain={[0, 100]} tick={{ fontSize: 12 }}>
               <Label value="위험도 점수" angle={-90} position="insideLeft" style={{ textAnchor: 'middle', fill: '#666', fontSize: '20px' }} />
             </YAxis>
             <Tooltip
-              labelFormatter={(value, index) => `${value + 1}번째 데이터`}
+              labelFormatter={(value, index) => {
+                const now = new Date();
+                // 배열의 index를 활용해 (10 - index)분 전을 계산
+                // 데이터가 0번부터 9번까지 총 10개라면:
+                const minutesAgo = 10 - value   
+
+                const d = new Date(now.getTime() - (minutesAgo * 60000));
+                const h = d.getHours().toString().padStart(2, '0');
+                const m = d.getMinutes().toString().padStart(2, '0');
+
+                return `${h}:${m}`;
+              }}
               formatter={(value) => [`${value}점`, "위험도"]}
             />
-            <ReferenceArea y1={0} y2={40} fill={"#9ae6b4"} fillOpacity={0.3} />
-            <ReferenceArea y1={40} y2={70} fill={"#faf089"} fillOpacity={0.3} />
-            <ReferenceArea y1={70} y2={100} fill={"#feb2b2"} fillOpacity={0.3} />
+            <ReferenceArea y1={0} y2={40} fill={"#9ae6b4"} fillOpacity={0.3} stroke="none" />
+            <ReferenceArea y1={40} y2={70} fill={"#faf089"} fillOpacity={0.3} stroke="none" />
+            <ReferenceArea y1={70} y2={100} fill={"#feb2b2"} fillOpacity={0.3} stroke="none" />
             <Line type="monotone" dataKey="dangerScore" stroke="#8884d8" strokeWidth={3} activeDot={{ r: 8 }}>
               <LabelList dataKey="dangerScore" position="top" offset={10} style={{ fontSize: '12px', fill: '#8884d8' }} />
             </Line>

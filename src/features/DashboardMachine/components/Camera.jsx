@@ -1,35 +1,66 @@
 import "../styles/camera.css";
-import {useState} from "react";
-import UseSocket from "../../../hooks/UseSocket"; // 경로 재확인 필수
+import {useState, useEffect, useRef} from "react"; // useRef 추가됨
+import UseSocket from "../../../hooks/UseSocket";
 import UseNavi from "../../../hooks/UseNavi.jsx";
+import Loading from "../../../components/Loading/Loading.jsx";
+import { axiosFlask } from "../../../utils/axiosFactory.js";
 
-const Camera = ({ selectedMachine }) => {
-  const FlaskUrl = import.meta.env.VITE_FLASK_API_URL || "http://localhost:5000";
-  const videoStreamUrl = `${FlaskUrl}/camera/video_feed`;
+const Camera = ({selectedMachine}) => {
+  const FlaskBase = axiosFlask.defaults.baseURL || "http://localhost:5000"
 
-  const { goTo } = UseNavi();
-
-  // YOLO 감지 결과를 저장할 상태
+  // 1. URL을 상태(State)로 관리해야 타임스탬프 업데이트가 가능합니다.
+  const [videoStreamUrl, setVideoStreamUrl] = useState(`${FlaskBase}/camera/video_feed`);
+  const [isCameraLoading, setIsCameraLoading] = useState(true);
   const [yoloResult, setYoloResult] = useState([]);
 
-  // UseSocket 커스텀 훅 사용
-  UseSocket("yolo_result", (data) => {
-    // [확인용] 데이터가 들어오면 무조건 콘솔에 찍힙니다.
+  const [hasStreamStarted, setHasStreamStarted] = useState(false);
 
-    // 데이터가 null이나 undefined로 올 경우를 대비해 빈 배열로 초기화
+  const {goTo} = UseNavi();
+  const disconnectTimer = useRef(null);
+
+  // UseSocket 커스텀 훅
+  UseSocket("yolo_result", (data) => {
     setYoloResult(data || []);
+
+    if (!hasStreamStarted) {
+      setHasStreamStarted(true);
+      setIsCameraLoading(false);
+    }
+
+    clearTimeout(disconnectTimer.current);
+    disconnectTimer.current = setTimeout(() => {
+      setIsCameraLoading(true);
+    }, 3000);
   });
 
-  // 상태 판별 도우미 함수 (코드를 깨끗하게 유지)
+  useEffect(() => {
+    setIsCameraLoading(true);
+    setHasStreamStarted(false); // 머신 변경 시 초기화
+    // 2. 새로고침이나 머신 변경 시 URL 뒤에 시간을 붙여 캐시를 방지합니다.
+    const newUrl = `${FlaskBase}/camera/video_feed?t=${new Date().getTime()}`;
+    setVideoStreamUrl(newUrl);
+
+    return () => {
+      if (disconnectTimer.current) clearTimeout(disconnectTimer.current);
+    };
+  }, [selectedMachine, FlaskBase]);
+
+  const handleVideoLoad = () => {
+    // 이미 소켓 데이터가 오고 있다면 로딩 해제
+    if (hasStreamStarted) {
+      setIsCameraLoading(false);
+    }
+  };
+
+  const handleVideoError = () => {
+    setIsCameraLoading(true);
+  };
+
   const renderStatusContent = () => {
-    // 데이터가 없거나 배열이 비어있으면 대기 화면 표시
     if (!yoloResult || yoloResult.length === 0) {
       return (
         <>
-          <li className="status-wait">🔍 객체 탐색 중...</li>
-          <li className="status-wait" style={{fontSize: "0.8rem", color: "#ccc"}}>
-            (카메라에 물체를 보여주세요)
-          </li>
+          <li className="status-wait">객체 탐색 중...</li>
           <li className="status-wait">라벨 : -</li>
           <li className="status-wait">색상 : -</li>
           <li className="status-wait">무게 : -</li>
@@ -38,10 +69,7 @@ const Camera = ({ selectedMachine }) => {
       );
     }
 
-    // 1. 데이터 정규화 (대소문자 무관하게 처리)
     const detected = yoloResult.map((item) => (item.class ? item.class.toLowerCase() : ""));
-
-    // 2. 판별 기준 (백엔드 클래스명: label, crushed, discolored, both_defect 등)
     const hasLabel = detected.includes("label");
     const hasCrushed = detected.includes("crushed") || detected.includes("both_defect");
     const hasColorFail =
@@ -49,12 +77,10 @@ const Camera = ({ selectedMachine }) => {
       detected.includes("color_defect") ||
       detected.includes("both_defect");
 
-    // 3. 결과 메시지 매핑
     const labelStatus = hasLabel ? "정상" : "불량";
     const colorStatus = hasColorFail ? "불량" : "정상";
     const dentStatus = hasCrushed ? "불량" : "정상";
 
-    // 전체 판정
     const isSystemOK = labelStatus === "정상" && colorStatus === "정상" && dentStatus === "정상";
     const getCn = (status) => (status === "불량" ? "status-fail" : "status-ok");
 
@@ -90,19 +116,53 @@ const Camera = ({ selectedMachine }) => {
 
   return (
     <div className="camera-container">
-      <div className="video-wrapper">
+      <div
+        className="video-wrapper"
+        style={{
+          position: "relative",
+          width: "100%",
+          // 4:3 비율 (640x480) 유지. 화면이 줄어들면 높이도 자동으로 계산됨
+          aspectRatio: "640 / 480",
+          backgroundColor: "#000",
+          overflow: "hidden",
+        }}
+      >
+        {isCameraLoading && (
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              zIndex: 10,
+              backgroundColor: "#001a33",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Loading message="카메라 스트림을 연결 중입니다..." />
+          </div>
+        )}
         <img
           src={videoStreamUrl}
           alt="AI Live Stream"
           className="video-feed"
-          onError={(e) => {
-            e.target.src = "https://via.placeholder.com/660x480?text=Camera+Offline";
-          }}
+          onLoad={handleVideoLoad}
+          onError={handleVideoError}
+          style={{width: "100%", display: isCameraLoading ? "none" : "block"}}
         />
-
-        <div className="video_status">
-          <ul className="video_status_list" onClick={() => {goTo(`/machine/${selectedMachine}/items/defect`)}}>{renderStatusContent()}</ul>
-        </div>
+        {!isCameraLoading && (
+          <div className="video_status">
+            <ul
+              className="video_status_list"
+              onClick={() => goTo(`/machine/${selectedMachine}/items/defect`)}
+            >
+              {renderStatusContent()}
+            </ul>
+          </div>
+        )}
       </div>
 
       <div className="status-bar">
