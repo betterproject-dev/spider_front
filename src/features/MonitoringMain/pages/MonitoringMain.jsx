@@ -1,5 +1,5 @@
 import "../styles/MonitoringMain.css";
-import { useState, useEffect, useMemo, memo } from "react";
+import { useState, useEffect, useMemo, memo, useCallback } from "react";
 import factoryImg from "../../../img/factory_bg.png";
 import UseNavi from "../../../hooks/UseNavi";
 import MessageSlider from "../../../components/MessageSlider/MessageSlider";
@@ -50,6 +50,10 @@ const MonitoringMain = memo(({ realTimeData, lastScore }) => {
       { machine: "4호기", text: "누수가 발생했습니다.", status: "danger" },
     ];
   }, [currentStatus]);
+
+  const handleNavigate = useCallback(() => {
+    goTo("/dashboard/1")
+  }, [goTo])
 
 
   // =====  Effects  =====
@@ -107,7 +111,7 @@ const MonitoringMain = memo(({ realTimeData, lastScore }) => {
               <div className="temp">온도 : {temperature !== null ? `${temperature}℃` : "--"}</div>
               <div className="hum">습도 : {humidity !== null ? `${humidity}%` : "--"}</div>
             </div>
-            <div className={`machine_1 ${currentStatus.class}`} onClick={() => goTo("/dashboard/1")}>
+            <div className={`machine_1 ${currentStatus.class}`} onClick={handleNavigate}>
               1호기
             </div>
             <div className="machine_2">2호기</div>

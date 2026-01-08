@@ -117,7 +117,7 @@ const Camera = ({selectedMachine}) => {
     <div className="camera-container">
       <div
         className="video-wrapper"
-        onClick={() => goTo(`/machine/${selectedMachine}/items/defect`)}
+        onClick={handleNavigate}
         title="클릭 시 제품 불량률 통계 페이지로 이동합니다"
       >
         {isCameraLoading && (
