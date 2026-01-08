@@ -191,3 +191,9 @@
   justify-content: center;
   color: #adb5bd;
 }
+
+/* Recharts에서 점선(stroke-dasharray) 전부 제거 → 실선/없음으로 */
+.recharts-cartesian-grid line,
+.recharts-cartesian-grid path {
+  stroke-dasharray: none !important;
+}

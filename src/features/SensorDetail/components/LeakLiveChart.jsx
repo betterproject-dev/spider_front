@@ -11,13 +11,13 @@ const LeakLiveChart =({ realTimeData, sensor }) => {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart data={processedData} stackOffset="sign" barCategoryGap={0}>
-        <XAxis dataKey="timestamp" tick={{fontSize: 12}} />
+        <XAxis dataKey="timestamp" interval={1} />
         <YAxis 
           width={60}
           domain={[-1.2, 1.2]}  // 그래프에 보여줄 Y축 데이터 범위
           ticks={[-1, 1]} // 눈금을 그려줄 범위
           tickFormatter={(value) => value === 1 ? "누수" : "정상"}
-          tick={{ fontSize: 13, fontWeight: 'bold' }}
+          tick={{ fontWeight: 'bold' }}
         />
         <ReferenceLine y={0} stroke="#666" />
         <Tooltip
@@ -30,7 +30,7 @@ const LeakLiveChart =({ realTimeData, sensor }) => {
           {processedData.map((entry, i) => (
             <Cell
               key={`cell-${i}`}
-              fill={entry.leakStatusValue > 0 ? 'var(--color-danger)' : 'var(--color-normal)'} 
+              fill={entry.leakStatusValue > 0 ? 'var(--color-danger)' : 'var(--color-safe)'} 
               fillOpacity={0.8}
             />
           ))}
