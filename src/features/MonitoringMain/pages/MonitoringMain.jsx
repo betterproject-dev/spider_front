@@ -13,6 +13,8 @@ const getStatus = (score) => {
   return { label: "정상", class: "safe", type: 0 };
 };
 
+const SOCKET_SERVER_URL = 'ws://localhost:5000'
+
 const MonitoringMain = ({ realTimeData, lastScore }) => {
   const { goTo } = UseNavi();
   
@@ -75,19 +77,15 @@ const MonitoringMain = ({ realTimeData, lastScore }) => {
   // WebSocket 연결 및 데이터 수신
   useEffect(() => {
     // 실제 센서 서버 주소로 변경 필요
-    const ws = io('ws://localhost:5000', {
+    const ws = io(SOCKET_SERVER_URL, {
       transports: ['websocket'],
     });
 
     ws.on('sensor_data', (data) => {      
       if (data.temperature !== undefined) setTemperature(data.temperature);
-      if (typeof data.humidity !== undefined) setHumidity(data.humidity);
+      if (data.humidity !== undefined) setHumidity(data.humidity);
     });
 
-    // 연결 성공 확인
-    ws.on('connect', () => {
-      console.log("서버와 연결되었습니다 ID:", ws.id);
-    })
     // 컴포넌트 언마운트 시 연결 종료
     return () => {
       ws.disconnect();

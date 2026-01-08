@@ -7,7 +7,6 @@ const WebSocket = require('ws');
 const wss = new WebSocket.Server({ port: 8080, path: '/ws/sensor' });
 
 wss.on('connection', function connection(ws) {
-  console.log('Client connected');
   // 1초마다 임의의 온도/습도 데이터 전송
   const interval = setInterval(() => {
     const data = {
@@ -19,8 +18,6 @@ wss.on('connection', function connection(ws) {
 
   ws.on('close', () => {
     clearInterval(interval);
-    console.log('Client disconnected');
   });
 });
 
-console.log('WebSocket sensor server running on ws://localhost:8080/ws/sensor');
