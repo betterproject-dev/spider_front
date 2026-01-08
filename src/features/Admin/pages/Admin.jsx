@@ -3,14 +3,18 @@ import '../styles/admin.css';
 import UseNavi from '../../../hooks/UseNavi';
 import requestHandler from '../../../utils/requestHandler';
 import Loading from '../../../components/Loading/Loading';
+import { useAdminAuthStore } from '../stores/useAdminAuthStore';
 
 const Admin = () => {
   const [pin, setPin] = useState("");
   const { goTo } = UseNavi();
   const [loading, setLoading] = useState(false)
 
+  const authenticate = useAdminAuthStore(state => state.authenticate);
+
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     await requestHandler({
       method: "post",
@@ -20,6 +24,7 @@ const Admin = () => {
       setLoading,
       onSuccess: (data) => {
         if (data.success) {
+          authenticate(); // 전역 상태 true
           alert(data.message);
           goTo('/monitor') // 인증 성공 시 이동할 페이지
         } else {

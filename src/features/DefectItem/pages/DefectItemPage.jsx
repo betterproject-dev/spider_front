@@ -57,22 +57,24 @@ const DefectItemPage = () => {
     setLoading(true);
 
     const fetchData = async () => {
-      // 파이 차트 데이터
+      // 파이 차트 데이터 URL
       const summaryUrl = `/api/stats/defect-summary?machineId=${selectedMachine}&type=${selectedSide}`;
-      // 바 차트 데이터
+      // 바 차트 데이터 URL
       const trendUrl = `/api/stats/rejection-trend/${selectedMachine}?type=${selectedSide}`;
 
       // Promise.all을 사용하여 두 API 호출을 병렬로 처리 (성능 향상)
       const [summaryRes, trendRes] = await Promise.all([
         requestHandler({ method: "get", url: summaryUrl, server: "spring" }),
         requestHandler({ method: "get", url: trendUrl, server: "spring" })
-      ])
+      ]);
 
       if (isMounted) {
-        if (summaryRes.ok) setDefectData(summaryRes.data)
+        // summaryRes.data가 {labelCount: 6, ...} 형태인 객체이므로 그대로 set
+        if (summaryRes.ok) setDefectData(summaryRes.data);
+        
         if (trendRes.ok) {
-          const data = trendRes.data || []
-          setTrendData(data)
+          const data = trendRes.data || [];
+          setTrendData(data);
 
           if (data.length > 0) {
             const totalIns = data.reduce((acc, cur) => acc + (cur.totalInspected || 0), 0);
@@ -80,10 +82,10 @@ const DefectItemPage = () => {
             const avg = totalIns > 0 ? ((totalRej / totalIns) * 100).toFixed(2) : "0.00";
             setSummary({ totalInspected: totalIns, totalRejected: totalRej, avgRate: avg });
           } else {
-            setSummary({ totalInspected: 0, totalRejected: 0, avgRate: "0.00" })
+            setSummary({ totalInspected: 0, totalRejected: 0, avgRate: "0.00" });
           }
         }
-        setLoading(false)
+        setLoading(false);
       }
     }
     fetchData()
@@ -106,7 +108,6 @@ const DefectItemPage = () => {
         onSideChange={setSelectedSide}
         summaryItems={[
           { label: "총 검사수", value: summary.totalInspected.toLocaleString(), color: "#333"},
-          // 만약 종류별 데이터가 없으면 summary의 불량수라도 보여줌
           { label: "불량수", value: summary.totalRejected.toLocaleString(), color: "red"}
         ]}
         currentValue={{label: "평균 불량률", value: `${summary.avgRate}%`, color: "red"}}

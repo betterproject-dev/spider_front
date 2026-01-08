@@ -15,7 +15,7 @@ const SensorDayChart =  ({data, dataKey, unit, sensorName}) => {
         <CartesianGrid strokeDasharray="3 3" vertical={false} />
         <XAxis dataKey="createdAt" tickFormatter={(t) => t.split(' ')[1].substring(0, 5)} />
         <YAxis domain={['auto', 'auto']} unit={unit} />
-        <Tooltip />
+        <Tooltip labelFormatter={(label) => label && label.split(' ')[1] ? label.split(' ')[1].substring(0, 5) : label} />
         <Area
           type="monotone"
           dataKey={dataKey}
