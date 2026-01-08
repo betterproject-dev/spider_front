@@ -21,7 +21,7 @@
 }
 
 .dash-status-on .working_on {
-  color: var(--color-normal);
+  color: var(--color-safe);
 }
 
 .dash-status-on .working_off {

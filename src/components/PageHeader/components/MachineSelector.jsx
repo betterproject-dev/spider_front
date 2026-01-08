@@ -3,7 +3,7 @@ import '../style/MachineSelector.css'
 import UseNavi from '../../../hooks/UseNavi';
 
 // 기계 번호 목록
-const MACHINES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const MACHINES = [1, 2, 3, 4];
 
 const MachineSelector = ({ onMachineChange }) => {
   const { machineNum } = useParams();
