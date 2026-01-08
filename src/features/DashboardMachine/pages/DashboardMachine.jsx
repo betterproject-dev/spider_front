@@ -66,12 +66,11 @@ const DashboardMachine = ({ realTimeData, scores, lastScore }) => {
           </div>
         </div>
         <div className="dash-sensor-row">
-          {/* (임시) 주석 처리 -> 실시간 데이터가 들어오지 않으면 대시보드 대신 로딩 스페너를 보여주는 코드임. */}
-          {/* { realTimeData.length === 0 && (
+          { realTimeData.length === 0 && (
             <div className="current_sensor_container">
               <Loading message="센서 데이터 수신 대기 중..." />
             </div>
-          )} */}
+          )}
           <CurrentSensors realTimeData={realTimeData} selectedMachine={selectedMachine} />
         </div>
         <div className="dash-main-row">

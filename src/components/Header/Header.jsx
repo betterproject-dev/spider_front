@@ -15,7 +15,7 @@ function Header() {
       <header>
         <ul>
           <li className="logo" onClick={() => goTo("/monitor")}><img src={logo} alt="logo" className="logo_img" /></li>
-          <li className={`alarm ${alert.isOpen ? "emergency" : ""}`}>
+          <li className={`alarm ${alert?.isOpen ? "emergency" : ""}`}>
             <NotificationBell>
               <FontAwesomeIcon icon={faBell} />
             </NotificationBell>

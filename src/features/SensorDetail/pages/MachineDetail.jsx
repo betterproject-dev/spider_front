@@ -12,26 +12,16 @@ import LeakLiveChart from '../components/LeakLiveChart';
 import LeakStateChart from '../components/LeakStateChart';
 
 const MachineDetail = ({ realTimeData }) => {
-   // (임시) 더미데이터
-  const testData = {
-    temperature_DS18B20 : 21.62,
-    humidity : 9,
-    noise : 59.06,
-    leak : 1
-  }
-
   const { machineNum, sensorKey } = useParams();
   const { SENSOR_LIST, checkIsNormal } = sensorConfig;
   
   // 마지막으로 들어온 센서 데이터
-  const currentData = (realTimeData && realTimeData.length > 0) 
-    ? realTimeData[realTimeData.length - 1] 
-    : testData;
+  const currentData = realTimeData[realTimeData.length - 1] 
 
   const [selectedMachine, setSelectedMachine] = useState(Number(machineNum) || 1);
   const [selectedSensor, setSelectedSensor] = useState(() => {
-  return sensorKey || SENSOR_LIST[0]?.eng_name || 'temperature';
-});
+    return sensorKey || SENSOR_LIST[0]?.eng_name || 'temperature';
+  });
   const [selectedPeriod, setSelectedPeriod] = useState('live');
   
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
@@ -69,16 +59,16 @@ const MachineDetail = ({ realTimeData }) => {
       });
     };
 
-    useEffect(() => {
-      console.log("현재 모드 변경됨:", selectedPeriod);
-      if (selectedPeriod !== 'live'){
-        getSensorData(selectedPeriod);
-      }
-    }, [selectedMachine, selectedPeriod, selectedDate]);
+  useEffect(() => {
+    console.log("현재 모드 변경됨:", selectedPeriod);
+    if (selectedPeriod !== 'live'){
+      getSensorData(selectedPeriod);
+    }
+  }, [selectedMachine, selectedPeriod, selectedDate]);
 
-    // 4. 가공 데이터 (UI에 뿌려줄 값들)
-    const currentSensorConfig = SENSOR_LIST.find(s => s.eng_name === selectedSensor) || SENSOR_LIST[0];;
-    // // 안전하게 (빈배열일 때 )
+  // 4. 가공 데이터 (UI에 뿌려줄 값들)
+  const currentSensorConfig = SENSOR_LIST.find(s => s.eng_name === selectedSensor) || SENSOR_LIST[0];;
+  // // 안전하게 (빈배열일 때 )
 
   // ✅ 수정: sensorKey가 변경될 때만 업데이트
   useEffect(() => {
@@ -89,19 +79,31 @@ const MachineDetail = ({ realTimeData }) => {
   
   // 현재 선택된 센서의 값 (단위 포함)
   const selectedSensorData = () => {
-    const dataType = currentData ? currentData : testData;
+    if (!currentData) return "--";
 
     if (currentSensorConfig.name === "누수") {
-      return dataType[selectedSensor] === 1 ? "정상" : "누수 발생"
+      return currentData["leak"] === 1 ? "정상" : "누수 발생"
     }
-
-    return `${dataType[selectedSensor] || 0}${currentSensorConfig.unit || ''}`
+    
+    const value = currentData[currentSensorConfig.key];
+    return value !== undefined ? `${value}${currentSensorConfig.unit || ''}` : "--";
   };
   // 현재 선택된 센서의 값 정상 판별
   const isNormal = checkIsNormal(currentSensorConfig, currentData);
   // 현재 선택된 센서의 정상 여부에 따른 색과 텍스트
-  const statusColor = isNormal ? STATUS_COLOR.NORMAL : STATUS_COLOR.DANGER;
+  const statusColor = isNormal ? STATUS_COLOR.SAFE : STATUS_COLOR.DANGER;
   const statusText = isNormal ? "정상 작동" : "비정상"
+
+  // 센서 데이터가 들어오지 않는 경우 로딩
+  if (!realTimeData) {
+    return (
+      <>
+      <div className="wrap">
+        <Loading message="센서 데이터 수신 대기 중..." />
+      </div>
+      </>
+    )
+  }
 
   return (
     <MachineLayout
@@ -159,8 +161,6 @@ const MachineDetail = ({ realTimeData }) => {
       ? <LeakLiveChart realTimeData={realTimeData} sensor={selectedSensor} />
       : <SensorLiveChart 
           realTimeData={realTimeData} 
-          sensor={selectedSensor} 
-          data={sensorData} 
           dataKey={currentSensorConfig?.key}
           unit={currentSensorConfig?.unit}
           sensorName={currentSensorConfig?.name}
