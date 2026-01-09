@@ -67,7 +67,7 @@ const loadNotionMemos = useCallback(async () => {
     } else {
       alert("노션 저장 오류: " + result.message);
     }
-  };
+  });
 
   // 메모 삭제
   const handleDelete = useCallback(
@@ -83,7 +83,7 @@ const loadNotionMemos = useCallback(async () => {
       // 삭제 성공 시 리스트 갱신 (전체 로드 혹은 필터링)
       setEvents(prev => prev.filter(ev => ev.id !== id));
     }
-  };
+  });
 
   // ✅ 선택된 날짜의 메모만 보여주기
   const filteredMemos = useMemo(() => {
