@@ -5,12 +5,15 @@
     min-height: 450px;   /* 높이를 강제로 지정 */
     padding: 20px;
     background-color: white;
+    align-items: flex-start
 }
 
 .chart-section {
     flex: 1;
-    height: 400px;       /* 각 섹션에도 높이 지정 */
+    height: 450px;       /* 각 섹션에도 높이 지정 */
     min-width: 300px;
+    padding: 10px;
+    overflow: visible !important;
 }
 
 .chart-title {
@@ -33,4 +36,12 @@
 
 .machine_contents {
     border-radius: 15px 15px 15px 15px;
+}
+
+.recharts-responsive-container {
+    overflow: visible !important; /* 라벨이 컨테이너 밖으로 나가도 보이게 설정 */
+}
+
+.recharts-surface {
+    overflow: visible !important;
 }

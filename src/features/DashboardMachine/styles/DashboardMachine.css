@@ -21,7 +21,7 @@
 }
 
 .dash-status-on .working_on {
-  color: var(--color-normal);
+  color: var(--color-safe);
 }
 
 .dash-status-on .working_off {
@@ -59,6 +59,7 @@
 
 .dash-sensor-row {
   padding: 16px 40px 0 40px;
+  max-height: 185px;
 }
 
 .dash-main-row {

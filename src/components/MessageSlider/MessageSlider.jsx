@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import "./MessageSlider.css";
 
 /**
@@ -7,7 +7,7 @@ import "./MessageSlider.css";
  * @param {number} rowHeight - 한 줄 높이(px)
  * @param {number} interval - 슬라이드 간격(ms)
  */
-const MessageSlider = ({ messages, rowHeight = 35, interval = 3500 }) => {
+const MessageSlider = memo(({ messages, rowHeight = 35, interval = 3500 }) => {
   const [messageIndex, setMessageIndex] = useState(0);
   const [transitionOn, setTransitionOn] = useState(true);
 
@@ -43,7 +43,7 @@ const MessageSlider = ({ messages, rowHeight = 35, interval = 3500 }) => {
           >
             {[...messages, messages[0]].map((msg, idx) => (
               <div className="message_item" key={`${msg.machine}-${idx}`}>
-                <div className="machine_num">{msg.machine}</div>
+                <div className={`machine_num ${msg.status}`}>{msg.machine}</div>
                 <div className="message_text">{msg.text}</div>
               </div>
             ))}
@@ -52,6 +52,6 @@ const MessageSlider = ({ messages, rowHeight = 35, interval = 3500 }) => {
       </div>
     </div>
   );
-};
+});
 
 export default MessageSlider;

@@ -62,3 +62,15 @@
 .dot.danger { background: #feb2b2; }
 .dot.warning { background: #faf089; }
 .dot.safe { background: #9ae6b4; }
+
+/* ReferenceArea가 그리는 사각형 path 자체를 제거 */
+.recharts-reference-area-rect {
+  stroke: none !important;
+  stroke-width: 0 !important;
+  stroke-dasharray: none !important;
+}
+
+/* 혹시 fill 경계가 남으면 */
+.recharts-reference-area-rect {
+  shape-rendering: crispEdges;
+}
