@@ -117,11 +117,24 @@
 
 .memo_summary {
   margin-top: 25px;
-  padding: 15px;
+  padding: 0 15px;
+  height: 170px;
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-top: 4px solid #3b82f6; /* 포인트 컬러 유지 */
   border-radius: 8px;
+  overflow-y: scroll;
+}
+/* 스크롤바 커스텀 */
+.memo_summary::-webkit-scrollbar {
+    width: 5px;  /* 세로축 스크롤바 폭 너비 */
+}
+.memo_summary::-webkit-scrollbar-thumb {
+    background: #3b82f6; /* 스크롤바 막대 색상 */
+    border-radius: 12px 12px 12px 12px;
+}
+.memo_summary::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02); /* 스크롤바 트랙 색상 */
 }
 
 .summary_header {
@@ -134,10 +147,16 @@
 
 .summary_title {
   font-size: 13px;
+  width: 245px;
+  height: 35px;
   color: #3b82f6;
   font-weight: bold;
-  margin: 0;
+  margin: 0 0 10px 0;
+  padding-top: 10px;
   flex: 0 0 auto; /* flex 속성 변경 */
+  display: flex;
+  position: fixed;
+  background-color: #263545;
 }
 
 .selected_date_label {
@@ -149,6 +168,7 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  margin-top: 40px;
 }
 
 .summary_list li {
@@ -191,8 +211,8 @@
   color: white;
   border: none;
   border-radius: 50%;
-  width: 28px;
-  height: 28px;
+  width: 22px;
+  height: 22px;
   font-size: 20px;
   cursor: pointer;
   display: flex;
@@ -260,3 +280,24 @@
   border-radius: 50%;
   background: #3b82f6;
 }
+
+/* ✅ 선택한 날짜 배경 */
+.fc .fc-daygrid-day.fc-day-selected {
+  background: rgba(74, 158, 255, 0.18) !important; /* 선택 날짜 (오늘과 다른 톤) */
+  border: 1px solid #3479c7a1 !important;
+}
+
+/* ✅ 선택한 날짜 숫자 강조 */
+.fc .fc-daygrid-day.fc-day-selected .fc-daygrid-day-number {
+  color: #fff !important;
+  font-weight: 800;
+}
+
+/* ✅ 오늘 날짜는 기존보다 살짝 다른 톤으로 (원하면) */
+.fc .fc-day-today {
+  background: rgb(0, 58, 151) !important; /* 오늘 */
+}
+.fc .fc-day-today.fc-day-selected {
+  background: rgb(0, 58, 151) !important;
+}
+

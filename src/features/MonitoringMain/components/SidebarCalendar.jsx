@@ -125,6 +125,14 @@ const SidebarCalendar = memo(() => {
           height="auto"
           locale="ko"
           dateClick={handleDateClick}
+          dayCellClassNames={(arg) => {
+            const y = arg.date.getFullYear();
+            const m = String(arg.date.getMonth() + 1).padStart(2, "0");
+            const d = String(arg.date.getDate()).padStart(2, "0");
+            const ymd = `${y}-${m}-${d}`; // ✅ 로컬 기준 YYYY-MM-DD
+
+            return ymd === selectedDate ? ["fc-day-selected"] : [];
+          }}
           datesSet={handleDatesSet}
           events={calendarEvents} // ✅ 날짜당 1개 점만 표시
           eventContent={() => ({html: '<span class="memo-dot"></span>'})} // ✅ 텍스트 대신 점만
@@ -136,10 +144,10 @@ const SidebarCalendar = memo(() => {
       <div className="memo_summary">
         <p className="summary_title">
           {selectedDate ? `${selectedDate} 일지` : "최근 일지 기록 (Notion)"}
+          <button className="memo_add_btn" onClick={handleAddMemo}>
+            +
+          </button>
         </p>
-        <button className="memo_add_btn" onClick={handleAddMemo}>
-          +
-        </button>
 
         <ul className="summary_list">
           {!selectedDate ? (
