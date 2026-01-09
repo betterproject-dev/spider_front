@@ -101,11 +101,10 @@
   margin-top: 10px;
 }
 .dash-cctv-box {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
+  background: #020730;
+  border-radius: 12px;
   flex: 1;
   min-height: 260px;
-  padding: 7px;
   display: flex;
   flex-direction: column;
 }
@@ -160,4 +159,13 @@
   padding: 4px 18px;
   border-radius: 4px;
   margin: 0 8px;
+}
+
+.dash_wrap{
+  padding-bottom: 5%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #2a3a4a;
 }
