@@ -86,17 +86,6 @@ const Camera = ({selectedMachine}) => {
     }, DISCONNECT_THRESHOLD)
   }, []));
 
-  useEffect(() => {
-    setIsCameraLoading(true);
-    setHasStreamStarted(false); // 머신 변경 시 초기화
-    const timestamp = Date.now()
-    setVideoStreamUrl(`${FlaskBase}/camera/video_feed?t=${timestamp}`)
-
-    return () => {
-      if (disconnectTimer.current) clearTimeout(disconnectTimer.current);
-    };
-  }, [selectedMachine, FlaskBase]);
-
   const handleVideoLoad = useCallback(() => {
     // 이미 소켓 데이터가 오고 있다면 로딩 해제
     if (hasStreamStarted) {
@@ -111,6 +100,36 @@ const Camera = ({selectedMachine}) => {
   const handleVideoError = () => {
     setIsCameraLoading(true);
   };
+
+  // 브라우저 탭 활성화 감지 및 스트림 재연결
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      // 사용자가 탭으로 다시 돌아왔을 때(visible)
+      if (document.visibilityState === "visible") {
+        console.log("📺 탭 활성화 감지: 카메라 스트림 재연결")
+        const timestamp = Date.now();
+        // URL 뒤에 새로운 타임스탬프를 붙여 브라우저가 새 요청을 보내도록 강제
+        setVideoStreamUrl(`${FlaskBase}/camera/video_feed?t=${timestamp}`);
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [FlaskBase]);
+
+  useEffect(() => {
+    setIsCameraLoading(true);
+    setHasStreamStarted(false); // 머신 변경 시 초기화
+    const timestamp = Date.now()
+    setVideoStreamUrl(`${FlaskBase}/camera/video_feed?t=${timestamp}`)
+
+    return () => {
+      if (disconnectTimer.current) clearTimeout(disconnectTimer.current);
+    };
+  }, [selectedMachine, FlaskBase]);
 
   return (
     <div className="camera-container">
