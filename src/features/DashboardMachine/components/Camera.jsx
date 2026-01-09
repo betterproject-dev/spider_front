@@ -53,7 +53,6 @@ const StatusOverlay = memo(({ yoloResult, onNavigate }) => {
       </li>
       <li>라벨 상태: <span className={getStatusClassName(statusInfo.labelStatus)}>{statusInfo.labelStatus}</span></li>
       <li>색상 오염: <span className={getStatusClassName(statusInfo.colorStatus)}>{statusInfo.colorStatus}</span></li>
-      <li>무게 측정: <span className="status-ok">정상</span></li>
       <li>외관 변형: <span className={getStatusClassName(statusInfo.dentStatus)}>{statusInfo.dentStatus}</span></li>
     </ul>
   )
