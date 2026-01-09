@@ -2,14 +2,15 @@ import '../styles/sensorDetail.css';
 import UseNavi from '../../../hooks/UseNavi';
 import PageHeader from '../../../components/PageHeader/PageHeader';
 import DefectlogCard from '../../DefectItem/pages/DefectlogCard';
+import { memo } from 'react';
 
-const MachineLayout = ({
+const MachineLayout = memo(({ 
   title = "정보 없음",
   sort,  // 페이지 네비바에 들어갈 상세 페이지 정보
-  selectedMachine,      // 현재 선택된 호기
-  onMachineChange,      // 호기 변경 함수
+  selectedMachine,      // 현재 선택된 기계 번호
+  onMachineChange,      // 기계 번호 변경 함수
   tabs = [],          // 상단 센서 탭 배열
-  selectedTab = "",   // 현재 선택된 센서 key
+  selectedTab = "",   // 현재 선택된 센서의 영문명
   sideButtons = [],   // 왼쪽 사이드바 버튼 배열 (일간, 주간, 실시간 등)
   selectedSide = "",  // 현재 선택된 사이드 버튼 key
   onSideChange = () => { },
@@ -72,7 +73,7 @@ const MachineLayout = ({
   }
   return (
     <>
-      {/* 1. 최상단 타이틀 */}
+      {/* 최상단 타이틀 */}
       <PageHeader
         detail={true}
         sort={sort}
@@ -81,7 +82,7 @@ const MachineLayout = ({
       />
       <h1 className="page-title">{title}</h1>
 
-      {/* 2. 상단 센서 탭 (데이터가 있을 때만 렌더링) */}
+      {/* 상단 센서 탭 */}
       {tabs.length > 0 && (
         <nav className="sensor-tabs">
           {tabs.map((tab) => (
@@ -97,7 +98,7 @@ const MachineLayout = ({
       )}
 
       <div className="dashboard-layout">
-        {/* 3. 사이드바 기간/메뉴 버튼 */}
+        {/* 사이드바 기간/메뉴 버튼 */}
         <aside className="sidebar">
           {sideButtons.map((btn) => (
             <button
@@ -110,7 +111,7 @@ const MachineLayout = ({
           ))}
         </aside>
 
-        {/* 4. 메인 컨텐츠 영역 (흰색 박스) */}
+        {/* 메인 컨텐츠 영역 (흰색 박스) */}
         <main className="machine_contents">
           {/* 요약 바 */}
           <div className="info-summary-bar">
@@ -135,7 +136,7 @@ const MachineLayout = ({
             </div>
           </div>
 
-          {/* 그래프 영역: 부모 컴포넌트에서 전달한 children이 여기에 꽂힘 */}
+          {/* 그래프 영역: 부모 컴포넌트에서 전달한 children */}
           <div className="chart-card">
             {children}
           </div>
@@ -143,6 +144,6 @@ const MachineLayout = ({
       </div>
     </>
   );
-};
+});
 
 export default MachineLayout;

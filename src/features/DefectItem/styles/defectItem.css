@@ -7,6 +7,7 @@
     /* 높이를 강제로 지정 */
     padding: 20px;
     background-color: white;
+    align-items: flex-start
 }
 
 .chart-section {

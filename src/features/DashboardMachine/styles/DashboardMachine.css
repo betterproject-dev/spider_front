@@ -59,6 +59,7 @@
 
 .dash-sensor-row {
   padding: 16px 40px 0 40px;
+  max-height: 185px;
 }
 
 .dash-main-row {

@@ -1,3 +1,4 @@
+import { useCallback } from "react"
 import { useNavigate } from "react-router-dom"
 
 /**
@@ -27,9 +28,9 @@ const UseNavi = () => {
    * @example
    * goIndex()
    */
-  const goIndex = () => {
-    navigate('/')
-  }
+  const goIndex = useCallback(() => {
+    navigate('/');
+  }, [navigate]);
 
   /**
    * 지정한 경로로 이동
@@ -39,9 +40,9 @@ const UseNavi = () => {
    * @example
    * goTo("/detail", { id: 3, name: "비타민C" })
    */
-  const goTo = (path, state, replace=false) => {
-    navigate(path, {state, replace})
-  }
+  const goTo = useCallback((path, state, replace=false) => {
+    navigate(path, {state, replace});
+  }, [navigate]);
 
   /**
    * 이전 페이지로 이동
@@ -49,9 +50,9 @@ const UseNavi = () => {
    * @example
    * goBack()
    */
-  const goBack = () => {
-    navigate(-1)
-  }
+  const goBack = useCallback(() => {
+    navigate(-1);
+  }, [navigate]);
 
   return {goIndex, goTo, goBack}
 }

@@ -1,6 +1,7 @@
+import { memo } from 'react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-const SensorLiveChart = ({ realTimeData, dataKey, unit, sensorName }) => {
+const SensorLiveChart = memo(({ realTimeData, dataKey, unit, sensorName }) => {
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -39,6 +40,6 @@ const SensorLiveChart = ({ realTimeData, dataKey, unit, sensorName }) => {
       </AreaChart>
     </ResponsiveContainer>
   )
-}
+});
 
 export default SensorLiveChart;

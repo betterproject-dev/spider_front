@@ -1,14 +1,10 @@
+import { memo } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-const SensorDayChart =  ({data, dataKey, unit, sensorName}) => {
-
-  //   console.log('=== SensorDayChart 디버깅 ===');
-  // console.log('받은 data:', data);
-  // console.log('받은 dataKey:', dataKey);
-  // console.log('받은 unit:', unit);
-  // console.log('data 길이:', data?.length);
-  // console.log('첫 번째 데이터:', data?.[0]);
-  // console.log('데이터에 해당 키 있나?:', data?.[0]?.[dataKey]);
+const SensorDayChart = memo(({data, dataKey, unit, sensorName}) => {
+  if (!data || !Array.isArray(data) || data.length === 0) {
+    return <div style={{padding: '50px', textAlign: 'center'}}>데이터가 없습니다</div>;
+  }
 
   return (
 
@@ -36,6 +32,6 @@ const SensorDayChart =  ({data, dataKey, unit, sensorName}) => {
       </AreaChart>
     </ResponsiveContainer>
   )
-}
+});
 
 export default SensorDayChart;

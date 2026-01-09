@@ -33,6 +33,7 @@
   cursor: pointer;
   position: relative;
   transition: all 0.3s;
+  min-height: 55px;
 }
 
 /* 활성화된 탭 디자인: 하단에 포인트 컬러 바 */
@@ -123,6 +124,7 @@
   /* 원하는 높이로 설정 (예: 500px, 80vh 등) */
   overflow-y: auto;
   /* 세로 방향으로 내용이 넘치면 스크롤 생성 */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
 /* 요약 바 - 가로로 정보를 펼쳐서 휑함을 해결 */
@@ -197,11 +199,33 @@
   /* 수치만 따로 한 줄 차지 */
 }
 
+.date-selection-bar {
+  margin-bottom: 10px;
+}
+
+.date-selection-bar > span {
+  font-size: 14px;
+  font-weight: 600;
+  margin-right: 10px;
+}
+
+.date-selection-bar > input {
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.chart-area {
+  min-height: 400px;
+  margin-top: 10px;
+}
+
 /* 그래프 카드 */
 .chart-card {
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 485px;
 }
 
 .chart-placeholder {
