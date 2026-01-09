@@ -39,7 +39,7 @@ const MonitoringMain = memo(({ realTimeData, lastScore }) => {
   const alertMessages = useMemo(() => {
     const getMessageText = (type, label) => {
       if (type === 0) return "현재 모든 시스템이 정상 가동 중입니다.";
-      if (type === 1) return "경고: 누수가 발생했습니다.";
+      if (type === 1) return "누수가 발생했습니다.";
       return `위험점수가 [${label}] 수준에 도달했습니다.`;
     };
 
