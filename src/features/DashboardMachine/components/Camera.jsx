@@ -62,7 +62,6 @@ const Camera = ({selectedMachine}) => {
           <li className="status-wait">객체 탐색 중...</li>
           <li className="status-wait">라벨 : -</li>
           <li className="status-wait">색상 : -</li>
-          <li className="status-wait">무게 : -</li>
           <li className="status-wait">찌그러짐 : -</li>
         </>
       );
@@ -104,9 +103,6 @@ const Camera = ({selectedMachine}) => {
           색상 오염: <span className={getCn(colorStatus)}>{colorStatus}</span>
         </li>
         <li>
-          무게 측정: <span className="status-ok">정상</span>
-        </li>
-        <li>
           외관 변형: <span className={getCn(dentStatus)}>{dentStatus}</span>
         </li>
       </>
@@ -116,7 +112,8 @@ const Camera = ({selectedMachine}) => {
   return (
     <div className="camera-container">
       <div
-        className="video-wrapper"
+        className="video-wrapper clickable-area"
+        onClick={() => goTo(`/machine/${selectedMachine}/items/defect`)}
         style={{
           position: "relative",
           width: "100%",
@@ -124,6 +121,7 @@ const Camera = ({selectedMachine}) => {
           aspectRatio: "640 / 480",
           backgroundColor: "#000",
           overflow: "hidden",
+          cursor: "pointer",
         }}
       >
         {isCameraLoading && (
@@ -162,11 +160,6 @@ const Camera = ({selectedMachine}) => {
             </ul>
           </div>
         )}
-      </div>
-
-      <div className="status-bar">
-        <span className="status-dot"></span>
-        <span>AI 모니터링 시스템 작동 중</span>
       </div>
     </div>
   );
