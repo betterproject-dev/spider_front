@@ -106,7 +106,7 @@ const Camera = ({selectedMachine}) => {
     const handleVisibilityChange = () => {
       // 사용자가 탭으로 다시 돌아왔을 때(visible)
       if (document.visibilityState === "visible") {
-        console.log("📺 탭 활성화 감지: 카메라 스트림 재연결")
+        setIsCameraLoading(true);
         const timestamp = Date.now();
         // URL 뒤에 새로운 타임스탬프를 붙여 브라우저가 새 요청을 보내도록 강제
         setVideoStreamUrl(`${FlaskBase}/camera/video_feed?t=${timestamp}`);
