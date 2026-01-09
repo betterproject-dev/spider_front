@@ -1,8 +1,10 @@
 .stats-chart-container {
     display: flex;
-    flex-direction: row; /* 가로 배치 */
+    flex-direction: row;
+    /* 가로 배치 */
     width: 100%;
-    min-height: 450px;   /* 높이를 강제로 지정 */
+    min-height: 450px;
+    /* 높이를 강제로 지정 */
     padding: 20px;
     background-color: white;
     align-items: flex-start
@@ -10,14 +12,16 @@
 
 .chart-section {
     flex: 1;
-    height: 450px;       /* 각 섹션에도 높이 지정 */
+    height: 450px;
+    /* 각 섹션에도 높이 지정 */
     min-width: 300px;
     padding: 10px;
     overflow: visible !important;
 }
 
 .chart-title {
-    color: #8fb184; /* 이미지의 연두색 텍스트 반영 */
+    color: #8fb184;
+    /* 이미지의 연두색 텍스트 반영 */
     font-size: 1.2rem;
     margin-bottom: 5px;
 }
@@ -38,8 +42,69 @@
     border-radius: 15px 15px 15px 15px;
 }
 
+/* DefectlogCard Styles */
+.defect-log-card {
+    display: flex;
+    flex-direction: row;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 10px;
+    overflow: hidden;
+    padding: 10px;
+    flex-shrink: 0;
+}
+
+.card-image {
+    width: 200px;
+    height: 200px;
+    flex-shrink: 0;
+    margin-right: 15px;
+    background-color: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+}
+
+.card-id {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.card-date {
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.4;
+    margin: 0;
+}
+
 .recharts-responsive-container {
-    overflow: visible !important; /* 라벨이 컨테이너 밖으로 나가도 보이게 설정 */
+    overflow: visible !important;
+    /* 라벨이 컨테이너 밖으로 나가도 보이게 설정 */
 }
 
 .recharts-surface {
