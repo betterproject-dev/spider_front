@@ -17,16 +17,17 @@
   font-size: 0.75rem;
 }
 
+
 /* 📌 2. 글자 가림 방지 (핵심) */
 /* 달력 안의 이벤트 텍스트를 숨기고 작은 점(Dot)으로 대체 */
 .fc-event-title, .fc-event-time {
-  display: none !important;
+  display: none;
 }
 
 .fc-daygrid-event-harness {
   display: flex;
   justify-content: center;
-  margin-top: -10px !important; /* 숫자 바로 아래 배치 */
+  margin-top: -10px ; /* 숫자 바로 아래 배치 */
 }
 
 /* 점 모양 커스텀 (파란색 포인트) */
@@ -36,6 +37,10 @@
   width: 5px !important;
   height: 5px !important;
   border-radius: 50% !important;
+}
+
+.fc-day {
+  cursor: pointer;
 }
 
 /* 📌 3. 셀 높이 및 헤더 정리 */
@@ -90,6 +95,11 @@
   text-align: center;
 }
 
+.fc-daygrid-day-number:hover {
+  color: #fff;
+  font-weight: 900;
+}
+
 /* 이벤트 점 위치 (숫자와 겹치지 않게 살짝 아래로) */
 .fc-daygrid-event-harness {
   display: flex;
@@ -97,13 +107,6 @@
   margin-top: -5px !important;
 }
 
-.fc-daygrid-event {
-  background-color: #3b82f6 !important;
-  border: none !important;
-  width: 4px !important;
-  height: 4px !important;
-  border-radius: 50% !important;
-}
 
 /* 📌 4. 툴바 및 메모 요약 영역 톤앤매너 */
 .fc-toolbar-title {
@@ -117,7 +120,7 @@
   padding: 15px;
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.05);
-  border-left: 4px solid #3b82f6; /* 포인트 컬러 유지 */
+  border-top: 4px solid #3b82f6; /* 포인트 컬러 유지 */
   border-radius: 8px;
 }
 
@@ -229,4 +232,31 @@
   color: #ff4d4f !important;
   transform: scale(1.2); /* 살짝 커지는 효과 */
   text-shadow: 0 0 8px rgba(255, 77, 79, 0.4); /* 빨간 광채 효과 */
+}
+
+/* 날짜 셀에서 이벤트 영역을 중앙 정렬 */
+.fc .fc-daygrid-day-events {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 10px;
+  margin-top: -2px; /* 숫자 아래 살짝 */
+  margin-left: 9%;
+}
+
+/* 이벤트 박스 자체는 투명/높이 최소 */
+.fc .memo-dot-event {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* eventContent로 넣은 점 */
+.fc .memo-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3b82f6;
 }
