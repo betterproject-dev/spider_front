@@ -1,6 +1,7 @@
 import '../styles/sensorDetail.css';
 import UseNavi from '../../../hooks/UseNavi';
 import PageHeader from '../../../components/PageHeader/PageHeader';
+import DefectlogCard from '../../DefectItem/pages/DefectlogCard';
 import { memo } from 'react';
 
 const MachineLayout = memo(({ 
@@ -12,13 +13,63 @@ const MachineLayout = memo(({
   selectedTab = "",   // 현재 선택된 센서의 영문명
   sideButtons = [],   // 왼쪽 사이드바 버튼 배열 (일간, 주간, 실시간 등)
   selectedSide = "",  // 현재 선택된 사이드 버튼 key
-  onSideChange = () => {},
+  onSideChange = () => { },
   summaryItems = [],  // 요약 바 왼쪽 아이템들 [{label, value, color}, ...]
   currentValue = { label: "현재 수치", value: "-" }, // 요약 바 오른쪽 강조 수치
-  children            // 하단 그래프 영역에 들어갈 내용 (h3 및 차트)
+  children,            // 하단 그래프 영역에 들어갈 내용 (h3 및 차트)
+  defectLog = []
 }) => {
   const { goTo } = UseNavi();
+  if (selectedSide === "log") {
+    return (
+      <>
+        <PageHeader
+          detail={true}
+          sort={sort}
+          selectedMachine={selectedMachine}
+          onMachineChange={onMachineChange}
+        />
+        <h1 className="page-title">{title}</h1>
 
+        {/* 2. 상단 센서 탭 (데이터가 있을 때만 렌더링) */}
+        {tabs.length > 0 && (
+          <nav className="sensor-tabs">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                className={`sensor-tab ${selectedTab === tab.eng_name ? 'active' : ''}`}
+                onClick={() => goTo(`/machine/${selectedMachine}/sensor/${tab.eng_name}`)}
+              >
+                {tab.name}
+              </button>
+            ))}
+          </nav>
+        )}
+
+        <div className="dashboard-layout">
+          {/* 3. 사이드바 기간/메뉴 버튼 */}
+          <aside className="sidebar">
+            {sideButtons.map((btn) => (
+              <button
+                key={btn.id}
+                className={`period-btn ${selectedSide === btn.key ? 'active' : ''}`}
+                onClick={() => onSideChange(btn.key)}
+              >
+                {btn.name}
+              </button>
+            ))}
+          </aside>
+
+          {/* 4. 메인 컨텐츠 영역 (흰색 박스) */}
+          <main className="machine_contents">
+            {defectLog.map((log) => (
+              <DefectlogCard key={log.id} log={log} />
+            ))}
+          </main>
+        </div>
+      </>
+    )
+  }
   return (
     <>
       {/* 최상단 타이틀 */}

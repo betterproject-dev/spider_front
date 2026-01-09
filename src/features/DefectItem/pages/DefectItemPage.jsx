@@ -27,7 +27,8 @@ const SERVER_KEY_MAPPING = {
 
 const SIDE_BUTTONS = [
   { id: 1, name: '오늘', key: 'today' },
-  { id: 2, name: '직전 7일', key: 'week' }
+  { id: 2, name: '직전 7일', key: 'week' },
+  { id: 3, name: '불량 로그', key: 'log' }
 ];
 
 const INITIAL_SUMMARY = { totalInspected: 0, totalRejected: 0, avgRate: "0.00" };
@@ -51,6 +52,7 @@ const DefectItemPage = () => {
   const [selectedMachine, setSelectedMachine] = useState(Number(machineNum) || 1);
   const [selectedSide, setSelectedSide] = useState('today');
   const [defectData, setDefectData] = useState([]);
+  const [defectLog, setDefectLog] = useState([]);
   const [trendData, setTrendData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [summary, setSummary] = useState(INITIAL_SUMMARY);
@@ -71,7 +73,7 @@ const DefectItemPage = () => {
   const visibleTrendData = useMemo(() => {
     return trendData.filter(item => (item.rejectionRate || 0) > 0);
   }, [trendData])
-  
+
   useEffect(() => {
     let isMounted = true
     setLoading(true);
@@ -81,17 +83,20 @@ const DefectItemPage = () => {
       const summaryUrl = `/api/stats/defect-summary?machineId=${selectedMachine}&type=${selectedSide}`;
       // 바 차트 데이터 URL
       const trendUrl = `/api/stats/rejection-trend/${selectedMachine}?type=${selectedSide}`;
+      // 로그 데이터
+      const logUrl = `/api/stats/getLog/${selectedMachine}`
 
       // Promise.all을 사용하여 두 API 호출을 병렬로 처리 (성능 향상)
-      const [summaryRes, trendRes] = await Promise.all([
+      const [summaryRes, trendRes, logRes] = await Promise.all([
         requestHandler({ method: "get", url: summaryUrl, server: "spring" }),
-        requestHandler({ method: "get", url: trendUrl, server: "spring" })
+        requestHandler({ method: "get", url: trendUrl, server: "spring" }),
+        requestHandler({ method: "get", url: logUrl, server: "spring" })
       ]);
 
       if (isMounted) {
         // summaryRes.data가 {labelCount: 6, ...} 형태인 객체이므로 그대로 set
         if (summaryRes.ok) setDefectData(summaryRes.data);
-        
+
         if (trendRes.ok) {
           const data = trendRes.data || [];
           setTrendData(data);
@@ -105,29 +110,33 @@ const DefectItemPage = () => {
             setSummary(INITIAL_SUMMARY);
           }
         }
+        if (logRes.ok) {
+          setDefectLog(logRes.data)
+        }
         setLoading(false);
       }
     }
     fetchData()
-    return () => {isMounted = false}
+    return () => { isMounted = false }
   }, [selectedMachine, selectedSide]);
 
   return (
     <>
-    <div className="wrap">
-      <MachineLayout
-        title="제품 불량률 통계 페이지"
-        sort="제품 불량률 통계"
-        selectedMachine={selectedMachine}
-        onMachineChange={setSelectedMachine}
-        sideButtons={SIDE_BUTTONS}
-        selectedSide={selectedSide}
-        onSideChange={setSelectedSide}
-        summaryItems={[
-          { label: "총 검사수", value: summary.totalInspected.toLocaleString(), color: "#333"},
-          { label: "불량수", value: summary.totalRejected.toLocaleString(), color: "red"}
-        ]}
-        currentValue={{label: "평균 불량률", value: `${summary.avgRate}%`, color: "red"}}
+      <div className="wrap">
+        <MachineLayout
+          title="제품 불량률 통계 페이지"
+          sort="제품 불량률 통계"
+          selectedMachine={selectedMachine}
+          onMachineChange={setSelectedMachine}
+          sideButtons={SIDE_BUTTONS}
+          selectedSide={selectedSide}
+          onSideChange={setSelectedSide}
+          summaryItems={[
+            { label: "총 검사수", value: summary.totalInspected.toLocaleString(), color: "#333" },
+            { label: "불량수", value: summary.totalRejected.toLocaleString(), color: "red" }
+          ]}
+          currentValue={{ label: "평균 불량률", value: `${summary.avgRate}%`, color: "red" }}
+          defectLog = {defectLog}
         >
           {loading && <Loading message="데이터 로딩 중..." backColor="#fff" fontColor="#000" />}
           <div className="stats-chart-container">
@@ -144,7 +153,7 @@ const DefectItemPage = () => {
                       nameKey="name"
                       cx="50%" cy="50%"
                       outerRadius={80}
-                      label={({name, value}) => `${value}개`}
+                      label={({ name, value }) => `${value}개`}
                       isAnimationActive={false}
                     >
                       {chartDefectData.map((_, index) => (
@@ -155,33 +164,33 @@ const DefectItemPage = () => {
                     <Legend />
                   </PieChart>
                 </ResponsiveContainer>
-              ): (
+              ) : (
                 <div style={EMPTY_CHART_STYLE}>
                   표시할 불량 데이터가 없습니다.
                 </div>
               )}
             </section>
 
-            <section className="chart-section" style={{flex: 1.5}}>
+            <section className="chart-section" style={{ flex: 1.5 }}>
               <h3 className="chart-title">일일 불량률 추이</h3>
               <p className="chart-subtitle">(%)일자별 총 검사수 대비 불량 발생 비중의 변화(1분)</p>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={visibleTrendData}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} />
                   <XAxis dataKey="createdAt" />
-                  <YAxis unit='%' domain={[0, 100]}/>
-                  <Tooltip formatter={(val) => `${val}%`} isAnimationActive={false}/>
+                  <YAxis unit='%' domain={[0, 100]} />
+                  <Tooltip formatter={(val) => `${val}%`} isAnimationActive={false} />
                   <Bar
                     dataKey="rejectionRate"
                     fill={BAR_COLOR}
                     barSize={40}
                     isAnimationActive={false}
                     label={{
-                      position: 'top', 
-                      formatter: (val) => `${val}%`, 
-                      fill:'#333', 
-                      fontSize:12, 
-                      fontWeight:'bold',
+                      position: 'top',
+                      formatter: (val) => `${val}%`,
+                      fill: '#333',
+                      fontSize: 12,
+                      fontWeight: 'bold',
                       dy: -10
                     }}
                   />
@@ -189,8 +198,8 @@ const DefectItemPage = () => {
               </ResponsiveContainer>
             </section>
           </div>
-      </MachineLayout>
-    </div>           
+        </MachineLayout>
+      </div>
     </>
   )
 };
