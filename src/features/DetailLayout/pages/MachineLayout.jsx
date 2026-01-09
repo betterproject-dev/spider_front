@@ -21,7 +21,6 @@ const MachineLayout = memo(({
 }) => {
   const { goTo } = UseNavi();
   if (selectedSide === "log") {
-    console.log(defectLog);
     return (
       <>
         <PageHeader
