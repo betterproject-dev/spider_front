@@ -17,16 +17,17 @@
   font-size: 0.75rem;
 }
 
+
 /* 📌 2. 글자 가림 방지 (핵심) */
 /* 달력 안의 이벤트 텍스트를 숨기고 작은 점(Dot)으로 대체 */
 .fc-event-title, .fc-event-time {
-  display: none !important;
+  display: none;
 }
 
 .fc-daygrid-event-harness {
   display: flex;
   justify-content: center;
-  margin-top: -10px !important; /* 숫자 바로 아래 배치 */
+  margin-top: -10px ; /* 숫자 바로 아래 배치 */
 }
 
 /* 점 모양 커스텀 (파란색 포인트) */
@@ -36,6 +37,10 @@
   width: 5px !important;
   height: 5px !important;
   border-radius: 50% !important;
+}
+
+.fc-day {
+  cursor: pointer;
 }
 
 /* 📌 3. 셀 높이 및 헤더 정리 */
@@ -90,6 +95,11 @@
   text-align: center;
 }
 
+.fc-daygrid-day-number:hover {
+  color: #fff;
+  font-weight: 900;
+}
+
 /* 이벤트 점 위치 (숫자와 겹치지 않게 살짝 아래로) */
 .fc-daygrid-event-harness {
   display: flex;
@@ -97,13 +107,6 @@
   margin-top: -5px !important;
 }
 
-.fc-daygrid-event {
-  background-color: #3b82f6 !important;
-  border: none !important;
-  width: 4px !important;
-  height: 4px !important;
-  border-radius: 50% !important;
-}
 
 /* 📌 4. 툴바 및 메모 요약 영역 톤앤매너 */
 .fc-toolbar-title {
@@ -114,11 +117,24 @@
 
 .memo_summary {
   margin-top: 25px;
-  padding: 15px;
+  padding: 0 15px;
+  height: 170px;
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.05);
-  border-left: 4px solid #3b82f6; /* 포인트 컬러 유지 */
+  border-top: 4px solid #3b82f6; /* 포인트 컬러 유지 */
   border-radius: 8px;
+  overflow-y: scroll;
+}
+/* 스크롤바 커스텀 */
+.memo_summary::-webkit-scrollbar {
+    width: 5px;  /* 세로축 스크롤바 폭 너비 */
+}
+.memo_summary::-webkit-scrollbar-thumb {
+    background: #3b82f6; /* 스크롤바 막대 색상 */
+    border-radius: 12px 12px 12px 12px;
+}
+.memo_summary::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02); /* 스크롤바 트랙 색상 */
 }
 
 .summary_header {
@@ -131,10 +147,16 @@
 
 .summary_title {
   font-size: 13px;
+  width: 245px;
+  height: 35px;
   color: #3b82f6;
   font-weight: bold;
-  margin: 0;
+  margin: 0 0 10px 0;
+  padding-top: 10px;
   flex: 0 0 auto; /* flex 속성 변경 */
+  display: flex;
+  position: fixed;
+  background-color: #263545;
 }
 
 .selected_date_label {
@@ -146,6 +168,7 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  margin-top: 40px;
 }
 
 .summary_list li {
@@ -188,8 +211,8 @@
   color: white;
   border: none;
   border-radius: 50%;
-  width: 28px;
-  height: 28px;
+  width: 22px;
+  height: 22px;
   font-size: 20px;
   cursor: pointer;
   display: flex;
@@ -230,3 +253,51 @@
   transform: scale(1.2); /* 살짝 커지는 효과 */
   text-shadow: 0 0 8px rgba(255, 77, 79, 0.4); /* 빨간 광채 효과 */
 }
+
+/* 날짜 셀에서 이벤트 영역을 중앙 정렬 */
+.fc .fc-daygrid-day-events {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 10px;
+  margin-top: -2px; /* 숫자 아래 살짝 */
+  margin-left: 9%;
+}
+
+/* 이벤트 박스 자체는 투명/높이 최소 */
+.fc .memo-dot-event {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* eventContent로 넣은 점 */
+.fc .memo-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3b82f6;
+}
+
+/* ✅ 선택한 날짜 배경 */
+.fc .fc-daygrid-day.fc-day-selected {
+  background: rgba(74, 158, 255, 0.18) !important; /* 선택 날짜 (오늘과 다른 톤) */
+  border: 1px solid #3479c7a1 !important;
+}
+
+/* ✅ 선택한 날짜 숫자 강조 */
+.fc .fc-daygrid-day.fc-day-selected .fc-daygrid-day-number {
+  color: #fff !important;
+  font-weight: 800;
+}
+
+/* ✅ 오늘 날짜는 기존보다 살짝 다른 톤으로 (원하면) */
+.fc .fc-day-today {
+  background: rgb(0, 58, 151) !important; /* 오늘 */
+}
+.fc .fc-day-today.fc-day-selected {
+  background: rgb(0, 58, 151) !important;
+}
+
