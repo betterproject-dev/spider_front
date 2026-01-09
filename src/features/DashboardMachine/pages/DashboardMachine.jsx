@@ -34,8 +34,12 @@ const DashboardMachine = ({ realTimeData, scores, lastScore }) => {
       server: "spring"
     });
 
-    if (ok) setIsWorking(data.status === "ONLINE");
-    else setIsWorking(false);
+    // 이제 data 자체가 "ONLINE" 또는 "OFFLINE" 문자열입니다.
+    if (ok) {
+      setIsWorking(data === "ONLINE"); 
+    } else {
+      setIsWorking(false);
+    }
   }, []);
 
   useEffect(() => {
