@@ -53,7 +53,6 @@ const StatusOverlay = memo(({ yoloResult, onNavigate }) => {
       </li>
       <li>라벨 상태: <span className={getStatusClassName(statusInfo.labelStatus)}>{statusInfo.labelStatus}</span></li>
       <li>색상 오염: <span className={getStatusClassName(statusInfo.colorStatus)}>{statusInfo.colorStatus}</span></li>
-      <li>무게 측정: <span className="status-ok">정상</span></li>
       <li>외관 변형: <span className={getStatusClassName(statusInfo.dentStatus)}>{statusInfo.dentStatus}</span></li>
     </ul>
   )
@@ -116,9 +115,18 @@ const Camera = ({selectedMachine}) => {
   return (
     <div className="camera-container">
       <div
-        className="video-wrapper"
+        className="video-wrapper clickable-area"
         onClick={handleNavigate}
         title="클릭 시 제품 불량률 통계 페이지로 이동합니다"
+        style={{
+          position: "relative",
+          width: "100%",
+          // 4:3 비율 (640x480) 유지. 화면이 줄어들면 높이도 자동으로 계산됨
+          aspectRatio: "640 / 480",
+          backgroundColor: "#000",
+          overflow: "hidden",
+          cursor: "pointer",
+        }}
       >
         {isCameraLoading && (
           <div
@@ -151,11 +159,6 @@ const Camera = ({selectedMachine}) => {
             <StatusOverlay yoloResult={yoloResult} onNavigate={handleNavigate} />
           </div>
         )}
-      </div>
-
-      <div className="status-bar">
-        <span className="status-dot"></span>
-        <span>AI 모니터링 시스템 작동 중</span>
       </div>
     </div>
   );
