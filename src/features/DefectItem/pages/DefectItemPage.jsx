@@ -86,7 +86,7 @@ const DefectItemPage = () => {
       // 로그 데이터
       const logUrl = `/api/stats/getLog/${selectedMachine}`
 
-      // Promise.all을 사용하여 두 API 호출을 병렬로 처리 (성능 향상)
+      // Promise.all을 사용하여 3개의 API 호출을 병렬로 처리 (성능 향상)
       const [summaryRes, trendRes, logRes] = await Promise.all([
         requestHandler({ method: "get", url: summaryUrl, server: "spring" }),
         requestHandler({ method: "get", url: trendUrl, server: "spring" }),
@@ -95,7 +95,9 @@ const DefectItemPage = () => {
 
       if (isMounted) {
         // summaryRes.data가 {labelCount: 6, ...} 형태인 객체이므로 그대로 set
-        if (summaryRes.ok) setDefectData(summaryRes.data);
+        if (summaryRes.ok) {
+          setDefectData(summaryRes.data || {}); 
+        }
 
         if (trendRes.ok) {
           const data = trendRes.data || [];
@@ -111,7 +113,7 @@ const DefectItemPage = () => {
           }
         }
         if (logRes.ok) {
-          setDefectLog(logRes.data)
+          setDefectLog(logRes.data || []);
         }
         setLoading(false);
       }

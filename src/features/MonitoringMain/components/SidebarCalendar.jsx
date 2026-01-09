@@ -10,17 +10,18 @@ const SidebarCalendar = memo(() => {
   const [currentYearMonth, setCurrentYearMonth] = useState(new Date().toISOString().slice(0, 7));
   const [selectedDate, setSelectedDate] = useState(null);
 
-  // 메모 로드
-  const loadNotionMemos = useCallback(async () => {
-    await requestHandler({
+const loadNotionMemos = useCallback(async () => {
+  const result = await requestHandler({
       method: "get",
       url: "/api/notion/memos",
-      server: "spring",
-      onSuccess: (res) => {
-        if (res) setEvents(res);
-      },
-      onError: (err) => console.error("데이터 로드 실패:", err),
+      server: "spring"
     });
+    // result.ok가 true라면 data에는 백엔드에서 보낸 List<NotionDTO>가 들어있습니다.
+    if (result.ok) {
+      setEvents(result.data || []);
+    } else {
+      console.error("데이터 로드 실패:", result.message);
+    }
   }, []);
 
   useEffect(() => {
@@ -54,34 +55,35 @@ const SidebarCalendar = memo(() => {
     const memoText = prompt(`${dateStr} 메모 입력:`);
     if (!memoText) return;
 
-    await requestHandler({
+    const result = await requestHandler({
       method: "post",
       url: "/api/notion/memo",
       server: "spring",
-      payload: {title: memoText, date: dateStr},
-      onSuccess: () => loadNotionMemos(),
-      onError: (err) => alert("노션 저장 오류: " + err),
+      payload: { title: memoText, date: dateStr }, // NotionDTO 구조와 일치
     });
-  }, [selectedDate, loadNotionMemos]);
+
+    if (result.ok) {
+      loadNotionMemos(); // 성공 시 새로고침
+    } else {
+      alert("노션 저장 오류: " + result.message);
+    }
+  };
 
   // 메모 삭제
   const handleDelete = useCallback(
     async (id) => {
       if (!window.confirm("메모를 삭제하시겠습니까?")) return;
 
-      await requestHandler({
-        method: "delete",
-        url: `/api/notion/memo/${id}`,
-        server: "spring",
-        onSuccess: () => {
-          loadNotionMemos();
-          setEvents((prev) => prev.filter((ev) => ev.id !== id));
-        },
-        onError: (err) => console.log("삭제 실패: " + err),
-      });
-    },
-    [loadNotionMemos]
-  );
+    const result = await requestHandler({
+      method: "delete",
+      url: `/api/notion/memo/${id}`,
+      server: "spring",
+    });
+    if (result.ok) {
+      // 삭제 성공 시 리스트 갱신 (전체 로드 혹은 필터링)
+      setEvents(prev => prev.filter(ev => ev.id !== id));
+    }
+  };
 
   // ✅ 선택된 날짜의 메모만 보여주기
   const filteredMemos = useMemo(() => {

@@ -16,27 +16,24 @@ const Admin = () => {
     e.preventDefault();
     setLoading(true);
 
-    await requestHandler({
+    const result = await requestHandler({
       method: "post",
       url: "/api/check-admin",
       payload: {number: pin},
       server: "spring",
-      setLoading,
-      onSuccess: (data) => {
-        if (data.success) {
-          authenticate(); // 전역 상태 true
-          alert(data.message);
-          goTo('/monitor') // 인증 성공 시 이동할 페이지
-        } else {
-          alert(data.message);
-          setPin(""); // 틀리면 입력창 초기화
-        }
-      },
-      onError: (msg, err) => {
-        console.error(err)
-        alert(msg || "서버 연결 실패")
-      }
+      setLoading
     })
+
+    if (result.ok) {
+      // 성공 시: requestHandler가 넘겨준 message 활용
+      authenticate(); // 전역 상태 true
+      alert(result.message);
+      goTo('/monitor') // 인증 성공 시 이동할 페이지
+    } else {
+      // 실패 시: 비밀번호 틀림 혹은 서버 에러
+      alert(result.message); // "번호가 일치하지 않습니다." 등
+      setPin("");
+    }
   };
 
   return(
