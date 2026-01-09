@@ -1,3 +1,4 @@
+import { formatDateTime } from "../../../utils/formatDate"
 import "../styles/defectItem.css"
 
 const DefectlogCard = ({ log }) => {
@@ -14,14 +15,7 @@ const DefectlogCard = ({ log }) => {
             <div className="card-content">
                 <span className="card-id">ID: {log.id}</span>
                 <span className="card-date">
-                    {new Intl.DateTimeFormat('ko-KR', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: false // 24시간제 (true로 바꾸면 오전/오후 표시)
-                    }).format(new Date(log.createdAt))}
+                    {formatDateTime(log.createdAt)}
                 </span>
                 <p className="card-text">
                     {text.length > 0 ? text.join(", ") : "Normal"}

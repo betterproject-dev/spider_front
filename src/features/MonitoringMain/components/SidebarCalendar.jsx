@@ -19,13 +19,14 @@ const loadNotionMemos = useCallback(async () => {
     await requestHandler({
       method: "get",
       url: "/api/notion/memos",
-      server: "spring",
-      onSuccess: (res) => {
-        // 백엔드에서 ResponseEntity.ok(results)로 보낸 List<NotionDTO>가 res에 담김
-        if (res) setEvents(res);
-      },
-      onError: (err) => console.error("데이터 로드 실패:", err)
+      server: "spring"
     });
+    // result.ok가 true라면 data에는 백엔드에서 보낸 List<NotionDTO>가 들어있습니다.
+    if (result.ok) {
+      setEvents(result.data || []);
+    } else {
+      console.error("데이터 로드 실패:", result.message);
+    }
   }, []);
 
   // ✅ 2. 달력의 월이 바뀔 때마다 실행되는 함수
@@ -59,12 +60,13 @@ const loadNotionMemos = useCallback(async () => {
       url: "/api/notion/memo",
       server: "spring",
       payload: { title: memoText, date: dateStr }, // NotionDTO 구조와 일치
-      onSuccess: () => {
-        // 저장 성공 후 다시 불러와서 화면 동기화
-        loadNotionMemos();
-      },
-      onError: (err) => alert("노션 저장 오류: " + err)
     });
+
+    if (result.ok) {
+      loadNotionMemos(); // 성공 시 새로고침
+    } else {
+      alert("노션 저장 오류: " + result.message);
+    }
   };
 
   const handleDelete = async (id) => {
@@ -74,13 +76,11 @@ const loadNotionMemos = useCallback(async () => {
       method: "delete",
       url: `/api/notion/memo/${id}`,
       server: "spring",
-      onSuccess: () => {
-        // ✅ 삭제 후 목록을 다시 불러와서 화면 갱신
-        loadNotionMemos(); 
-        setEvents(prev => prev.filter(ev => ev.id !== id));
-      },
-      onError: (err) => console.log("삭제 실패: " + err)
     });
+    if (result.ok) {
+      // 삭제 성공 시 리스트 갱신 (전체 로드 혹은 필터링)
+      setEvents(prev => prev.filter(ev => ev.id !== id));
+    }
   };
 
   // ✅ 3. 현재 월(currentYearMonth)과 일치하는 데이터만 필터링

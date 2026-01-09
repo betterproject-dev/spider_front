@@ -77,7 +77,9 @@ const MachineDetail = memo(({ realTimeData }) => {
     if (selectedPeriod === 'live') return;  // 실시간 탭에서는 호출 필요x
 
     const url = selectedPeriod === 'today' ? '/api/sensors/day' : '/api/sensors/week';
-    await requestHandler({
+    setLoading(true);
+
+    const result = await requestHandler({
       method : "get",
       url : url,
       server : "spring",
@@ -85,12 +87,15 @@ const MachineDetail = memo(({ realTimeData }) => {
         machineNumber : selectedMachine,
         date : selectedDate
       },
-      setLoading : setLoading,
-      onSuccess : (data) =>  {
-        setSensorData(data);
-      }, 
-      onError : (msg) => console.log(msg)
     });
+    if (result.ok) {
+      // result.data는 이제 순수한 센서 데이터 배열(List)입니다.
+      setSensorData(result.data || []);
+    } else {
+      console.error("센서 데이터 로드 실패:", result.message);
+      setSensorData([]);
+    }
+    setLoading(false);
   }, [selectedMachine, selectedPeriod, selectedDate]);
 
 
