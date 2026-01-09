@@ -16,7 +16,7 @@ const SidebarCalendar = memo(() => {
   }, []);
 
 const loadNotionMemos = useCallback(async () => {
-    await requestHandler({
+  const result = await requestHandler({
       method: "get",
       url: "/api/notion/memos",
       server: "spring"
@@ -55,7 +55,7 @@ const loadNotionMemos = useCallback(async () => {
     const memoText = prompt(`${dateStr} 메모 입력:`);
     if (!memoText) return;
 
-    await requestHandler({
+    const result = await requestHandler({
       method: "post",
       url: "/api/notion/memo",
       server: "spring",
@@ -72,7 +72,7 @@ const loadNotionMemos = useCallback(async () => {
   const handleDelete = async (id) => {
     if (!window.confirm("메모를 삭제하시겠습니까?")) return;
 
-    await requestHandler({
+    const result = await requestHandler({
       method: "delete",
       url: `/api/notion/memo/${id}`,
       server: "spring",
