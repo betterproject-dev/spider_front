@@ -141,67 +141,67 @@ const DefectItemPage = () => {
           defectLog = {defectLog}
         >
           {loading ? (
-            <Loading message="데이터 로딩 중..." backColor="#fff" fontColor="#000" />
+          <Loading message="데이터 로딩 중..." backColor="#fff" fontColor="#000" />
           ) : (
-            <div className="stats-chart-container">
-              <section className="chart-section">
-                <h3 className="chart-title">제품 불량 종류별 빈도</h3>
-                <p className="chart-subtitle">어떤 불량이 많이 나오는가?</p>
-                {/* 데이터가 비어있을 때의 예외 처리 추가 */}
-                {chartDefectData.length > 0 ? (
-                  <ResponsiveContainer width="100%" height={300}>
-                    <PieChart>
-                      <Pie
-                        data={chartDefectData}
-                        dataKey="value" // 명시적으로 value 사용
-                        nameKey="name"
-                        cx="50%" cy="50%"
-                        outerRadius={80}
-                        label={({ name, value }) => `${value}개`}
-                        isAnimationActive={false}
-                      >
-                        {chartDefectData.map((_, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                      <Legend />
-                    </PieChart>
-                  </ResponsiveContainer>
-                ) : (
-                  <div style={EMPTY_CHART_STYLE}>
-                    표시할 불량 데이터가 없습니다.
-                  </div>
-                )}
-              </section>
-
-              <section className="chart-section" style={{ flex: 1.5 }}>
-                <h3 className="chart-title">일일 불량률 추이</h3>
-                <p className="chart-subtitle">(%)일자별 총 검사수 대비 불량 발생 비중의 변화(1분)</p>
+          <div className="stats-chart-container">
+            <section className="chart-section">
+              <h3 className="chart-title">제품 불량 종류별 빈도</h3>
+              <p className="chart-subtitle">어떤 불량이 많이 나오는가?</p>
+              {/* 데이터가 비어있을 때의 예외 처리 추가 */}
+              {chartDefectData.length > 0 ? (
                 <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={visibleTrendData}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                    <XAxis dataKey="createdAt" />
-                    <YAxis unit='%' domain={[0, 100]} />
-                    <Tooltip formatter={(val) => `${val}%`} isAnimationActive={false} />
-                    <Bar
-                      dataKey="rejectionRate"
-                      fill={BAR_COLOR}
-                      barSize={40}
+                  <PieChart>
+                    <Pie
+                      data={chartDefectData}
+                      dataKey="value" // 명시적으로 value 사용
+                      nameKey="name"
+                      cx="50%" cy="50%"
+                      outerRadius={80}
+                      label={({ name, value }) => `${value}개`}
                       isAnimationActive={false}
-                      label={{
-                        position: 'top',
-                        formatter: (val) => `${val}%`,
-                        fill: '#333',
-                        fontSize: 12,
-                        fontWeight: 'bold',
-                        dy: -10
-                      }}
-                    />
-                  </BarChart>
+                    >
+                      {chartDefectData.map((_, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
                 </ResponsiveContainer>
-              </section>
-            </div>
+              ) : (
+                <div style={EMPTY_CHART_STYLE}>
+                  표시할 불량 데이터가 없습니다.
+                </div>
+              )}
+            </section>
+
+            <section className="chart-section" style={{ flex: 1.5 }}>
+              <h3 className="chart-title">일일 불량률 추이</h3>
+              <p className="chart-subtitle">(%)일자별 총 검사수 대비 불량 발생 비중의 변화(1분)</p>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={visibleTrendData}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="createdAt" />
+                  <YAxis unit='%' domain={[0, 100]} />
+                  <Tooltip formatter={(val) => `${val}%`} isAnimationActive={false} />
+                  <Bar
+                    dataKey="rejectionRate"
+                    fill={BAR_COLOR}
+                    barSize={40}
+                    isAnimationActive={false}
+                    label={{
+                      position: 'top',
+                      formatter: (val) => `${val}%`,
+                      fill: '#333',
+                      fontSize: 12,
+                      fontWeight: 'bold',
+                      dy: -10
+                    }}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </section>
+          </div>
           )}
         </MachineLayout>
       </div>
