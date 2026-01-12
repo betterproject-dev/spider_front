@@ -120,7 +120,7 @@
   gap: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 
-  height: 700px;
+  max-height: 700px;
   /* 원하는 높이로 설정 (예: 500px, 80vh 등) */
   overflow-y: auto;
   /* 세로 방향으로 내용이 넘치면 스크롤 생성 */
