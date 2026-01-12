@@ -24,7 +24,7 @@
 
 /* 3. 호버 시 영상 위에 나타날 안내 문구 (새로 추가) */
 .video-wrapper::after {
-    content: "제품 불량률 통계 페이지로 이동 ➔";
+    content: "제품 불량률 통계 페이지로 이동";
     position: absolute;
     top: 30px;
     left: 50%;

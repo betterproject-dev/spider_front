@@ -28,18 +28,14 @@ const DashboardMachine = ({ realTimeData, scores, lastScore }) => {
 
   // API 호출 함수를 useCallback으로 감싸 효율화
   const fetchHeartbeatStatus = useCallback(async (machineId) => {
-    const { ok, data } = await requestHandler({
+    const {ok, data} = await requestHandler({
       method: "get",
       url: `/api/heartbeat/status/${machineId}`,
-      server: "spring"
+      server: "spring",
     });
-
-    // 이제 data 자체가 "ONLINE" 또는 "OFFLINE" 문자열입니다.
-    if (ok) {
-      setIsWorking(data === "ONLINE"); 
-    } else {
-      setIsWorking(false);
-    }
+    
+    if (ok) setIsWorking(data === "ONLINE");
+    else setIsWorking(false);
   }, []);
 
   useEffect(() => {

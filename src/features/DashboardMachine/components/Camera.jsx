@@ -149,28 +149,13 @@ const Camera = ({selectedMachine}) => {
           width: "100%",
           // 4:3 비율 (640x480) 유지. 화면이 줄어들면 높이도 자동으로 계산됨
           aspectRatio: "640 / 480",
-          backgroundColor: "#000",
+          backgroundColor: "#000000d7",
           overflow: "hidden",
           cursor: "pointer",
         }}
       >
         {isCameraLoading && (
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              zIndex: 10,
-              backgroundColor: "#001a33",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
             <Loading message="카메라 스트림을 연결 중입니다..." />
-          </div>
         )}
         <button
           type="button"
