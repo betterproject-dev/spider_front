@@ -10,7 +10,6 @@ const socket = io(SOCKET_URL, {
   reconnection: true,
   reconnectionAttempts: 5,
   reconnectionDelay: 1000,
-  forceNew: false,
 });
 
 const UseSocket = (eventName, callback) => {

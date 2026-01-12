@@ -44,12 +44,27 @@ const MonitoringMain = memo(({ realTimeData, lastScore }) => {
     };
 
     return [
-      { machine: "1호기", text: getMessageText(currentStatus.type, currentStatus.label), status: currentStatus.class },
-      { machine: "2호기", text: "위험점수가 [주의] 수준에 도달했습니다.", status: "warning" },
-      { machine: "3호기", text: "현재 모든 시스템이 정상 가동 중입니다.", status: "safe" },
-      { machine: "4호기", text: "누수가 발생했습니다.", status: "danger" },
+      {
+        id: "m1",
+        machine: "1호기",
+        text: getMessageText(currentStatus.type, currentStatus.label),
+        status: currentStatus.class,
+      },
+      {
+        id: "m2",
+        machine: "2호기",
+        text: "위험점수가 [주의] 수준에 도달했습니다.",
+        status: "warning",
+      },
+      {
+        id: "m3",
+        machine: "3호기",
+        text: "현재 모든 시스템이 정상 가동 중입니다.",
+        status: "safe",
+      },
+      {id: "m4", machine: "4호기", text: "누수가 발생했습니다.", status: "danger"},
     ];
-  }, [currentStatus]);
+  }, [currentStatus.type, currentStatus.label, currentStatus.class]);
 
   const handleNavigate = useCallback(() => {
     goTo("/dashboard/1")
@@ -111,12 +126,24 @@ const MonitoringMain = memo(({ realTimeData, lastScore }) => {
               <div className="temp">온도 : {temperature !== null ? `${temperature}℃` : "--"}</div>
               <div className="hum">습도 : {humidity !== null ? `${humidity}%` : "--"}</div>
             </div>
-            <div className={`machine_1 ${currentStatus.class}`} onClick={handleNavigate}>
-              1호기
+            <div
+              className={`machine_badge machine_1 ${currentStatus.class}`}
+              onClick={handleNavigate}
+            >
+              <div className="hexagon">1호기</div>
             </div>
-            <div className="machine_2">2호기</div>
-            <div className="machine_3">3호기</div>
-            <div className="machine_4">4호기</div>
+
+            <div className="machine_badge machine_2 warning">
+              <div className="hexagon">2호기</div>
+            </div>
+
+            <div className="machine_badge machine_3 safe">
+              <div className="hexagon">3호기</div>
+            </div>
+
+            <div className="machine_badge machine_4 danger">
+              <div className="hexagon">4호기</div>
+            </div>
             <div className="message-area">
               <MessageSlider messages={alertMessages} rowHeight={35} interval={3500} />
             </div>
