@@ -24,7 +24,7 @@
 
 /* 3. 호버 시 영상 위에 나타날 안내 문구 (새로 추가) */
 .video-wrapper::after {
-    content: "제품 불량률 통계 페이지로 이동 ➔";
+    content: "제품 불량률 통계 페이지로 이동";
     position: absolute;
     top: 30px;
     left: 50%;
@@ -111,4 +111,28 @@
 /* 대기/데이터 없음 스타일 */
 .status-wait {
   color: #ffffff;
+}
+
+.stream-refresh-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 20;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: transform 0.15s, background 0.15s;
+}
+
+.stream-refresh-btn:hover {
+  background: rgba(0,0,0,0.75);
+  transform: scale(1.05);
 }

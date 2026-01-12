@@ -9,19 +9,41 @@ const SidebarCalendar = memo(() => {
   const [events, setEvents] = useState([]);
   const [currentYearMonth, setCurrentYearMonth] = useState(new Date().toISOString().slice(0, 7));
   const [selectedDate, setSelectedDate] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMemo, setModalMemo] = useState(null);
 
-const loadNotionMemos = useCallback(async () => {
-  const result = await requestHandler({
+  const openMemoModal = useCallback((memo) => {
+    setModalMemo(memo);
+    setIsModalOpen(true);
+  }, []);
+
+  const closeMemoModal = useCallback(() => {
+    setIsModalOpen(false);
+    setModalMemo(null);
+  }, []);
+
+  useEffect(() => {
+    if (!isModalOpen) return;
+
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") closeMemoModal();
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isModalOpen, closeMemoModal]);
+
+  // 메모 로드
+  const loadNotionMemos = useCallback(async () => {
+    await requestHandler({
       method: "get",
       url: "/api/notion/memos",
-      server: "spring"
+      server: "spring",
+      onSuccess: (res) => {
+        if (res) setEvents(res);
+      },
+      onError: (err) => console.error("데이터 로드 실패:", err),
     });
-    // result.ok가 true라면 data에는 백엔드에서 보낸 List<NotionDTO>가 들어있습니다.
-    if (result.ok) {
-      setEvents(result.data || []);
-    } else {
-      console.error("데이터 로드 실패:", result.message);
-    }
   }, []);
 
   useEffect(() => {
@@ -55,11 +77,13 @@ const loadNotionMemos = useCallback(async () => {
     const memoText = prompt(`${dateStr} 메모 입력:`);
     if (!memoText) return;
 
-    const result = await requestHandler({
+    await requestHandler({
       method: "post",
       url: "/api/notion/memo",
       server: "spring",
-      payload: { title: memoText, date: dateStr }, // NotionDTO 구조와 일치
+      payload: {title: memoText, date: dateStr},
+      onSuccess: () => loadNotionMemos(),
+      onError: (err) => alert("노션 저장 오류: " + err),
     });
 
     if (result.ok) {
@@ -162,9 +186,24 @@ const loadNotionMemos = useCallback(async () => {
             </li>
           ) : (
             filteredMemos.map((ev) => (
-              <li key={ev.id} className="memo_item">
-                [{ev.date.slice(11, 16)}] {ev.title}
-                <button className="memo_delete_btn" onClick={() => handleDelete(ev.id)}>
+              <li
+                key={ev.id}
+                className="memo_item"
+                onClick={() => openMemoModal(ev)}
+                role="button"
+                tabIndex={0}
+              >
+                <span className="memo_text">
+                  [{ev.date.slice(11, 16)}] {ev.title}
+                </span>
+
+                <button
+                  className="memo_delete_btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(ev.id);
+                  }}
+                >
                   ×
                 </button>
               </li>
@@ -172,6 +211,31 @@ const loadNotionMemos = useCallback(async () => {
           )}
         </ul>
       </div>
+      {isModalOpen && modalMemo && (
+        <div className="memo_modal_overlay" onClick={closeMemoModal}>
+          <div className="memo_modal" onClick={(e) => e.stopPropagation()}>
+            <div className="memo_modal_header">
+              <div className="memo_modal_title">
+                {modalMemo.date?.slice(0, 10)} {modalMemo.date?.slice(11, 16)}
+              </div>
+
+              <button className="memo_modal_close" onClick={closeMemoModal}>
+                ×
+              </button>
+            </div>
+
+            <div className="memo_modal_body">
+              <div className="memo_modal_content">{modalMemo.title}</div>
+            </div>
+
+            <div className="memo_modal_footer">
+              <button className="memo_modal_btn" onClick={closeMemoModal}>
+                닫기
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 });

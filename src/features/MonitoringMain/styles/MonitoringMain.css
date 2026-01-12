@@ -238,99 +238,85 @@
   border-radius: 4px;
 }
 
-/* 기계 라벨 - 오버레이 (이미지 위에 표시) */
-.machine_1,
-.machine_2,
-.machine_3,
-.machine_4 {
+
+/* 기계 배지 전체 컨테이너 */
+.machine_badge {
   position: absolute;
-  background-color: rgba(220, 220, 220, 0.95);
-  color: #333;
-  padding: 10px 14px;
-  border: 2px solid #a8a8a8;
-  font-weight: 600;
-  font-size: 13px;
-  z-index: 6;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35);
-  border-radius: 4px;
-  white-space: nowrap;
+  width: 100px;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  z-index: 10;
+  transition: all 0.3s ease;
 }
 
-.machine_1 {
-  bottom: 35%;
-  left: 25%;
+/* 육각형 본체: 투명도와 블러 효과(유리 질감) */
+.hexagon {
+  position: relative;
+  width: 80%;
+  height: 80%;
+  background: rgba(255, 255, 255, 0.1); /* 매우 투명하게 */
+  backdrop-filter: blur(8px); /* 뒤가 비치는 유리 효과 */
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  z-index: 2;
 }
 
-.machine_1.safe {
-  background-color: var(--color-safe);
-  border: 1px solid var(--border-safe);
-  box-shadow: 0 0 14px rgba(74, 222, 128, 0.5);
+/* 외곽선(Border) 전용 레이어: hexagon보다 살짝 크게 배치 */
+.machine_badge::before {
+  content: "";
+  position: absolute;
+  width: 60%;
+  height: 60%;
+  /* 육각형 외곽선 색상 (기본값) */
+  background: rgba(255, 255, 255, 0.4); 
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  /* 안쪽 본체보다 아주 살짝 크게 해서 테두리처럼 보이게 함 */
+  transform: scale(1.05); 
+  z-index: 1;
 }
 
-.machine_1.warning {
-  background-color: var(--color-warning);
-  border: 1px solid var(--border-warning);
-  box-shadow: 0 0 14px rgba(250, 204, 21, 0.8);
+/* --- 상태별 스타일 (사진처럼
+
+
+
+화려한 광원 효과) --- */
+
+/* 정상 (Green) */
+.machine_badge.safe::before { background: #4ade8060; }
+.machine_badge.safe { filter: drop-shadow(0 0 15px rgba(74, 222, 128, 0.6)); }
+
+/* 주의 (Yellow) */
+.machine_badge.warning::before { background: #facc156e; }
+.machine_badge.warning { filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.979)); }
+
+/* 위험 (Red) */
+.machine_badge.danger::before { background: #ff3333cc; }
+.machine_badge.danger { 
+  filter: drop-shadow(0 0 20px rgba(255, 51, 51, 0.986)); 
+  animation: pulse-glow 1.5s infinite;
 }
 
-.machine_1.danger {
-  background-color: var(--color-danger);
-  border: 1px solid var(--border-danger);
-  box-shadow: 0 0 14px rgba(255, 50, 50, 0.8);
+@keyframes pulse-glow {
+  0% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.5; }
 }
 
-.machine_1 a {
-  color: inherit;
-  text-decoration: none;
-  display: block;
+.machine_badge:hover {
+  transform: translateY(-10px);
+  opacity: 1;
 }
 
-.machine_1:hover {
-  transform: translateY(-3px) scale(1.04);
-  filter: brightness(1.05);
-}
-
-.machine_2:hover {
-  transform: translateY(-3px) scale(1.04);
-  box-shadow: 0 0 14px rgba(250, 204, 21, 0.8);
-  filter: brightness(1.05);
-}
-
-.machine_3:hover {
-  transform: translateY(-3px) scale(1.04);
-  box-shadow: 0 0 14px rgba(74, 222, 128, 0.8);
-  filter: brightness(1.05);
-}
-
-.machine_4:hover {
-  transform: translateY(-3px) scale(1.04);
-  box-shadow: 0 0 14px rgba(255, 50, 50, 0.8);
-  filter: brightness(1.05);
-}
-
-.machine_2 {
-  bottom: 38%;
-  left: 40%;
-  background-color: #facc15;
-  border: 1px solid #f0aa00;
-  box-shadow: 0 0 8px rgba(250, 204, 21, 0.5);
-}
-
-.machine_3 {
-  bottom: 35%;
-  left: 55%;
-  background-color: #4ade80;
-  border: 1px solid #22dd22;
-  box-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
-}
-
-.machine_4 {
-  bottom: 38%;
-  left: 70%;
-  background-color: #ff3333;
-  border: 1px solid #cc0000;
-  box-shadow: 0 0 8px rgba(255, 50, 50, 0.5);
-}
-
+/* 각 기계별 위치 (기존 위치 유지 또는 미세 조정) */
+.machine_1 { bottom: 35%; left: 25%; }
+.machine_2 { bottom: 38%; left: 40%; }
+.machine_3 { bottom: 35%; left: 55%; }
+.machine_4 { bottom: 38%; left: 70%; }
