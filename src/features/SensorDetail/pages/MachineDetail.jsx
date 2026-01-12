@@ -62,13 +62,14 @@ const MachineDetail = memo(({ realTimeData }) => {
     { label: '장비명', value: `${selectedMachine}호기` },
     { label: '조회 일자', value: selectedDate },
     { label: '선택 센서', value: currentSensorConfig?.name || "센서 선택됨" },
-    { label: '상태', value: isNormal ? "정상 작동" : "비정상", color: isNormal ? STATUS_COLOR.SAFE : STATUS_COLOR.DANGER }
+    { label: `현재 ${currentSensorConfig?.name || '센서'} 센서 현황`, value: displaySensorValue, color: "#4A90E2" }
   ], [selectedMachine, selectedDate, currentSensorConfig, isNormal]);
 
   // 요약 바 오른쪽 강조 수치
   const currentValue = useMemo(() => ({
-    label: `현재 ${currentSensorConfig?.name || '센서'} 센서 현황`,
-    value: displaySensorValue
+    label: '상태',
+    value: isNormal ? "정상 작동" : "비정상",
+    color: isNormal ? STATUS_COLOR.SAFE : STATUS_COLOR.DANGER
   }), [currentSensorConfig, displaySensorValue]);
 
   // =====  API  =====
