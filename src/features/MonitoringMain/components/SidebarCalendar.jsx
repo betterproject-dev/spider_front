@@ -85,26 +85,29 @@ const SidebarCalendar = memo(() => {
       onSuccess: () => loadNotionMemos(),
       onError: (err) => alert("노션 저장 오류: " + err),
     });
-  }, [selectedDate, loadNotionMemos]);
+
+    if (result.ok) {
+      loadNotionMemos(); // 성공 시 새로고침
+    } else {
+      alert("노션 저장 오류: " + result.message);
+    }
+  });
 
   // 메모 삭제
   const handleDelete = useCallback(
     async (id) => {
       if (!window.confirm("메모를 삭제하시겠습니까?")) return;
 
-      await requestHandler({
-        method: "delete",
-        url: `/api/notion/memo/${id}`,
-        server: "spring",
-        onSuccess: () => {
-          loadNotionMemos();
-          setEvents((prev) => prev.filter((ev) => ev.id !== id));
-        },
-        onError: (err) => console.log("삭제 실패: " + err),
-      });
-    },
-    [loadNotionMemos]
-  );
+    const result = await requestHandler({
+      method: "delete",
+      url: `/api/notion/memo/${id}`,
+      server: "spring",
+    });
+    if (result.ok) {
+      // 삭제 성공 시 리스트 갱신 (전체 로드 혹은 필터링)
+      setEvents(prev => prev.filter(ev => ev.id !== id));
+    }
+  });
 
   // ✅ 선택된 날짜의 메모만 보여주기
   const filteredMemos = useMemo(() => {
