@@ -380,3 +380,9 @@
   background: rgba(96,165,250,0.14);
   color: #cfe7ff;
 }
+
+.areason-chip.sensor{
+  border-color: rgba(167,139,250,0.35);
+  background: rgba(167,139,250,0.14);
+  color: #e7ddff;
+}

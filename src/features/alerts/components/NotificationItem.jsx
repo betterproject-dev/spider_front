@@ -2,10 +2,12 @@ import { useMemo } from "react"
 import { formatDateTime } from "../../../utils/formatDate"
 
 const REASON_TO_CLASS = (code) => {
-  if (code.inclides("LEAK")) return "leak"
-  if (code.includes("SCORE")) return "score"
+  const cls = []
   if (code.includes("OFFLINE")) return "offline"
-  return ""
+  if (code.includes("LEAK")) return "leak"
+  if (code.includes("SCORE")) return "score"
+  if (code.includes("SENSOR")) return "sensor"
+  return cls.join(" ")
 }
 
 const REASON_LABEL_MAP = {
@@ -41,7 +43,7 @@ const NotificationItem = ({ data, onClick, onResolveClick }) => {
 
       <div className="nitem-msg">{data.message}</div>
 
-      {reasons.lenth > 0 && (
+      {reasons.length > 0 && (
         <div className="areasons">
           {reasons.slice(0, 3).map((code) => (
             <span
