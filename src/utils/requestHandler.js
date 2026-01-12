@@ -61,9 +61,18 @@ const requestHandler = async ({
     return { ok: true, data: responseData, status: res.status };
   } catch (err) {
     const status = err?.response?.status;
+
+    const data = err?.response?.data
+
+    // Spring 에러(400/404 등)도 ApiResponse 형태면 여기서 message를 뽑는다
+    if (server === "spring" && data && typeof data === "object") {
+      const msg = data.message || "요청 처리 중 오류가 발생했습니다."
+      onError?.(msg, err)
+      return { ok: false, message: msg, status }
+    }
     const msg =
-      err?.response?.data?.message ||
-      err?.response?.data?.error ||
+      data?.message ||
+      data?.error ||
       err?.message ||
       "요청 처리 중 오류가 발생했습니다.";
 
