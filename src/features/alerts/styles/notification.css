@@ -350,13 +350,13 @@
 .areasons{
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 6px;
+  gap: 4px;
+  margin-top: 4px;
 }
 
 .areason-chip{
-  font-size: 12px;
-  padding: 4px 10px;
+  font-size: 11px;       /* 한 단계 작게 */
+  padding: 2px 8px;     /* 세로 얇게 */
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.12);
   background: rgba(255,255,255,0.06);
