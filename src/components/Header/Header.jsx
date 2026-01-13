@@ -6,7 +6,7 @@ import NotificationBell from "../../features/alerts/components/NotificationBell.
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 
-function Header() {
+function Header({ emergencyEnabled }) {
   const { goTo } = UseNavi();
   const {alert} = useEmergencyAlertContext()
 
@@ -15,11 +15,11 @@ function Header() {
       <header>
         <ul>
           <li className="logo" onClick={() => goTo("/monitor")}><img src={logo} alt="logo" className="logo_img" /></li>
-          <li className={`alarm ${alert?.isOpen ? "emergency" : ""}`}>
+          { emergencyEnabled && (<li className={`alarm ${alert?.isOpen ? "emergency" : ""}`}>
             <NotificationBell>
               <FontAwesomeIcon icon={faBell} />
             </NotificationBell>
-          </li>
+          </li>)}
         </ul>
       </header>
     </>

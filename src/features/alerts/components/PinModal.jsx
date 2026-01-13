@@ -34,7 +34,7 @@ const PinModal = ({ open, onClose, onSubmit, loading }) => {
           <button className="pmodal-x" onClick={onClose} type="button">✕</button>
         </div>
 
-        <form onSubmit={handleSumit}>
+        <form id="pinForm" onSubmit={handleSumit}>
           <input
             ref={inputRef}
             type="password"
