@@ -1,20 +1,26 @@
-import {useEffect} from "react";
+import {useEffect, useRef} from "react";
 import {io} from "socket.io-client";
 import { axiosFlask } from "../utils/axiosFactory";
 
 // 주소를 명시적으로 확인하기 위해 로그 추가 (디버깅용)
 const SOCKET_URL = axiosFlask.defaults.baseURL || "http://localhost:5000";
 
-const socket = io(SOCKET_URL, {
+const SOCKET_OPTIONS = {
   transports: ["websocket"], // 400 에러를 유발하는 polling을 건너뜁니다.
   reconnection: true,
   reconnectionAttempts: 5,
   reconnectionDelay: 1000,
-});
+};
 
-const UseSocket = (eventName, callback) => {
+const UseSocket = (eventName, callback, { enabled = true } = {}) => {
+  const socketRef = useRef(null)
+
   useEffect(() => {
-    if (!eventName || !callback) return;
+    if ( !enabled || !eventName || !callback) return;
+
+    // enabled=true일 때만 연결 생성
+    const socket = io(SOCKET_URL, SOCKET_OPTIONS);
+    socketRef.current = socket;
 
     // 2. 데이터 수신 핸들러
     const onMessage = (data) => {
@@ -34,10 +40,12 @@ const UseSocket = (eventName, callback) => {
     return () => {
       socket.off(eventName, onMessage);
       socket.off("connect_error", onConnectError);
+      socket.disconnect();      // 반드시 연결 끊기
+      socketRef.current = null;
     };
-  }, [eventName, callback]);
+  }, [eventName, callback, enabled]);
 
-  return socket;
+  return socketRef.current;
 };
 
 export default UseSocket;

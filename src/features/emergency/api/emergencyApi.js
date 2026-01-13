@@ -30,11 +30,12 @@ export const emergencyApi = {
   /**
    * 알림 해결(Resolve) 처리
    */
-  resolve: (id) => 
+  resolve: (id, pin) => 
     requestHandler({
       method: "post",
       server: "spring",
-      url: `/api/alerts/${id}/resolve`
+      url: `/api/alerts/${id}/resolve`,
+      payload: { pin: String(pin)}
     }),
 
   /**
