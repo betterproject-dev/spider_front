@@ -7,32 +7,18 @@ import Loading from "../../../components/Loading/Loading";
 import CurrentSensors from "../components/CurrentSensors";
 import requestHandler from "../../../utils/requestHandler.js";
 import { useParams } from "react-router-dom";
+import UseCurrentTime from "../../../hooks/UseCurrentTime.jsx";
 
 /** [상수 분리] */
 const HEARTBEAT_INTERVAL = 5000;
-const CLOCK_UPDATE_INTERVAL = 1000; // 1초
 const WORKING_STATUS = {
   ONLINE: { class: 'working_on', label: '작동 ON' },
   OFFLINE: { class: 'working_off', label: '작동 OFF' }
 };
 
-// 시계만 담당하는 컴포넌트를 분리하여 부모의 리렌더링 전파를 막음
-const DigitalClock = memo(() => {
-  // 시간 표시
-  const [currentTime, setCurrentTime] = useState(new Date());
-
-  useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), CLOCK_UPDATE_INTERVAL);
-    return () => clearInterval(timer);
-  }, []);
-  const formattedDate = `${currentTime.getFullYear()}/${(currentTime.getMonth()+1).toString().padStart(2,'0')}/${currentTime.getDate().toString().padStart(2,'0')}`;
-  const time = `${currentTime.getHours().toString().padStart(2,'0')}:${currentTime.getMinutes().toString().padStart(2,'0')}:${currentTime.getSeconds().toString().padStart(2,'0')}`;
-
-  return <p>{formattedDate} {time}</p>
-})
-
 const DashboardMachine = ({ realTimeData, scores, lastScore }) => {
   const { machineNum } = useParams();
+  const { formattedDate, time } = UseCurrentTime();
 
   // 현재 선택한 기계 번호
   const [selectedMachine, setSelectedMachine] = useState(Number(machineNum) || 1);
@@ -42,13 +28,13 @@ const DashboardMachine = ({ realTimeData, scores, lastScore }) => {
 
   // API 호출 함수를 useCallback으로 감싸 효율화
   const fetchHeartbeatStatus = useCallback(async (machineId) => {
-    const { ok, data } = await requestHandler({
+    const {ok, data} = await requestHandler({
       method: "get",
       url: `/api/heartbeat/status/${machineId}`,
-      server: "spring"
+      server: "spring",
     });
-
-    if (ok) setIsWorking(data.status === "ONLINE");
+    
+    if (ok) setIsWorking(data === "ONLINE");
     else setIsWorking(false);
   }, []);
 
@@ -73,38 +59,44 @@ const DashboardMachine = ({ realTimeData, scores, lastScore }) => {
     <>
       <div className="wrap">
         {/* 상단 */}
-        <div className="dashboard_main">
-          <PageHeader
-            selectedMachine={selectedMachine}
-            onMachineChange={handleMachineChange}
-          />
-          <div className="dash-status-row">
-            <div className="dash-status-on">
-              {/* isWorking 여부에 따라 상수의 값을 가져옴 */}
-              <p className={status.class}>{status.label}</p>
-            </div>
-            <div className="dash-title">
-              <h1>{selectedMachine}호기</h1>
-            </div>
-            <div className="dash-date">
-              <DigitalClock />
+        <div className="dash_wrap">
+          <div className="dashboard_main">
+            <PageHeader selectedMachine={selectedMachine} onMachineChange={handleMachineChange} />
+            <div className="dash-status-row">
+              <div className="dash-status-on">
+                {/* isWorking 여부에 따라 상수의 값을 가져옴 */}
+                <p className={status.class}>{status.label}</p>
+              </div>
+              <div className="dash-title">
+                <h1>{selectedMachine}호기</h1>
+              </div>
+              <div className="dash-date">
+                <p>
+                  {formattedDate} {time}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="dash-sensor-row">
-          { realTimeData.length === 0 && (
-            <div className="current_sensor_container">
-              <Loading message="센서 데이터 수신 대기 중..." />
-            </div>
-          )}
-          <CurrentSensors realTimeData={realTimeData} selectedMachine={selectedMachine} />
-        </div>
-        <div className="dash-main-row">
-          <div className="dash-graph-box">
-            <DangerScoreGraph machine_number={selectedMachine} scores={scores} lastScore={lastScore} />
+          <div className="dash-sensor-row">
+            {realTimeData.length === 0 && (
+              <div className="current_sensor_container">
+                <Loading message="센서 데이터 수신 대기 중..." />
+              </div>
+            )}
+            <CurrentSensors realTimeData={realTimeData} selectedMachine={selectedMachine} />
           </div>
-          <div className="dash-cctv-box">
-            <Camera selectedMachine={selectedMachine} />
+          <div className="dash-main-row">
+            <div className="dash-graph-box">
+              <DangerScoreGraph
+                machine_number={selectedMachine}
+                scores={scores}
+                lastScore={lastScore}
+              />
+            </div>
+
+            <div className="dash-cctv-box">
+              <Camera selectedMachine={selectedMachine} />
+            </div>
           </div>
         </div>
       </div>

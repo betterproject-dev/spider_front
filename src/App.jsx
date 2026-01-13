@@ -5,8 +5,15 @@ import Routers from './Route'
 import Header from "./components/Header/Header.jsx";
 import UseSocket from './hooks/UseSocket.jsx';
 import requestHandler from './utils/requestHandler.js';
+import { useLocation } from 'react-router-dom';
 
 function App() {
+  const location = useLocation()
+  const isAdminPage = location.pathname === "/admin"
+
+  // admin에서는 긴급 기능 꺼버리기
+  const emergencyEnabled = !isAdminPage
+
   const [realTimeData, setRealTimeData] = useState([]);
   const [scores, setScores] = useState([]);
 
@@ -27,7 +34,7 @@ function App() {
     });
   }, []);
 
-  UseSocket("sensor_data", handleSensorData);
+  UseSocket("sensor_data", handleSensorData, { enabled: emergencyEnabled });
 
   // === 위험점수 불러오기 ===
   const getScore = async () => {
@@ -45,6 +52,8 @@ function App() {
 
 
   useEffect(() => {
+    if (!emergencyEnabled) return
+
     const load = async () => {
       const result = await getScore();
       setScores(result);
@@ -62,17 +71,17 @@ function App() {
     return () => {
       clearInterval(timerId);
     };
-  }, []); // 빈 배열이므로 마운트 시에만 타이머 생성
+  }, [emergencyEnabled]); // 빈 배열이므로 마운트 시에만 타이머 생성
 
   return (
     
     <div className="app-layout">
-      <Header  />
+      <Header emergencyEnabled={emergencyEnabled}   />
       <main className="app-main">
         <Routers realTimeData={realTimeData} scores={scores} lastScore={lastScore} />
       </main>
         
-      <EmergencyAlertModal />
+      { emergencyEnabled && <EmergencyAlertModal />}
     </div>
     
   )

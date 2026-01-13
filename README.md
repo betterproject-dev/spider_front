@@ -1,16 +1,54 @@
-# React + Vite
+# S.P.I.D.E.R
+S.P.I.D.E.R 
+(Smart Predictive & Integrated Defect Evaluation Robot)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+스마트 예지보전 및 통합 불량 평가 시스템
 
-Currently, two official plugins are available:
+[🔗Flask Github]  
+[🔗Spring Github]
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+</br>
 
-## React Compiler
+## 목차
+- [프로젝트 개요](#프로젝트-개요)
+- [주요 기능](#주요-기능)
+- [기술 스택](#기술-스택)
+- [주요 사용 라이브러리](#주요-사용-라이브러리)
+- [팀원 및 역할](#팀원-및-역할)
+- [설치 및 실행 방법](#설치-및-실행-방법)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Expanding the ESLint configuration
+## 프로젝트 개요
+### 개발 기간
+2025.00.00 ~ 2026.00.00 (??일)
+### 기획 의도
+기획 의도 - ppt의 개발 배경 및 필요성 참고
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+## 주요 기능
+gif 포함하여 작성
+
+
+## 기술 스택
+ppt 기술 스택 및 시스템 구성 & 아키텍처 다이어그램 참고  
+아키텍처 다이어그램을 아예 항목 하나로 빼서 이미지 넣는 것도 좋을 듯  
+이번에는 flask / spring으로 나눈 거 주의  
+아주르 사용도 명시  
+
+
+## 주요 사용 라이브러리
+
+
+## 팀원 및 역할
+- **장수현(팀장)** : 
+- **강미선** : 
+- **배연희** : 
+- **송상윤** : 
+- **신승오** : 
+- **진현진** : 
+- **한소연** : 
+
+
+## 설치 및 실행 방법
+본 프로젝트는 개발 단계까지 진행되었으며, 실제 서비스 배포는 진행하지 않았습니다.  
+따라서 프론트엔드/백엔드의 빌드 및 배포 과정은 포함되어 있지 않습니다.

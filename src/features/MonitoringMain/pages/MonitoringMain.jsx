@@ -1,11 +1,12 @@
 import "../styles/MonitoringMain.css";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, memo, useCallback } from "react";
 import factoryImg from "../../../img/factory_bg.png";
 import UseNavi from "../../../hooks/UseNavi";
 import MessageSlider from "../../../components/MessageSlider/MessageSlider";
 import { io } from "socket.io-client";
 import SidebarCalendar from "../components/SidebarCalendar";
 import Loading from "../../../components/Loading/Loading";
+import DigitalClock from "../components/DigitalClock";
 
 const getStatus = (score) => {
   if (score >= 70) return { label: "위험", class: "danger", type: 2 };
@@ -15,34 +16,21 @@ const getStatus = (score) => {
 
 const SOCKET_SERVER_URL = 'ws://localhost:5000'
 
-const MonitoringMain = ({ realTimeData, lastScore }) => {
+const MonitoringMain = memo(({ realTimeData, lastScore }) => {
   const { goTo } = UseNavi();
   
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [messageIndex, setMessageIndex] = useState(0);
+  // =====  state  =====
   // WebSocket으로 받아올 온도/습도 상태
   const [temperature, setTemperature] = useState(null);
   const [humidity, setHumidity] = useState(null);
-  
-  const todayweek = currentTime.getDay();
-  const formattedDate = `${currentTime.getFullYear()}.${(currentTime.getMonth()+1)}.${currentTime.getDate()}`;
-  const hours = String(currentTime.getHours()).padStart(2, '0');
-  const minutes = String(currentTime.getMinutes()).padStart(2, '0');
-  const seconds = String(currentTime.getSeconds()).padStart(2, '0');
-  const time = `${hours}:${minutes}:${seconds}`;
-  const sec = `${seconds}`;
 
-  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  const dayName = dayNames[todayweek];
 
+  // ===== Memoized Values  =====
+  // 현재 상태 출력 (위험점수+누수)
   const currentStatus = useMemo(() => {
     const currentData = realTimeData[realTimeData.length - 1];
-    const currentLeak = currentData?.leak ?? 1;
-
     // 누수 발생(0) 시 곧바로 위험 처리
-    if (currentLeak === 0) {
-      return { label: "위험", class: "danger", type: 1 }; // 누수는 type 1
-    }
+    if (currentData?.leak === 0) return { label: "위험", class: "danger", type: 1 };
     return getStatus(lastScore);
   }, [realTimeData, lastScore]);
 
@@ -51,29 +39,39 @@ const MonitoringMain = ({ realTimeData, lastScore }) => {
   const alertMessages = useMemo(() => {
     const getMessageText = (type, label) => {
       if (type === 0) return "현재 모든 시스템이 정상 가동 중입니다.";
-      if (type === 1) return "경고: 누수가 발생했습니다.";
+      if (type === 1) return "누수가 발생했습니다.";
       return `위험점수가 [${label}] 수준에 도달했습니다.`;
     };
 
     return [
-      { machine: "1호기", text: getMessageText(currentStatus.type, currentStatus.label), status: currentStatus.class },
-      { machine: "2호기", text: "위험점수가 [주의] 수준에 도달했습니다.", status: "warning" },
-      { machine: "3호기", text: "현재 모든 시스템이 정상 가동 중입니다.", status: "safe" },
-      { machine: "4호기", text: "누수가 발생했습니다.", status: "danger" },
+      {
+        id: "m1",
+        machine: "1호기",
+        text: getMessageText(currentStatus.type, currentStatus.label),
+        status: currentStatus.class,
+      },
+      {
+        id: "m2",
+        machine: "2호기",
+        text: "위험점수가 [주의] 수준에 도달했습니다.",
+        status: "warning",
+      },
+      {
+        id: "m3",
+        machine: "3호기",
+        text: "현재 모든 시스템이 정상 가동 중입니다.",
+        status: "safe",
+      },
+      {id: "m4", machine: "4호기", text: "누수가 발생했습니다.", status: "danger"},
     ];
-  }, [currentStatus]);
+  }, [currentStatus.type, currentStatus.label, currentStatus.class]);
 
-  // 센서 데이터 또는 위험점수가 들어오지 않는 경우 로딩
-  if (!realTimeData || !lastScore) {
-    return (
-      <>
-      <div className="wrap">
-        <Loading message="센서 데이터 수신 대기 중..." />
-      </div>
-      </>
-    )
-  }
+  const handleNavigate = useCallback(() => {
+    goTo("/dashboard/1")
+  }, [goTo])
 
+
+  // =====  Effects  =====
   // WebSocket 연결 및 데이터 수신
   useEffect(() => {
     // 실제 센서 서버 주소로 변경 필요
@@ -92,37 +90,28 @@ const MonitoringMain = ({ realTimeData, lastScore }) => {
     };
   }, []);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  useEffect(() => {
-    const ticker = setInterval(() => {
-      setMessageIndex((prev) => prev + 1);
-    }, 3500);
-
-    return () => clearInterval(ticker);
-  }, []);
+  // =====  기타  =====
+  // 센서 데이터 또는 위험점수가 들어오지 않는 경우 로딩
+  if (!realTimeData || !lastScore) {
+    return (
+      <>
+      <div className="wrap">
+        <Loading message="센서 데이터 수신 대기 중..." />
+      </div>
+      </>
+    )
+  }
 
   return (
     <>
       <div className="wrap">
         <div className="monitor_contents">
           <div className="left_container">
-            <div className="clock">
-              <p className="date">{formattedDate}</p>
-              <p className="todayweek">{dayName}</p>
-              <p className="time">{time}</p>
+            <DigitalClock />
+            <div className="sidebar_content_area">
+              <SidebarCalendar />
             </div>
-{/* ✅ 기존 버튼 리스트를 치우고 캘린더 컴포넌트 삽입 */}
-          <div className="sidebar_content_area">
-             <SidebarCalendar />
           </div>
-        </div>
           <div className="right_container">
             <div className="factory_image">
               <img src={factoryImg} alt="factory" className="factory_img" />
@@ -137,12 +126,24 @@ const MonitoringMain = ({ realTimeData, lastScore }) => {
               <div className="temp">온도 : {temperature !== null ? `${temperature}℃` : "--"}</div>
               <div className="hum">습도 : {humidity !== null ? `${humidity}%` : "--"}</div>
             </div>
-            <div className={`machine_1 ${currentStatus.class}`} onClick={() => goTo("/dashboard/1")}>
-              1호기
+            <div
+              className={`machine_badge machine_1 ${currentStatus.class}`}
+              onClick={handleNavigate}
+            >
+              <div className="hexagon">1호기</div>
             </div>
-            <div className="machine_2">2호기</div>
-            <div className="machine_3">3호기</div>
-            <div className="machine_4">4호기</div>
+
+            <div className="machine_badge machine_2 warning">
+              <div className="hexagon">2호기</div>
+            </div>
+
+            <div className="machine_badge machine_3 safe">
+              <div className="hexagon">3호기</div>
+            </div>
+
+            <div className="machine_badge machine_4 danger">
+              <div className="hexagon">4호기</div>
+            </div>
             <div className="message-area">
               <MessageSlider messages={alertMessages} rowHeight={35} interval={3500} />
             </div>
@@ -151,6 +152,6 @@ const MonitoringMain = ({ realTimeData, lastScore }) => {
       </div>
     </>
   );
-}
+});
 
 export default MonitoringMain;

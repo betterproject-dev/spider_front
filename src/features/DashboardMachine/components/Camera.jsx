@@ -10,7 +10,7 @@ import { axiosFlask } from "../../../utils/axiosFactory.js";
  */
 const DEFAULT_FLASK_URL = "http://localhost:5000";
 const DISCONNECT_THRESHOLD = 3000;
-const INITIAL_STATUS_LABELS = ["라벨", "색상", "무게", "찌그러짐"];
+const INITIAL_STATUS_LABELS = ["라벨 상태", "색상 오염", "외관 변형"];
 const getStatusClassName = (status) => (status === "불량" ? "status-fail" : "status-ok");
 
 // 상태 리스트 렌더링 부분을 별도 컴포넌트로  분리 ( 메모제이션 적용 )
@@ -53,14 +53,14 @@ const StatusOverlay = memo(({ yoloResult, onNavigate }) => {
       </li>
       <li>라벨 상태: <span className={getStatusClassName(statusInfo.labelStatus)}>{statusInfo.labelStatus}</span></li>
       <li>색상 오염: <span className={getStatusClassName(statusInfo.colorStatus)}>{statusInfo.colorStatus}</span></li>
-      <li>무게 측정: <span className="status-ok">정상</span></li>
       <li>외관 변형: <span className={getStatusClassName(statusInfo.dentStatus)}>{statusInfo.dentStatus}</span></li>
     </ul>
   )
 })
 
 const Camera = ({selectedMachine}) => {
-  const FlaskBase = useMemo(() => axiosFlask.defaults.baseURL || DEFAULT_FLASK_URL, [])
+  const imgRef = useRef(null);
+  const FlaskBase = useMemo(() => axiosFlask.defaults.baseURL || DEFAULT_FLASK_URL, []);
 
   // 1. URL을 상태(State)로 관리해야 타임스탬프 업데이트가 가능합니다.
   const [videoStreamUrl, setVideoStreamUrl] = useState(null);
@@ -72,20 +72,90 @@ const Camera = ({selectedMachine}) => {
   const {goTo} = UseNavi();
   const disconnectTimer = useRef(null);
 
+  const [streamKey, setStreamKey] = useState(0); // ✅ 스트림 새로고침 트리거
+
+  const refreshStream = useCallback((e) => {
+    e?.stopPropagation(); // ✅ 버튼 클릭 시 페이지 이동(네비게이션) 막기
+    setIsCameraLoading(true);
+    setHasStreamStarted(false);
+    setYoloResult([]);
+
+    // ✅ src를 바꿔서 브라우저가 MJPEG를 다시 연결하게 만들기
+    setStreamKey((k) => k + 1);
+  }, []);
+
   // UseSocket 커스텀 훅
-  UseSocket("yolo_result", useCallback((data) => {
-    setYoloResult(data || []);
+  UseSocket(
+    "yolo_result",
+    useCallback((data) => {
+      setYoloResult(data || []);
 
-    setHasStreamStarted(prev => {
-      if (!prev) setIsCameraLoading(false)
-      return true
-    })
+      setHasStreamStarted((prev) => {
+        if (!prev) setIsCameraLoading(false);
+        return true;
+      });
 
-    if (disconnectTimer.current) clearTimeout(disconnectTimer.current)
-    disconnectTimer.current = setTimeout(() => {
-      setIsCameraLoading(true)
-    }, DISCONNECT_THRESHOLD)
-  }, []));
+      if (disconnectTimer.current) clearTimeout(disconnectTimer.current);
+      disconnectTimer.current = setTimeout(() => {
+        setIsCameraLoading(true);
+      }, DISCONNECT_THRESHOLD);
+    }, [])
+  );
+
+  useEffect(() => {
+    setIsCameraLoading(true);
+    setHasStreamStarted(false);
+
+    const timestamp = Date.now();
+    setVideoStreamUrl(`${FlaskBase}/camera/video_feed?t=${timestamp}&k=${streamKey}`);
+
+    return () => {
+      if (disconnectTimer.current) clearTimeout(disconnectTimer.current);
+    };
+  }, [selectedMachine, FlaskBase, streamKey]);
+
+  useEffect(() => {
+    if (!isCameraLoading) return;
+
+    const t = setTimeout(() => {
+      setStreamKey((k) => k + 1);
+    }, 5000);
+
+    return () => clearTimeout(t);
+  }, [isCameraLoading]);
+
+  const handleVideoLoad = useCallback(() => {
+      setIsCameraLoading(false);
+  }, []);
+
+  const handleNavigate = useCallback(() => {
+    goTo(`/machine/${selectedMachine}/items/defect`);
+  }, [goTo, selectedMachine]);
+
+  const handleVideoError = useCallback(() => {
+    setIsCameraLoading(true);
+    // ✅ 에러 나면 1초 뒤 자동 새로고침(원치 않으면 이 줄들 제거)
+    setTimeout(() => setStreamKey((k) => k + 1), 1000);
+  }, []);
+
+  // 브라우저 탭 활성화 감지 및 스트림 재연결
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      // 사용자가 탭으로 다시 돌아왔을 때(visible)
+      if (document.visibilityState === "visible") {
+        setIsCameraLoading(true);
+        const timestamp = Date.now();
+        // URL 뒤에 새로운 타임스탬프를 붙여 브라우저가 새 요청을 보내도록 강제
+        setVideoStreamUrl(`${FlaskBase}/camera/video_feed?t=${timestamp}`);
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [FlaskBase]);
 
   useEffect(() => {
     setIsCameraLoading(true);
@@ -98,53 +168,35 @@ const Camera = ({selectedMachine}) => {
     };
   }, [selectedMachine, FlaskBase]);
 
-  const handleVideoLoad = useCallback(() => {
-    // 이미 소켓 데이터가 오고 있다면 로딩 해제
-    if (hasStreamStarted) {
-      setIsCameraLoading(false);
-    }
-  }, [hasStreamStarted]);
-
-  const handleNavigate = useCallback(() => {
-    goTo(`/machine/${selectedMachine}/items/defect`)
-  }, [goTo, selectedMachine])
-
-  const handleVideoError = () => {
-    setIsCameraLoading(true);
-  };
-
   return (
     <div className="camera-container">
       <div
-        className="video-wrapper"
+        className="video-wrapper clickable-area"
+        onClick={handleNavigate}
+        title="클릭 시 제품 불량률 통계 페이지로 이동합니다"
         style={{
           position: "relative",
           width: "100%",
           // 4:3 비율 (640x480) 유지. 화면이 줄어들면 높이도 자동으로 계산됨
           aspectRatio: "640 / 480",
-          backgroundColor: "#000",
+          backgroundColor: "#000000d7",
           overflow: "hidden",
+          cursor: "pointer",
         }}
       >
         {isCameraLoading && (
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              zIndex: 10,
-              backgroundColor: "#001a33",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
             <Loading message="카메라 스트림을 연결 중입니다..." />
-          </div>
         )}
+        <button
+          type="button"
+          className="stream-refresh-btn"
+          onClick={refreshStream}
+          title="카메라 스트림 새로고침"
+        >
+          ↻
+        </button>
         <img
+          ref={imgRef}
           src={videoStreamUrl || null}
           alt="AI Live Stream"
           className="video-feed"
@@ -157,11 +209,6 @@ const Camera = ({selectedMachine}) => {
             <StatusOverlay yoloResult={yoloResult} onNavigate={handleNavigate} />
           </div>
         )}
-      </div>
-
-      <div className="status-bar">
-        <span className="status-dot"></span>
-        <span>AI 모니터링 시스템 작동 중</span>
       </div>
     </div>
   );

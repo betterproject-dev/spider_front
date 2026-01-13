@@ -16,6 +16,7 @@ a {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: #2a3a4a;
 
   /* 위험도 기본 색상 */
   --rgb-safe: 74, 222, 128;  /* #4ade80 */
