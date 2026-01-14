@@ -176,7 +176,8 @@ const MachineDetail = memo(({ realTimeData }) => {
             selectedSensor === "leak"
               ? <LeakStateChart 
                   data={sensorData} 
-                  dataKey={currentSensorConfig?.key} 
+                  dataKey={currentSensorConfig?.key}
+                  period={selectedPeriod}
                 />
               : <SensorDayChart 
                   data={sensorData} 
@@ -189,7 +190,8 @@ const MachineDetail = memo(({ realTimeData }) => {
             selectedSensor === "leak"
               ? <LeakStateChart 
                   data={sensorData} 
-                  dataKey={currentSensorConfig?.key} 
+                  dataKey={currentSensorConfig?.key}
+                  period={selectedPeriod}
                 />
               : <SensorWeekChart
                   data={sensorData} 

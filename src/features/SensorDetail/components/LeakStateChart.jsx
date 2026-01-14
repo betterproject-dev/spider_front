@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react';
 import { Bar, BarChart, Cell, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-const LeakStateChart = memo(({ data, dataKey }) => {
+const LeakStateChart = memo(({ data, dataKey, period }) => {
   if (!data || !Array.isArray(data) || data.length === 0) {
     return <div style={{padding: '50px', textAlign: 'center'}}>데이터가 없습니다</div>;
   }
@@ -24,9 +24,9 @@ const LeakStateChart = memo(({ data, dataKey }) => {
           dataKey="createdAt"
           tickFormatter={(t) => {
             if (!t) return '';
-            return t.split(' ')[1]?.substring(0, 5) || t;
+            if (period === 'today') return t.split(' ')[1]?.substring(0, 5) || t;
+            else return t.split(' ')[0]?.substring(5, 10) || t;
           }}
-          tick={{fontSize: 12}} 
         />
         <YAxis 
           width={60}
