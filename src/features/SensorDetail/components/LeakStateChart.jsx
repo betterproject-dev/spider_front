@@ -1,6 +1,12 @@
 import { memo, useMemo } from 'react';
 import { Bar, BarChart, Cell, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
+  // 날짜 추출 함수
+  const formatFullDate = (label) => {
+    if (!label) return "";
+    return label.split(' ')[0];
+  };
+
 const LeakStateChart = memo(({ data, dataKey, period }) => {
   if (!data || !Array.isArray(data) || data.length === 0) {
     return <div style={{padding: '50px', textAlign: 'center'}}>데이터가 없습니다</div>;
@@ -41,6 +47,7 @@ const LeakStateChart = memo(({ data, dataKey, period }) => {
             const isLeak = props.payload[dataKey] === true;
             return [isLeak ? "누수 발생" : "정상", "상태"];
           }}
+          labelFormatter={period === 'week' && formatFullDate}
         />
         <Bar dataKey="leakStatusValue" isAnimationActive={false}>
           {processedData.map((entry, i) => (
