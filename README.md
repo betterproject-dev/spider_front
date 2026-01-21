@@ -98,7 +98,7 @@ S.P.I.D.E.R는 스마트팩토리 환경에서 **설비 센서 데이터와 이�
   - Socket.io 연동: 실시간 설비 상태 및 이상 알림 수신
   
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': {'fontSize':'11px', 'mainBkg': '#ffffff', 'canvasBkg': '#ffffff', 'background': '#ffffff'}, 'flowchart': {'nodeSpacing': 30, 'rankSpacing': 40, 'padding': 10}}}%%
+%%{init: {'theme':''default', 'themeVariables': {'fontSize':'11px', 'mainBkg': '#ffffff', 'canvasBkg': '#ffffff', 'background': '#ffffff'}, 'flowchart': {'nodeSpacing': 30, 'rankSpacing': 40, 'padding': 15}}}%%
 graph TD
     %% 1. Data Collection
     subgraph IN ["1. Input"]
